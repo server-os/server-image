@@ -39,6 +39,14 @@ TODO: Setup SSH key to connect to git!
 After successful build, the zone image can be build (see https://github.com/server-os/zone-image).
 
 
+## Projects
+
+### mdata client
+
+https://eng.tritondatacenter.com/mdata/protocol.html
+
+https://eng.tritondatacenter.com/mdata/datadict.html
+
 
 -----------------
 old docs

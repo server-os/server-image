@@ -57,7 +57,7 @@ function get_status
 
 	[[ -z "$dir" ]] && fatal "missing directory argument"
 	[[ -z "$name" ]] && fatal "missing name"
-	[[ -d $dir ]] || fatal "asked to get status of non-existant directory"
+	[[ -d $dir ]] || fatal "asked to get status of non-existant directory \"$dir\""
 
 	prevdir=$PWD
 	if ! cd "$dir"; then
