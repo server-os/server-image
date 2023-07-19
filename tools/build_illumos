@@ -35,7 +35,7 @@ echo "==> Building Illumos (${BUILDSTAMP})"
 set -o pipefail
 set -e
 
-cd ${ROOT}/projects/illumos
+cd ${ROOT}/projects/illumos-joyent
 [[ -d "log" ]] || mkdir -p log
 gsed -i -e "s|^GATE=.*$|GATE=\"joyent_${BUILDSTAMP}\"; export GATE|" illumos.sh
 if [[ -n ${MAX_JOBS} ]]; then

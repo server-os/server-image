@@ -606,7 +606,7 @@ server-os-publish:
 ctftools-publish:
 	@echo "# Publish ctftools tarball"
 	mkdir -p $(CTFTOOLS_BITS_DIR)
-	git -C projects/illumos log -1 >$(CTFTOOLS_BITS_DIR)/gitstatus.illumos
+	git -C projects/illumos-joyent log -1 >$(CTFTOOLS_BITS_DIR)/gitstatus.illumos
 	cp $(CTFTOOLS_TARBALL) $(CTFTOOLS_BITS_DIR)/ctftools.tar.gz
 
 .PHONY: strap-cache-publish

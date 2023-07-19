@@ -76,7 +76,7 @@ function make
 
 	mkdir -p "$(dirname $CTFTOOLS_TARBALL)"
 
-	cd ${ROOT}/projects/illumos
+	cd ${ROOT}/projects/illumos-joyent
 	[[ -d "log" ]] || mkdir -p log
 	gsed -i -e "s|^GATE=.*$|GATE=\"joyent_${BUILDSTAMP}\"; export GATE|" illumos.sh
 	gsed -i -e "s|^MAX_JOBS=.*$|MAX_JOBS=${max_jobs}; export MAX_JOBS|" illumos.sh

@@ -39,7 +39,7 @@ LDLIBS =					\
 		-lavl
 
 
-ILLUMOS_SRC =	../../projects/illumos
+ILLUMOS_SRC =	../../projects/illumos-joyent
 TOOLS_BIN =	$(ILLUMOS_SRC)/usr/src/tools/proto/root_i386-nd/opt/onbld/bin
 CC =		gcc
 CTFCONVERT =	$(TOOLS_BIN)/i386/ctfconvert
