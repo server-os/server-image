@@ -23,7 +23,7 @@ set -o pipefail
 
 ci_wsroot=$(cd $(dirname $0)/../; pwd)
 ci_arg0=$(basename $0)
-ci_illumos="$ci_wsroot/projects/illumos/usr/src"
+ci_illumos="$ci_wsroot/projects/illumos-joyent/usr/src"
 ci_dmake="/opt/local/bin/dmake"
 
 export PATH=/usr/bin:/usr/sbin:/opt/local/bin:/opt/local/sbin

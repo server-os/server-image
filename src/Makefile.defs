@@ -33,7 +33,7 @@ endif
 
 DESTDIR =	$(BASE)/../proto
 NATIVEDIR =	$(BASE)/../proto.strap
-ILLUMOS_SRC =	$(BASE)/../projects/illumos/usr/src
+ILLUMOS_SRC =	$(BASE)/../projects/illumos-joyent/usr/src
 
 BUILDSTAMP =	$(shell cat $(BASE)/../proto/buildstamp)
 

@@ -34,19 +34,13 @@ BOOT_PROTO =	$(ROOT)/proto.boot
 IMAGES_PROTO =	$(ROOT)/proto.images
 TESTS_PROTO =	$(ROOT)/proto.tests
 
-# On Darwin/OS X we support running 'make check'
-ifeq ($(shell uname -s),Darwin)
-PATH =		/bin:/usr/bin:/usr/sbin:/sbin:/opt/local/bin
-NATIVE_CC =	gcc
-else
 PATH =		/usr/bin:/usr/sbin:/sbin:/opt/local/bin
 NATIVE_CC =	/opt/local/bin/gcc
-endif
 
 BUILD_PLATFORM := $(shell uname -v)
 
 #
-# This number establishes a maximum for smartos-live, illumos-extra, and
+# This number establishes a maximum for Server OS, illumos-extra, and
 # illumos-joyent.  Support for it can and should be added to other projects
 # as time allows.  The default value on large (16 GB or more) zones/systems
 # is 128; on smaller systems it is 8.  You can override this in the usual way;
@@ -62,11 +56,6 @@ else
 MAX_JOBS ?=	$(shell tools/optimize_jobs)
 endif
 
-#
-# deps/eng is a submodule that includes build tools, ensure it gets checked out
-#
-ENGBLD_REQUIRE := $(shell git submodule update --init deps/eng)
-
 LOCAL_SUBDIRS :=	$(shell ls projects/local)
 PKGSRC =	$(ROOT)/pkgsrc
 MANIFEST =	manifest.gen
@@ -80,7 +69,7 @@ TZCHECK =	$(ROOT)/tools/tzcheck/tzcheck
 UCODECHECK =	$(ROOT)/tools/ucodecheck/ucodecheck
 
 CTFBINDIR = \
-	$(ROOT)/projects/illumos/usr/src/tools/proto/*/opt/onbld/bin/i386
+	$(ROOT)/projects/illumos-joyent/usr/src/tools/proto/*/opt/onbld/bin/i386
 CTFMERGE =	$(CTFBINDIR)/ctfmerge
 CTFCONVERT =	$(CTFBINDIR)/ctfconvert
 
@@ -104,7 +93,7 @@ WORLD_MANIFESTS := \
 
 MANCHECK_CONFS := \
 	$(ROOT)/man/mancheck.conf \
-	$(ROOT)/projects/illumos/mancheck.conf \
+	$(ROOT)/projects/illumos-joyent/mancheck.conf \
 	$(ROOT)/projects/illumos-extra/mancheck.conf \
 	$(shell ls projects/local/*/mancheck.conf 2>/dev/null)
 
@@ -113,7 +102,7 @@ BOOT_MANIFESTS := \
 
 SUBDIR_MANIFESTS :=	$(LOCAL_SUBDIRS:%=$(MPROTO)/%.sd.manifest)
 
-TEST_IPS_MANIFEST_ROOT = projects/illumos/usr/src/pkg/manifests
+TEST_IPS_MANIFEST_ROOT = projects/illumos-joyent/usr/src/pkg/manifests
 
 #
 # To avoid cross-repository flag days, the list of IPS manifest
@@ -121,7 +110,7 @@ TEST_IPS_MANIFEST_ROOT = projects/illumos/usr/src/pkg/manifests
 # stored in the illumos-joyent.git repository. By including the
 # following Makefile, we get the $(TEST_IPS_MANIFEST_FILES) macro.
 #
-include projects/illumos/usr/src/Makefile.testarchive
+include projects/illumos-joyent/usr/src/Makefile.testarchive
 
 TEST_IPS_MANIFESTS = $(TEST_IPS_MANIFEST_FILES:%=$(TEST_IPS_MANIFEST_ROOT)/%)
 TESTS_MANIFEST = $(ROOT)/tests.manifest.gen
@@ -238,11 +227,11 @@ $(MPROTO)/live.manifest: src/manifest | $(MPROTO)
 $(MPROTO)/man.manifest: man/manifest | $(MPROTO)
 	cp man/manifest $@
 
-$(MPROTO)/illumos.manifest: projects/illumos/manifest | $(MPROTO)
-	cp projects/illumos/manifest $(MPROTO)/illumos.manifest
+$(MPROTO)/illumos.manifest: projects/illumos-joyent/manifest | $(MPROTO)
+	cp projects/illumos-joyent/manifest $(MPROTO)/illumos.manifest
 
-$(BOOT_MPROTO)/illumos.manifest: projects/illumos/manifest | $(BOOT_MPROTO)
-	cp projects/illumos/boot.manifest $(BOOT_MPROTO)/illumos.manifest
+$(BOOT_MPROTO)/illumos.manifest: projects/illumos-joyent/manifest | $(BOOT_MPROTO)
+	cp projects/illumos-joyent/boot.manifest $(BOOT_MPROTO)/illumos.manifest
 
 $(MPROTO)/illumos-extra.manifest: 0-extra-stamp \
     projects/illumos-extra/manifest | $(MPROTO)
@@ -296,7 +285,7 @@ tests-tar: $(TESTS_TARBALL)
 
 #
 # Update source code from parent repositories.  We do this for each local
-# project as well as for illumos, illumos-extra, and smartos-live via the
+# project as well as for illumos, illumos-extra, and Server OS via the
 # update_base tool.
 #
 update: update-base $(LOCAL_SUBDIRS:%=%.update)
@@ -508,7 +497,7 @@ STRAP_CACHE_BITS_DIR		= $(ROOT)/output/strap-cache/bits
 # PUB_BRANCH_DESC indicates the different 'projects' branches used by the build.
 # Our shell script uniqifies the branches used, then emits a
 # hyphen-separated string of 'projects' branches *other* than ones which
-# match $PLATFORM_BRANCH (the branch of smartos-live.git itself).
+# match $PLATFORM_BRANCH (the branch of server-os.git itself).
 # While this doesn't perfectly disambiguate builds from different branches,
 # it is good enough for our needs.
 #
@@ -537,18 +526,13 @@ PUB_TESTS_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_TESTS_BASE)
 PLATFORM_IMAGE_UUID		?= $(shell uuid -v4)
 
 #
-# platform-publish, platform-bits-upload and platform-bits-upload-latest
-# are analogous to the 'publish', 'bits-upload' and 'bits-upload-latest'
-# targets defined in the eng.git Makefile.defs and Makefile.targ files.
+# platform-publish is analogous to the 'publish'
+# target defined in the eng.git Makefile.defs and Makefile.targ files.
 # Typically a user would 'make world && make live' before invoking any
 # of these targets, though the '*-release' targets are likely more convenient.
 # Those are not dependencies to allow more flexibility during the publication
 # process.
 #
-# The platform-bits-publish|upload targets are also used for pushing
-# SmartOS releases to Manta.
-#
-
 
 .PHONY: common-platform-publish
 common-platform-publish:
@@ -566,34 +550,6 @@ common-platform-publish:
 	cp output/gitstatus.json $(PLATFORM_BITS_DIR)
 	cp output/changelog.txt $(PLATFORM_BITS_DIR)
 
-.PHONY: triton-platform-publish
-triton-platform-publish: common-platform-publish
-	@echo "# Publish Triton-specific platform$(PLATFORM_DEBUG_SUFFIX) bits"
-	mkdir -p $(PLATFORM_BITS_DIR)
-	cat src/platform.imgmanifest.in | sed \
-	    -e "s/UUID/$(PLATFORM_IMAGE_UUID)/" \
-	    -e "s/VERSION_STAMP/$(PLATFORM_STAMP)/" \
-	    -e "s/BUILDSTAMP/$(PLATFORM_STAMP)/" \
-	    -e "s/SIZE/$$(stat --printf="%s" $(PLATFORM_TARBALL))/" \
-	    -e "s#SHA#$$(digest -a sha1 $(PLATFORM_TARBALL))#" \
-	    > $(PUB_PLATFORM_MF)
-	cp $(IMAGES_TARBALL) $(PUB_IMAGES_TARBALL)
-	cp $(BOOT_TARBALL) $(PUB_BOOT_TARBALL)
-	cd $(ROOT)/output/bits/platform$(PLATFORM_DEBUG_SUFFIX)
-	rm -f platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
-	ln -s $(PUB_PLATFORM_MF_BASE) \
-	    platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
-
-#
-# The bits-upload.sh script in deps/eng is used to upload bits
-# either to a Manta instance under $ENGBLD_DEST_OUT_PATH (requiring $MANTA_USER,
-# $MANTA_KEY_ID and $MANTA_URL to be set in the environment, and
-# $MANTA_TOOLS_PATH pointing to the manta-client tools scripts) or, with
-# $ENGBLD_BITS_UPLOAD_LOCAL set to 'true', will upload to $ENGBLD_DEST_OUT_PATH
-# on a local filesystem. If $ENGBLD_BITS_UPLOAD_IMGAPI is set in the environment
-# it also publishes any images from the -D directory to
-# updates.tritondatacenter.com.
-#
 
 ENGBLD_DEST_OUT_PATH ?=	/public/builds
 
@@ -611,86 +567,38 @@ endif
 
 BITS_UPLOAD_BRANCH = $(PLATFORM_BRANCH)$(PUB_BRANCH_DESC)
 
-SMARTOS_DEST_OUT_PATH := $(ENGBLD_DEST_OUT_PATH)/SmartOS
+SERVEROS_DEST_OUT_PATH := $(ENGBLD_DEST_OUT_PATH)/ServerOS
 
 CTFTOOLS_DEST_OUT_PATH := \
-    $(SMARTOS_DEST_OUT_PATH)/ctftools/$(BITS_UPLOAD_BRANCH)
+    $(SERVEROS_DEST_OUT_PATH)/ctftools/$(BITS_UPLOAD_BRANCH)
 
 STRAP_CACHE_DEST_OUT_PATH := \
-    $(SMARTOS_DEST_OUT_PATH)/strap-cache/$(BITS_UPLOAD_BRANCH)
-
-.PHONY: platform-bits-upload
-platform-bits-upload:
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) \
-	    $(ROOT)/deps/eng/tools/bits-upload.sh \
-	        -b $(BITS_UPLOAD_BRANCH) \
-	        $(BITS_UPLOAD_LOCAL_ARG) \
-	        $(BITS_UPLOAD_IMGAPI_ARG) \
-	        -D $(ROOT)/output/bits \
-	        -d $(ENGBLD_DEST_OUT_PATH)/$(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
-	        -n $(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
-	        -t $(PLATFORM_STAMP)
-
-#
-# Clear TIMESTAMP due to TOOLS-2241, where bits-upload would otherwise interpret
-# that environment variable as the '-t' option
-#
-.PHONY: platform-bits-upload-latest
-platform-bits-upload-latest:
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) TIMESTAMP= \
-	    $(ROOT)/deps/eng/tools/bits-upload.sh \
-	        -b $(BITS_UPLOAD_BRANCH) \
-	        $(BITS_UPLOAD_LOCAL_ARG) \
-	        $(BITS_UPLOAD_IMGAPI_ARG) \
-	        -D $(ROOT)/output/bits \
-	        -d $(ENGBLD_DEST_OUT_PATH)/$(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
-	        -n $(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX)
-
-#
-# ctftools and strap-cache do not fit well into the bits-upload.sh
-# infrastructure, as we need to differentiate based on aspects of our build
-# platform. So we do it by hand instead.
-#
-
-.PHONY: ctftools-bits-upload
-ctftools-bits-upload: $(STAMPFILE)
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) ./tools/build_ctftools upload \
-	    -D $(CTFTOOLS_BITS_DIR) \
-	    -d $(CTFTOOLS_DEST_OUT_PATH) \
-	    -p $(BUILD_PLATFORM) \
-	    -t $(PLATFORM_TIMESTAMP)
-
-.PHONY: strap-cache-bits-upload
-strap-cache-bits-upload: $(STAMPFILE)
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) ./tools/build_strap upload \
-	    -D $(STRAP_CACHE_BITS_DIR) \
-	    -d $(STRAP_CACHE_DEST_OUT_PATH) \
-	    -t $(PLATFORM_TIMESTAMP)
+    $(SERVEROS_DEST_OUT_PATH)/strap-cache/$(BITS_UPLOAD_BRANCH)
 
 #
 # A wrapper to build the additional components that a standard
-# SmartOS release needs.
+# Server OS release needs.
 #
-.PHONY: smartos-build
-smartos-build:
+.PHONY: server-os-build
+server-os-build:
 	./tools/build_boot_image -I -r $(ROOT)
 	./tools/build_boot_image -r $(ROOT)
 	./tools/build_vmware -r $(ROOT)
 
-.PHONY: smartos-publish
-smartos-publish:
-	@echo "# Publish SmartOS platform $(PLATFORM_TIMESTAMP) images"
+.PHONY: server-os-publish
+server-os-publish:
+	@echo "# Publish Server OS $(PLATFORM_TIMESTAMP) images"
 	mkdir -p $(PLATFORM_BITS_DIR)
 	cp output/platform-$(PLATFORM_TIMESTAMP)/root.password \
 	    $(PLATFORM_BITS_DIR)/SINGLE_USER_ROOT_PASSWORD.txt
 	cp output-iso/platform-$(PLATFORM_TIMESTAMP).iso \
-	    $(PLATFORM_BITS_DIR)/smartos-$(PLATFORM_TIMESTAMP).iso
+	    $(PLATFORM_BITS_DIR)/server-os-$(PLATFORM_TIMESTAMP).iso
 	cp output-usb/platform-$(PLATFORM_TIMESTAMP).usb.gz \
-	    $(PLATFORM_BITS_DIR)/smartos-$(PLATFORM_TIMESTAMP)-USB.img.gz
-	cp output-vmware/smartos-$(PLATFORM_TIMESTAMP).vmwarevm.tar.gz \
+	    $(PLATFORM_BITS_DIR)/server-os-$(PLATFORM_TIMESTAMP)-USB.img.gz
+	cp output-vmware/server-os-$(PLATFORM_TIMESTAMP).vmwarevm.tar.gz \
 		$(PLATFORM_BITS_DIR)
 	(cd $(PLATFORM_BITS_DIR) && \
-	    $(ROOT)/tools/smartos-index $(PLATFORM_TIMESTAMP) > index.html)
+	    $(ROOT)/tools/server-os-index $(PLATFORM_TIMESTAMP) > index.html)
 	(cd $(PLATFORM_BITS_DIR) && \
 	    /usr/bin/sum -x md5 * > md5sums.txt)
 
@@ -711,18 +619,14 @@ strap-cache-publish:
 
 #
 # Define a series of phony targets that encapsulate a standard 'release' process
-# for both SmartOS and Triton platform builds. These are a convenience to allow
+# for Server OS builds. These are a convenience to allow
 # callers to invoke only two 'make' commands after './configure' has been run.
 # We can't combine these because our stampfile likely doesn't exist at the point
 # that the various build artifact Makefile macros are set, resulting in
 # misnamed artifacts. Thus, expected usage is:
 #
 # ./configure
-# make common-release; make triton-release
-#  or
-# make common-release; make triton-smartos-release
-# or
-# make common-release; make smartos-only-release
+# make common-release; make server-os-release
 #
 .PHONY: common-release
 common-release: \
@@ -730,41 +634,22 @@ common-release: \
     live \
     pkgsrc
 
-.PHONY: triton-release
-triton-release: \
-    images-tar \
-    tests-tar \
-    triton-platform-publish \
-    platform-bits-upload
-
-.PHONY: triton-smartos-release
-triton-smartos-release: \
-    images-tar \
-    tests-tar \
-    triton-platform-publish \
-    smartos-build \
-    smartos-publish \
-    platform-bits-upload
-
-.PHONY: smartos-only-release
-smartos-only-release: \
+.PHONY: server-os-release
+server-os-release: \
     tests-tar \
     common-platform-publish \
-    smartos-build \
-    smartos-publish \
-    platform-bits-upload
+    server-os-build \
+    server-os-publish
 
 .PHONY: ctftools-release
 ctftools-release: \
     $(CTFTOOLS_TARBALL) \
-    ctftools-publish \
-    ctftools-bits-upload
+    ctftools-publish
 
 .PHONY: strap-cache-release
 strap-cache-release: \
     $(STRAP_CACHE_TARBALL) \
-    strap-cache-publish \
-    strap-cache-bits-upload
+    strap-cache-publish
 
 print-%:
 	@echo '$*=$($*)'

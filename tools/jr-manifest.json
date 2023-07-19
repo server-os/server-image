@@ -1,8 +1,8 @@
 {
     "jrVersion": 1,
-    "description": "SmartOS platform public repositories",
+    "description": "Server OS platform public repositories",
     "repoCandidateSearch": {
-        "description": "public github.com/joyent repos directly relevant to development of SmartOS",
+        "description": "public github.com/joyent repos directly relevant to development of Server OS",
         "type": "public",
         "includeArchived": false
     },
@@ -20,7 +20,7 @@
     ],
     "defaults": {
         "labels": {
-            "smartos": true,
+            "serveros": true,
             "public": true
         }
     },
@@ -54,13 +54,6 @@
             }
         },
         {
-            "name": "kbmd",
-            "labels": {
-                "release": true,
-                "mg": "platform"
-            }
-        },
-        {
             "name": "libMicro"
         },
         {
@@ -71,17 +64,10 @@
             }
         },
         {
-            "name": "sdc-ur-agent",
-            "labels": {
-                "release": true,
-                "mg": "platform"
-            }
+            "name": "server-os-changelog"
         },
         {
-            "name": "smartos-changelog"
-        },
-        {
-            "name": "smartos-live",
+            "name": "server-os",
             "labels": {
                 "release": true,
                 "mg": "platform"

@@ -32,8 +32,8 @@ unalias -a
 cd "$(dirname $0)/.."
 BASE="$PWD"
 ROOT="$1"
-SVCCFG="$BASE/projects/illumos/usr/src/cmd/svc/svccfg/svccfg-native"
-CONFIGD="$BASE/projects/illumos/usr/src/cmd/svc/configd/svc.configd-native"
+SVCCFG="$BASE/projects/illumos-joyent/usr/src/cmd/svc/svccfg/svccfg-native"
+CONFIGD="$BASE/projects/illumos-joyent/usr/src/cmd/svc/configd/svc.configd-native"
 MAN_BASE="$ROOT/lib/svc/manifest"
 TMPFILE="/tmp/$(basename $0).$$"
 

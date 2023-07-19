@@ -7,7 +7,7 @@ set -e
 
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 
-SVCCFG="${ROOT}/projects/illumos/usr/src/cmd/svc/svccfg/svccfg-native"
+SVCCFG="${ROOT}/projects/illumos-joyent/usr/src/cmd/svc/svccfg/svccfg-native"
 
 rdmnt=$1
 if [ -z "${rdmnt}" ] || [ ! -d "${rdmnt}" ]; then

@@ -3,7 +3,7 @@
 #
 
 CC=gcc
-ILLUMOS_SRC=$(PWD)/../../projects/illumos/usr/src
+ILLUMOS_SRC=$(PWD)/../../projects/illumos-joyent/usr/src
 
 CFLAGS=-std=gnu99 -Wall -W -Werror -Wno-sign-compare
 CPPFLAGS += -isystem $(PWD)/../../proto/usr/include

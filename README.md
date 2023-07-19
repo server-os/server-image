@@ -1,3 +1,49 @@
+# Server OS Server Image
+
+Build the images used to create Server OS servers.
+
+## Prerequisites
+
+- Server OS based build server is available, recommended 8 Gb memory, 50 Gb HD
+
+On a clean install:
+
+    $ pkgin -y update
+
+    $ pkgin -y upgrade
+
+Install git:
+
+    $ pkgin -y install git
+
+TODO: Setup SSH key to connect to git!
+
+    $ git clone git@github.com:server-os/server-image.git
+
+    $ git clone git@github.com:server-os/zone-image.git
+
+
+## Create server images
+
+    $ cd server-image
+
+    $ ./configure
+
+    $ gmake live
+    $ gmake iso
+    $ gmake usb
+    $ gmake common-release
+    $ gmake server-os-build
+    $ gmake server-os-publish
+
+After successful build, the zone image can be build (see https://github.com/server-os/zone-image).
+
+
+
+-----------------
+old docs
+
+
 # Quickstart
 
 ```
@@ -158,9 +204,8 @@ The current set of local projects include:
 * [illumos-kvm-cmd](https://github.com/TritonDataCenter/illumos-kvm-cmd) aka
 QEMU
 * [mdata-client](https://github.com/TritonDataCenter/mdata-client)
-* [ur-agent](https://github.com/TritonDataCenter/sdc-ur-agent)
 
-# Building SmartOS
+# Building Server OS
 
 ## Setting up a Build Environment
 
@@ -342,10 +387,7 @@ and/or SmartOS build variety:
 * `common-release`: depends on `check`, `live` and `pkgsrc` targets and
    needs to be run before a subsequent `make` invocation of any of
    the `-release` targets below
-* `smartos-release`: builds, publishes and uploads SmartOS artifacts
-* `triton-release`: builds, publishes and uploads a Triton platform
-  image
-* `triton-and-smartos-release`: all of the above
+* `serveros-release`: builds, publishes and uploads SmartOS artifacts
 
 The following are used by the targets listed above as part of the
 release engineering process when publishing release builds of the
@@ -354,30 +396,6 @@ for both build flavors.
 
 * `*-publish`: stage bits from the output directory, preparing for
   upload
-* `*-bits-upload`: upload bits to either Manta, a remote filesystem
-  and optionally, a Triton imgapi instance, defaulting to
-  `updates.tritondatacenter.com`
-* `*-bits-upload-latest`: as above, except attempt to re-upload the
-  latest built bits, useful in case of interrupted uploads
-
-The `bits-upload` tool comes from
-[eng.git](http://github.com/TritonDataCenter/eng) which the build pulls in via
-the `deps/eng` "git submodule" from the top-level of the workspace.
-
-The upload can be influenced by the following shell environment
-variables:
-
-* `ENGBLD_DEST_OUT_PATH`: The path where we wish to upload bits. This is
-  assumed to be relative to `$MANTA_USER` if using a Manta path.
-  Otherwise this can be set to a local (or NFS) path where we wish to
-  upload build arifacts.
-* `ENGBLD_BITS_UPLOAD_LOCAL`: If set to `true`, this causes us to simply
-  `cp(1)` bits to `$ENGBLD_DEST_OUT_PATH` rather than upload using
-  Manta tools.
-* `ENGBLD_BITS_UPLOAD_IMGAPI`: If set to `true`, this causes the build to
-  also attempt to upload any Triton images found in the `output/bits`
-  directory to an imgapi instance, which defaults to
-  `updates.tritondatacenter.com`.
 
 For Manta and imgapi uploads, the following environment variables are
 used to configure the upload:
@@ -389,10 +407,6 @@ used to configure the upload:
 * `UPDATES_IMGADM_IDENTITY`
 * `UPDATES_IMGADM_CHANNEL`
 * `UPDATES_IMGADM_USER`
-
-For details on the default values of these variables, and how they are
-used, see
-[bits-upload.sh](https://github.com/TritonDataCenter/eng/blob/master/tools/bits-upload.sh)
 
 Finally, release engineers may find the script
 [`build_jenkins`](/tools/build_jenkins) useful, intended to be run
@@ -519,7 +533,7 @@ that you clobber it before doing anything else. For example:
 
 ```
 $ gmake clobber
-$ vi projects/illumos/illumos.sh
+$ vi projects/illumos-joyent/illumos.sh
 # Add -DF to the NIGHTLY_OPTIONS line
 $ gmake live
 ```
@@ -579,7 +593,7 @@ the `bldenv(1ONBLD)` tool. To use `bldenv`, follow the following steps
 from the root of the smartos-live repository:
 
 ```
-$ cd projects/illumos/usr/src
+$ cd projects/illumos-joyent/usr/src
 $ ./tools/proto/root_i386-nd/opt/onbld/bin/bldenv ../../illumos.sh
 ```
 
@@ -631,8 +645,8 @@ a manual command like:
 ```
 $ cd projects/illumos-extra/binutils
 $ STRAP= \
-  CTFMERGE=/home/rm/src/mdb_v8/projects/illumos/usr/src/tools/proto/*/opt/onbld/bin/i386/ctfmerge \
-  CTFCONVERT=/home/rm/src/mdb_v8/projects/illumos/usr/src/tools/proto/*/opt/onbld/bin/i386/ctfconvert \
+  CTFMERGE=/home/rm/src/mdb_v8/projects/illumos-joyent/usr/src/tools/proto/*/opt/onbld/bin/i386/ctfmerge \
+  CTFCONVERT=/home/rm/src/mdb_v8/projects/illumos-joyent/usr/src/tools/proto/*/opt/onbld/bin/i386/ctfconvert \
   gmake DESTDIR=/home/rm/src/mdb_v8/proto install
 ```
 

@@ -265,7 +265,7 @@ function bi_copy_files
 
 function bi_gen_whatis
 {
-	local tools_proto="$bi_wsroot/projects/illumos/usr/src/tools/proto"
+	local tools_proto="$bi_wsroot/projects/illumos-joyent/usr/src/tools/proto"
 	local tools_man="$tools_proto/root_i386-nd/opt/onbld/bin/i386/man"
 
 	bi_emit_start 'Generating whatis database'

@@ -101,7 +101,7 @@ function archive_artifacts {
         echo "Writing Jenkins artifacts to output/$JENKINS_STAGE_NAME"
         mkdir -p output/$JENKINS_STAGE_NAME
         # move these logs because they're large
-        mv projects/illumos/log/log.* output/$JENKINS_STAGE_NAME
+        mv projects/illumos-joyent/log/log.* output/$JENKINS_STAGE_NAME
         cp log/* output/$JENKINS_STAGE_NAME
         for file in output/bits/artifacts.txt \
                 output/gitstatus.json \
@@ -189,7 +189,7 @@ git config --replace-all remote.origin.fetch '+refs/heads/*:refs/remotes/origin/
 git remote update
 
 # Remove any old logs so that these don't get swept up as Jenkins artifacts
-log rm -rf log projects/illumos/log
+log rm -rf log projects/illumos-joyent/log
 
 # Is this a release branch build
 if echo "${BRANCH}" | grep -q "^release"; then
