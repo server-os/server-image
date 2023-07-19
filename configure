@@ -235,7 +235,7 @@ function fetch_adjuncts
 
 function fetch_closed
 {
-	local ildir="projects/illumos"
+	local ildir="projects/illumos-joyent"
 	local cld="on-closed-bin.i386.tar.bz2"
 	local clnd="on-closed-bin-nd.i386.tar.bz2"
 	[[ -z "$ON_CLOSED_BINS_URL" ]] && fatal \

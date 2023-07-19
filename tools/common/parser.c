@@ -14,7 +14,7 @@
  */
 
 /*
- * smartos-live: Build Tools: String Parsing Utilities.
+ * server-image: Build Tools: String Parsing Utilities.
  */
 
 

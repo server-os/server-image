@@ -17,7 +17,7 @@
 #define	_COMMON_H
 
 /*
- * smartos-live: Build Tools: Common Utilities.
+ * server-image: Build Tools: Common Utilities.
  */
 
 #ifdef __cplusplus

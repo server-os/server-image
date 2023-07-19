@@ -14,7 +14,7 @@
  */
 
 /*
- * smartos-live: String List with variable element count.
+ * server-image: String List with variable element count.
  */
 
 #include <stdio.h>

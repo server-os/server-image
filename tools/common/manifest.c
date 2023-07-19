@@ -14,7 +14,7 @@
  */
 
 /*
- * smartos-live: Build Tools: Manifest File Reader.
+ * server-image: Build Tools: Manifest File Reader.
  */
 
 

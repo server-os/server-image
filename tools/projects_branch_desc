@@ -11,7 +11,7 @@
 
 #
 # Query the projects framework to emit a uniquified hyphen-separated list of
-# branch names, omitting any branch names identical to the current smartos-live
+# branch names, omitting any branch names identical to the current server-image
 # branch, passed as $1.
 #
 

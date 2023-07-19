@@ -14,7 +14,7 @@
  */
 
 /*
- * smartos-live: Build Tools: String Set data structure backed by libavl.
+ * server-image: Build Tools: String Set data structure backed by libavl.
  */
 
 

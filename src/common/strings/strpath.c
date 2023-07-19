@@ -14,7 +14,7 @@
  */
 
 /*
- * smartos-live: Path manipulation utility functions.
+ * server-image: Path manipulation utility functions.
  */
 #include "custr.h"
 

@@ -6,13 +6,13 @@ Build the images used to create Server OS servers.
 
 - Server OS based build server is available, recommended 8 Gb memory, 50 Gb HD
 
-On a clean install:
+On a clean install, first update the base system:
 
-    $ pkgin -y update
-
-    $ pkgin -y upgrade
+    $ pkgin -y update && pkgin -y upgrade
 
 Install git:
+
+TODO: Try only installing git-base
 
     $ pkgin -y install git
 

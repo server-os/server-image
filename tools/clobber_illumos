@@ -37,7 +37,7 @@ function ci_fatal
 }
 
 #
-# We assume that this will be run from the root of smartos-live. If
+# We assume that this will be run from the root of server-image. If
 # we're not being run from there, error, since we assume paths. We use
 # the presence of the file default.configure-projects for this, since it's
 # a relatively unique file in the top level.
@@ -55,7 +55,7 @@ function ci_verify_root
 #
 function ci_do_clobber
 {
-	echo "Clobbering $ci_wsroot/projects/illumos"
+	echo "Clobbering $ci_wsroot/projects/illumos-joyent"
 	export MAKE="$ci_dmake"
 	$ci_illumos/tools/scripts/bldenv $ci_illumos/../../illumos.sh \
 	    'cd $CODEMGR_WS/usr/src && dmake clobber'

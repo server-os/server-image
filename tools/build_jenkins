@@ -36,7 +36,7 @@ export BUILDSTAMP=${TIMESTAMP}
 export ENGBLD_CUSTOM=''
 
 # Jenkins should set this, otherwise default to the current branch, assuming
-# our working directory is a smartos-live repository.
+# our working directory is a server-image repository.
 if [[ -z "${BRANCH}" ]]; then
     export BRANCH=$(git branch 2> /dev/null | \
         sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/')
@@ -60,7 +60,7 @@ function usage {
     echo "  -S <stage>    the Jenkins stage name, used to distinguish artifacts"
     echo ""
     echo "ENVIRONMENT"
-    echo "  BRANCH                the branch of smartos-live being built"
+    echo "  BRANCH                the branch of server-image being built"
     echo "  ENGBLD_DEST_OUT_PATH  the Manta path used when uploading artifacts"
     echo "  PLAT_CONFIGURE_ARGS   additional arguments to pass to 'configure'"
     echo "  PLATFORM_BUILD_FLAVOR one of the -F arguments, as above"
@@ -200,7 +200,7 @@ fi
 
 #
 # ${CONFIGURE_PROJECTS} is multi-line jenkins parameter, set so that users can
-# specify which branches of the repositories in the smartos-live 'projects'
+# specify which branches of the repositories in the server-image 'projects'
 # framework to build, and from where they should be cloned. For release builds,
 # override all repositories.
 #

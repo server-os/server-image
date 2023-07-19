@@ -77,15 +77,15 @@ else
 fi
 
 echo "Updating illumos-joyent... \c "
-cd $upd_root/projects/illumos
+cd $upd_root/projects/illumos-joyent
 [[ $? -eq 0 ]] || fail "can't find illumos directory"
 git_update || rm -f $upd_illumos_stamp
 echo "done"
 
 
-echo "Updating smartos-live... \c "
+echo "Updating server-image... \c "
 cd $upd_root
-[[ $? -eq 0 ]] || fail "smartos-live repo disappeared"
+[[ $? -eq 0 ]] || fail "server-image repo disappeared"
 git_update || rm -f $upd_live_stamp
 echo "done"
 

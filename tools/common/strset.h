@@ -17,7 +17,7 @@
 #define	_STRSET_H
 
 /*
- * smartos-live: Build Tools: String Set data structure backed by libavl.
+ * server-image: Build Tools: String Set data structure backed by libavl.
  */
 
 #ifdef __cplusplus

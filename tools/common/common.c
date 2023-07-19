@@ -14,7 +14,7 @@
  */
 
 /*
- * smartos-live: Build Tools: Common Utilities.
+ * server-image: Build Tools: Common Utilities.
  */
 
 

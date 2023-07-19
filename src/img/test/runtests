@@ -169,7 +169,7 @@ if [[ $opt_reporter == "tap" ]]; then
     echo "# test output:"
     ls $OUTPUT_DIR/*.tap
 
-    # Colored summary of results (borrowed from smartos-live.git/src/vm/run-tests).
+    # Colored summary of results (borrowed from server-image.git/src/vm/run-tests).
     echo ""
     echo "# test results:"
 

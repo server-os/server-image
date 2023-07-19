@@ -17,7 +17,7 @@
 #define	_MANIFEST_H
 
 /*
- * smartos-live: Build Tools: Manifest File Reader.
+ * server-image: Build Tools: Manifest File Reader.
  */
 
 #ifdef __cplusplus

@@ -17,7 +17,7 @@
 #define	_STRLIST_H
 
 /*
- * smartos-live: String List with variable element count.
+ * server-image: String List with variable element count.
  */
 
 #ifdef __cplusplus

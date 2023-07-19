@@ -16,7 +16,7 @@ VM.loglevel = 'DEBUG';
 // This tests both that the txtimer + txburst can be set, but also a payload
 // typical of one that might be used for installing a new OS. Two cdrom devices
 // and a blank zvol. We don't boot it because the ISOs don't exist.
-// With the passed-in UUID we also test for smartos-live#112
+// With the passed-in UUID we also test for server-image#112
 var payload = {
     alias: 'test-create-kvm-' + process.pid,
     autoboot: false,
