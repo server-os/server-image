@@ -1,5 +1,5 @@
-illumos-extra: main: origin
-illumos: main: origin
-local/illumos-kvm-cmd: master: origin
-local/illumos-kvm: master: origin
+illumos-extra: master: origin
+illumos: master: origin
+local/kvm-cmd: master: origin
+local/kvm: master: origin
 local/mdata-client: master: origin
