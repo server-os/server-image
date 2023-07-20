@@ -286,8 +286,7 @@ build, configure shadow compilers, etc. See `./configure -h`.
 ### Build Outputs
 
 By default, running `gmake live` produces a directory and a tarball in
-the `output` directory.  This can be used in Triton with the `sdcadm`
-commands and can be used to boot through `ipxe` or other network boot
+the `output` directory.  This can be used to boot through `ipxe` or other network boot
 loaders.
 
 It is also possible to create ISO and USB images. These images default
@@ -335,20 +334,16 @@ This section is likely to only interest users who perform release builds
 of SmartOS, or the Triton Platform Image.
 
 When performing release builds, the following are convenient targets
-which encapsulate the entire release process for a specific Triton
-and/or SmartOS build variety:
+which encapsulate the entire release process for a specific build variety:
 
 * `common-release`: depends on `check`, `live` and `pkgsrc` targets and
    needs to be run before a subsequent `make` invocation of any of
    the `-release` targets below
 * `smartos-release`: builds and publishes SmartOS artifacts
-* `triton-release`: builds and publishes a Triton platform
-  image
-* `triton-and-smartos-release`: all of the above
 
 The following are used by the targets listed above as part of the
 release engineering process when publishing release builds of the
-SmartOS and Triton platform image. There are varieties of each target
+SmartOS platform image. There are varieties of each target
 for both build flavors.
 
 * `*-publish`: stage bits from the output directory, preparing for
@@ -748,7 +743,7 @@ When thinking about integrating, the following are questions that you or
 your approver should be asking:
 
 * Have I tested this in all the ways I can think of? Might this impact
-standalone SmartOS or Triton in some way?
+standalone SmartOS in some way?
 * Have I documented any new commands or interfaces in manual pages?
 * Have I built this both debug and non-debug?
 * Have I reviewed the `git pbchk` output when working in bldenv in

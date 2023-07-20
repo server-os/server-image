@@ -32,7 +32,6 @@ STRAP_PROTO =	$(ROOT)/proto.strap
 MPROTO =	$(ROOT)/manifest.d
 BOOT_MPROTO =	$(ROOT)/boot.manifest.d
 BOOT_PROTO =	$(ROOT)/proto.boot
-IMAGES_PROTO =	$(ROOT)/proto.images
 TESTS_PROTO =	$(ROOT)/proto.tests
 
 # On Darwin/OS X we support running 'make check'
@@ -126,10 +125,6 @@ BOOT_VERSION :=	boot-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
     echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
 BOOT_TARBALL :=	output/$(BOOT_VERSION).tgz
 
-IMAGES_VERSION :=	images-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
-    echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
-IMAGES_TARBALL :=	output/$(IMAGES_VERSION).tgz
-
 TESTS_VERSION :=	tests-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
     echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
 TESTS_TARBALL :=	output/$(TESTS_VERSION).tgz
@@ -173,32 +168,6 @@ $(BOOT_TARBALL): world manifest
 	    $(BOOT_PROTO) $(ROOT)/proto
 	cp $(STAMPFILE) $(BOOT_PROTO)/etc/version/boot
 	(cd $(BOOT_PROTO) && pfexec gtar czf $(ROOT)/$@ .)
-
-#
-# Create proforma images for use in assembling bootable USB device images.  The
-# images tar file is used by "make coal" and "make usb" in "sdc-headnode.git"
-# to create Triton boot and installation media.
-#
-$(IMAGES_PROTO)/4gb.img: boot
-	rm -f $@
-	mkdir -p $(IMAGES_PROTO)
-	./tools/build_boot_image -p 4 -r $(ROOT)
-
-$(IMAGES_PROTO)/8gb.img: boot
-	rm -f $@
-	mkdir -p $(IMAGES_PROTO)
-	./tools/build_boot_image -p 8 -r $(ROOT)
-
-$(IMAGES_PROTO)/16gb.img: boot
-	rm -f $@
-	mkdir -p $(IMAGES_PROTO)
-	./tools/build_boot_image -p 16 -r $(ROOT)
-
-$(IMAGES_TARBALL): $(IMAGES_PROTO)/4gb.img $(IMAGES_PROTO)/8gb.img \
-	$(IMAGES_PROTO)/16gb.img
-	cd $(IMAGES_PROTO) && gtar -Scvz --owner=0 --group=0 -f $(ROOT)/$@ *
-
-images-tar: $(IMAGES_TARBALL)
 
 #
 # Manifest construction.  There are 5 sources for manifests we need to collect
@@ -270,7 +239,6 @@ $(TESTS_MANIFEST): world
 	cat $(TEST_IPS_MANIFESTS) | \
 	    ./tools/generate-manifest-from-ips.nawk | \
 	    ./tools/sorter >> $@
-
 
 #
 # We want a copy of the buildstamp in the tests archive, but
@@ -447,10 +415,9 @@ clean:
 	(cd $(ROOT) && [ -h $(STRAP_PROTO) ] || rm -rf $(STRAP_PROTO))
 	(cd $(ROOT) && rm -f $(STRAP_PROTO))
 	(cd $(ROOT) && pfexec rm -rf $(BOOT_PROTO))
-	(cd $(ROOT) && pfexec rm -rf $(IMAGES_PROTO))
 	(cd $(ROOT) && pfexec rm -rf $(TESTS_PROTO))
 	(cd $(ROOT) && mkdir -p $(PROTO) $(BOOT_PROTO) \
-	    $(IMAGES_PROTO) $(TESTS_PROTO))
+	    $(TESTS_PROTO))
 	rm -f tools/cryptpass
 	(cd tools/builder && gmake clean)
 	(cd tools/format_image && gmake clean)
@@ -470,10 +437,6 @@ iso: live
 
 usb: live
 	./tools/build_boot_image -r $(ROOT)
-
-#
-# Targets and macros to create Triton manifests and publish build artifacts.
-#
 
 #
 # The build itself doesn't add debug suffixes to its outputs when running
@@ -516,7 +479,6 @@ PLATFORM_STAMP			= $(PLATFORM_BRANCH)$(PUB_BRANCH_DESC)-$(PLATFORM_TIMESTAMP)
 PLATFORM_TARBALL_BASE		= platform-$(PLATFORM_TIMESTAMP).tgz
 PLATFORM_TARBALL		= output/$(PLATFORM_TARBALL_BASE)
 
-PUB_IMAGES_BASE			= images$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).tgz
 PUB_BOOT_BASE			= boot$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).tgz
 PUB_TESTS_BASE			= tests$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).tgz
 
@@ -526,7 +488,6 @@ PUB_PLATFORM_MF_BASE		= platform$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).imgma
 PUB_PLATFORM_MF			= $(PLATFORM_BITS_DIR)/$(PUB_PLATFORM_MF_BASE)
 PUB_PLATFORM_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_PLATFORM_IMG_BASE)
 
-PUB_IMAGES_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_IMAGES_BASE)
 PUB_BOOT_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_BOOT_BASE)
 PUB_TESTS_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_TESTS_BASE)
 
@@ -547,24 +508,6 @@ common-platform-publish:
 	./tools/build_changelog
 	cp output/gitstatus.json $(PLATFORM_BITS_DIR)
 	cp output/changelog.txt $(PLATFORM_BITS_DIR)
-
-.PHONY: triton-platform-publish
-triton-platform-publish: common-platform-publish
-	@echo "# Publish Triton-specific platform$(PLATFORM_DEBUG_SUFFIX) bits"
-	mkdir -p $(PLATFORM_BITS_DIR)
-	cat src/platform.imgmanifest.in | sed \
-	    -e "s/UUID/$(PLATFORM_IMAGE_UUID)/" \
-	    -e "s/VERSION_STAMP/$(PLATFORM_STAMP)/" \
-	    -e "s/BUILDSTAMP/$(PLATFORM_STAMP)/" \
-	    -e "s/SIZE/$$(stat --printf="%s" $(PLATFORM_TARBALL))/" \
-	    -e "s#SHA#$$(digest -a sha1 $(PLATFORM_TARBALL))#" \
-	    > $(PUB_PLATFORM_MF)
-	cp $(IMAGES_TARBALL) $(PUB_IMAGES_TARBALL)
-	cp $(BOOT_TARBALL) $(PUB_BOOT_TARBALL)
-	cd $(ROOT)/output/bits/platform$(PLATFORM_DEBUG_SUFFIX)
-	rm -f platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
-	ln -s $(PUB_PLATFORM_MF_BASE) \
-	    platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
 
 #
 # A wrapper to build the additional components that a standard
@@ -610,17 +553,13 @@ strap-cache-publish:
 
 #
 # Define a series of phony targets that encapsulate a standard 'release' process
-# for both SmartOS and Triton platform builds. These are a convenience to allow
+# for SmartOS platform builds. These are a convenience to allow
 # callers to invoke only two 'make' commands after './configure' has been run.
 # We can't combine these because our stampfile likely doesn't exist at the point
 # that the various build artifact Makefile macros are set, resulting in
 # misnamed artifacts. Thus, expected usage is:
 #
 # ./configure
-# make common-release; make triton-release
-#  or
-# make common-release; make triton-smartos-release
-# or
 # make common-release; make smartos-only-release
 #
 .PHONY: common-release
@@ -628,20 +567,6 @@ common-release: \
     check \
     live \
     pkgsrc
-
-.PHONY: triton-release
-triton-release: \
-    images-tar \
-    tests-tar \
-    triton-platform-publish
-
-.PHONY: triton-smartos-release
-triton-smartos-release: \
-    images-tar \
-    tests-tar \
-    triton-platform-publish \
-    smartos-build \
-    smartos-publish
 
 .PHONY: smartos-only-release
 smartos-only-release: \
