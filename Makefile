@@ -63,11 +63,6 @@ else
 MAX_JOBS ?=	$(shell tools/optimize_jobs)
 endif
 
-#
-# deps/eng is a submodule that includes build tools, ensure it gets checked out
-#
-ENGBLD_REQUIRE := $(shell git submodule update --init deps/eng)
-
 LOCAL_SUBDIRS :=	$(shell ls projects/local)
 PKGSRC =	$(ROOT)/pkgsrc
 MANIFEST =	manifest.gen
