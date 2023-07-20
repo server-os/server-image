@@ -151,7 +151,7 @@ function checkout_project
 function create_projects
 {
 	local dir="projects/local"
-	local git_stem="https://github.com/joyent"
+	local git_stem="git@github.com:server-os"
 
 	[[ -d "$dir" ]] || mkdir -p "$dir" || fatal "failed to create $dir"
 
@@ -163,6 +163,7 @@ function create_projects
 	else
 		echo "Info: no configure-projects file found, using defaults."
 	fi
+
 	echo "$configure_projects" | grep -v '^#' | while read -r line; do
 		local project_dir=$(echo $line | cut -d: -f 1 | sed -e 's/ //g')
 		local project_name=$(basename $project_dir)
@@ -170,22 +171,13 @@ function create_projects
 		local project_branch=$(echo $line | cut -d: -f 2 | sed -e 's/ //g')
 		local project_url=$(echo $line | cut -d: -f 3- | sed -e 's/ //g')
 
-		# special cases for some projects
-		case ${project_name} in
-		'kvm'|'kvm-cmd')
-			git_name="illumos-${project_name}.git"
-			;;
-		'illumos')
-			git_name="illumos-joyent.git"
-			;;
-		esac
-
 		# process URL keywords
 		case $project_url in
 		'origin'|'')
 			project_url="$git_stem/$git_name"
 			;;
 		esac
+
 		checkout_project "projects/$project_dir" "$project_branch" \
 		    "$project_url"
 	done || fatal "Error encountered when creating projects directory"
