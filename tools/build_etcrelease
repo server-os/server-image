@@ -162,8 +162,8 @@ if [[ -n "$ber_version" ]]; then
 fi
 
 ( printf '[\n'
-get_status "$ber_wsroot" smartos-live
-get_status "$ber_wsroot/projects/illumos" illumos-joyent
+get_status "$ber_wsroot" server-image
+get_status "$ber_wsroot/projects/illumos" illumos
 get_status "$ber_wsroot/projects/illumos-extra" illumos-extra
 for d in $ber_wsroot/projects/local/*; do
 	get_status $d $(basename $d)
