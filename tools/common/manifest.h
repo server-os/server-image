@@ -11,13 +11,14 @@
 
 /*
  * Copyright 2016 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 #ifndef _MANIFEST_H
 #define	_MANIFEST_H
 
 /*
- * smartos-live: Build Tools: Manifest File Reader.
+ * Build Tools: Manifest File Reader.
  */
 
 #ifdef __cplusplus

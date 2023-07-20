@@ -30,7 +30,7 @@ build and rebooting on it. Here is how:
 
     # On a dev machine:
     # Get a clone of the repo.
-    git clone git@github.com:TritonDataCenter/smartos-live.git
+    git clone git@github.com:server-os/server-image.git
     cd src/img
 
     # Make edits, e.g. change the version:

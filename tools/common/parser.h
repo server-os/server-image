@@ -11,13 +11,14 @@
 
 /*
  * Copyright 2015 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 #ifndef _PARSER_H
 #define	_PARSER_H
 
 /*
- * smartos-live: Build Tools: String Parsing Utilities.
+ * Build Tools: String Parsing Utilities.
  */
 
 #include "strlist.h"

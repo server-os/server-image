@@ -12,6 +12,7 @@
 
 #
 # Copyright 2020 Joyent, Inc.
+# Copyright 2023 Server OS.
 #
 
 #
@@ -37,7 +38,7 @@ function ci_fatal
 }
 
 #
-# We assume that this will be run from the root of smartos-live. If
+# We assume that this will be run from the root of server-image. If
 # we're not being run from there, error, since we assume paths. We use
 # the presence of the file default.configure-projects for this, since it's
 # a relatively unique file in the top level.

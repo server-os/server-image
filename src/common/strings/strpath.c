@@ -11,10 +11,11 @@
 
 /*
  * Copyright (c) 2017, Joyent, Inc.
+ * Copyright (c) 2023, Server OS.
  */
 
 /*
- * smartos-live: Path manipulation utility functions.
+ * Build Tools: Path manipulation utility functions.
  */
 #include "custr.h"
 

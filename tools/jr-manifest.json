@@ -67,7 +67,7 @@
             "name": "smartos-changelog"
         },
         {
-            "name": "smartos-live",
+            "name": "server-image",
             "labels": {
                 "release": true,
                 "mg": "platform"

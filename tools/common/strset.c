@@ -11,10 +11,11 @@
 
 /*
  * Copyright 2016 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 /*
- * smartos-live: Build Tools: String Set data structure backed by libavl.
+ * Build Tools: String Set data structure backed by libavl.
  */
 
 

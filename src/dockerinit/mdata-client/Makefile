@@ -103,7 +103,7 @@ $(DESTDIR)/lib/smartdc/mdata-%:
 	ln -s $(BINDIR)/$$(basename $@) $@
 
 #
-# SmartOS (smartos-live) Package Manifest Targets
+# Server OS (server-image) Package Manifest Targets
 #
 
 .PHONY: manifest

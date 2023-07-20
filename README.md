@@ -1,21 +1,64 @@
-# Quickstart
+# Server OS Server Image
 
-```
-git clone https://github.com/TritonDataCenter/smartos-live.git
-cd smartos-live
-./configure
-gmake world
-gmake live
-ls output/
-```
+Build the images used to create Server OS servers.
+
+## Prerequisites
+
+- Server OS based build server is available, recommended 8 Gb memory, 50 Gb HD
+
+On a clean install, first update the base system:
+
+    $ pkgin -y update && pkgin -y upgrade
+
+Install git:
+
+TODO: Try only installing git-base
+
+    $ pkgin -y install git
+
+TODO: Setup SSH key to connect to git!
+
+    $ git clone git@github.com:server-os/server-image.git
+
+    $ git clone git@github.com:server-os/zone-image.git
+
+
+## Create server images
+
+    $ cd server-image
+
+    $ ./configure
+
+    $ gmake live
+    $ gmake iso
+    $ gmake usb
+    $ gmake common-release
+    $ gmake server-os-build
+    $ gmake server-os-publish
+
+After successful build, the zone image can be build (see https://github.com/server-os/zone-image).
+
+
+## Projects
+
+### mdata client
+
+https://eng.tritondatacenter.com/mdata/protocol.html
+
+https://eng.tritondatacenter.com/mdata/datadict.html
+
+
+-----------------
+old docs
+
 
 # Overview
 
-This repository is smartos-live, which builds a SmartOS platform image
+This repository builds a Server OS platform image
 containing the illumos core OS components; a set of "extra" mostly
-third-party software required by illumos, by other SmartOS software, or
+third-party software required by illumos, by other Server OS software, or
 for system management; and a collection of utilities comprising
-SmartOS-specific functionality found in `projects/local/`.
+Server OS specific functionality found in `projects/local/`.
 
 # Contents
 
@@ -50,7 +93,7 @@ includes:
 # Bug Reports
 
 If you encounter a problem, please reach out for assistance. You can file a
-[GitHub issue](https://github.com/TritonDataCenter/smartos-live/issues) for
+[GitHub issue](https://github.com/server-os/server-image/issues) for
 any problem you encounter. When filing a bug, please include the platform
 version that you're running and a description of the problem.
 
@@ -58,39 +101,39 @@ If there was an operating system crash dump or a program generated a
 core dump, it would be greatly appreciated if you could make that
 available.
 
-While there are multiple repositories that make up the smartos-live
-image, if you're in doubt about where to file a bug or just are
-uncertain, please file it on the [SmartOS live issue
-tracker](https://github.com/TritonDataCenter/smartos-live/issues) and we'll
+While there are multiple repositories that make up the server image,
+if you're in doubt about where to file a bug or just are
+uncertain, please file it on the [Server OS live issue
+tracker](https://github.com/server-os/server-image/issues) and we'll
 help from there. It's more important that the bug is recorded and we can work
 on solving it than it end up in the right location.
 
-# Components of SmartOS
+# Components of Server OS
 
-SmartOS is made up of several different components. These components are:
+Server OS is made up of several different components. These components are:
 
-## smartos-live
+## server-image
 
-The [smartos-live](https://github.com/TritonDataCenter/smartos-live)
-repository is the root of SmartOS. It has logic for how to build all of the
-different components that make up SmartOS and has components that are
-specific to the SmartOS live image environment. For example, it has tools
+The [server-image](https://github.com/server-os/server-image)
+repository is the root of Server OS. It has logic for how to build all of the
+different components that make up Server OS and has components that are
+specific to the Server OS image environment. For example, it has tools
 like `vmadm` and `imgadm`.
 
-## illumos-joyent
+## illumos
 
-The [illumos-joyent](https://github.com/TritonDataCenter/illumos-joyent)
-repository is the core of the operating system. It represents SmartOS's
+The [illumos](https://github.com/server-os/illumos)
+repository is the core of the operating system. It represents Server OS's
 child of [illumos-gate](https://github.com/illumos/illumos-gate). This
 has the core kernel, libraries, and user commands.
 
-The illumos-joyent code can be found in the smartos-live tree under
-`projects/illumos`. The SmartOS build only supports using illumos-joyent
+The illumos-joyent code can be found in the server-image tree under
+`projects/illumos`. The Server OS build only supports using illumos-joyent
 and not stock illumos-gate.
 
 ## illumos-extra
 
-The [illumos-extra](https://github.com/TritonDataCenter/illumos-extra)
+The [illumos-extra](https://github.com/server-os/illumos-extra)
 repository contains a few different sets of software:
 
 1. Software which is held at a specific version that is required for the
@@ -106,7 +149,7 @@ working build machine of any illumos vintage, we can build the rest of
 the platform and get the specific patched versions of software we need
 from illumos-extra.
 
-The illumos-extra code can be found in the smartos-live tree under
+The illumos-extra code can be found in the server-image tree under
 `projects/illumos-extra`.
 
 ### illumos-extra design
@@ -149,22 +192,22 @@ of the set up process.
 
 There are a collection of extra projects that live in separate
 repositories. Each of these projects lives in the `projects/local`
-directory of the smartos-live root. The local projects system defines a
+directory of the server-image root. The local projects system defines a
 series of Makefile targets that a local project is required to implement.
 
 The current set of local projects include:
 
-* [illumos-kvm](https://github.com/TritonDataCenter/illumos-kvm)
-* [illumos-kvm-cmd](https://github.com/TritonDataCenter/illumos-kvm-cmd) aka
+* [illumos-kvm](https://github.com/server-os/illumos-kvm)
+* [illumos-kvm-cmd](https://github.com/server-os/illumos-kvm-cmd) aka
 QEMU
-* [mdata-client](https://github.com/TritonDataCenter/mdata-client)
+* [mdata-client](https://github.com/server-os/mdata-client)
 
-# Building SmartOS
+# Building Server OS
 
 ## Setting up a Build Environment
 
-The first step when building is to set up a build environment. The SmartOS
-build requires building on SmartOS.  As of the `base-64-lts 21.4.0` build
+The first step when building is to set up a build environment. The Server OS
+build requires building on Server OS.  As of the `base-64-lts 21.4.0` build
 image, the SmartOS Platform Image must be 20211007 or newer. This can be done
 in VMware, on an existing SmartOS machine, or other virtualization. You must
 build inside of a non-global zone.
@@ -270,8 +313,8 @@ Once the build zone has been configured, you can kick off a build in a
 few easy steps:
 
 ```
-$ git clone https://github.com/TritonDataCenter/smartos-live
-$ cd smartos-live
+$ git clone https://github.com/server-os/server-image
+$ cd server-image
 $ ./configure
 $ gmake live
 ```
@@ -291,7 +334,7 @@ loaders.
 
 It is also possible to create ISO and USB images. These images default
 to the VGA console. To make an ISO or USB image you can run from the
-root of the smartos-live repository:
+root of the server-image repository:
 
 ```
 $ ./tools/build_boot_image -r $ROOT
@@ -304,13 +347,13 @@ directories based on the latest platform image.
 
 ## Build Order and Common Targets
 
-When you kick off a smartos-live build (running `gmake live`), it will
+When you kick off a server-image build (running `gmake live`), it will
 build components in the following order:
 
 1. illumos-extra bootstrap phase against the build system
-2. illumos-joyent
+2. illumos
 3. illumos-extra main phase against the proto area
-4. smartos-live src against the proto area
+4. server-image src against the proto area
 5. local projects against the proto area
 6. assemble packaging manifests
 7. assemble the platform tgz
@@ -322,7 +365,7 @@ The following summarizes the primary targets used on a day to day basis:
 
 * `world`: Builds all the components
 * `live`: Assembles the live image from the built components
-* `check`: Runs various style and lint tools on code in smartos-live
+* `check`: Runs various style and lint tools on code in server-image
 * `clean`: Removes built artifacts and intermediate objects
 * `update`: Updates all of the repositories to the latest
 * `iso`: Builds a CD-ROM ISO image, defaulting to the VGA console
@@ -371,7 +414,7 @@ please report a bug.
 To update all of the repositories that are part of the platform, you
 should first make sure that all of your changes have been committed.
 Once they have been, you can run the following from the root of the
-smartos-live repository:
+server-image repository:
 
 ```
 $ gmake update
@@ -399,7 +442,7 @@ While developing, you may want to use local branches, sometimes there
 are longer lived branches that exist for project development or for
 releases. To automate the configuration of branches when creating the
 `projects` directory, create a file called `configure-projects` in the
-root of the smartos-live repository.
+root of the server-image repository.
 
 The `configure-projects` file takes the format:
 
@@ -413,7 +456,7 @@ default to github.com.
 
 If you update the branch name that corresponds to a repository, rerun
 `./configure` to make sure that every branch is set to the correct
-one, except that of smartos-live which needs to be changed manually.
+one, except that of server-image which needs to be changed manually.
 
 Not all repositories have to be on the same branch. It's totally fine to
 mix and match.
@@ -421,7 +464,7 @@ mix and match.
 ### Additional build customization
 
 Several variables can also be set in a shell script at the top of the
-smartos-live repository called `configure-build` and are sourced by `configure`
+server-image repository called `configure-build` and are sourced by `configure`
 if this file exists. This allows you to override `configure` script defaults,
 or include additional pre-build customization.
 
@@ -437,8 +480,8 @@ ILLUMOS_ADJUNCT_TARBALL_URL="https://us-east.manta.joyent.com/Joyent_Dev/public/
 
 ### Debug Builds
 
-By default, all of SmartOS is built non-debug. It is possible to build a
-debug build of SmartOS. This debug build primarily changes things by
+By default, all of Server OS is built non-debug. It is possible to build a
+debug build of Server OS. This debug build primarily changes things by
 creating a debug build of illumos. A debug build of illumos will result
 in various things such as:
 
@@ -457,8 +500,8 @@ arguments when running `./configure` to take care of it. For example, you
 would modify the normal workflow as follows:
 
 ```
-$ git clone https://github.com/TritonDataCenter/smartos-live
-$ cd smartos-live
+$ git clone https://github.com/server-os/server-image
+$ cd server-image
 $ ./configure -d
 $ gmake live
 ```
@@ -492,7 +535,7 @@ should set the `MAX_JOBS` environment variable.
 ## Incremental Development
 
 Each of the different build phases is represented with a stamp file that
-exists in the root of the smartos-live clone. These files are named based
+exists in the root of the server-image clone. These files are named based
 on the directory. For example `0-illumos-stamp` and
 `0-subdir-mdata-client-stamp`.
 
@@ -527,7 +570,7 @@ Guide](https://www.illumos.org/books/dev/). If you simply remove the
 
 However, for most iterations, this can be cumbersome. Here, you can use
 the `bldenv(1ONBLD)` tool. To use `bldenv`, follow the following steps
-from the root of the smartos-live repository:
+from the root of the server-image repository:
 
 ```
 $ cd projects/illumos/usr/src
@@ -542,7 +585,7 @@ SmartOS build, then once you are complete, you can run `gmake live` again.
 For example, if you're iterating on a driver or command of some kind in
 the platform then you can simply use `dmake install` to get the build
 artifacts into the proto area and then run `gmake live` at the top level
-of smartos-live to rebuild the platform image.
+of server-image to rebuild the platform image.
 
 In addition, depending on what you're working on, you can also sometimes
 copy over build artifacts over to the running system and use them out of
@@ -553,7 +596,7 @@ it over to a running system to test against. Even if the vast majority
 of development is done this way, it's still important to always test a
 full build at the end.
 
-The top-level tool `./tools/build_illumos` in the smartos-live
+The top-level tool `./tools/build_illumos` in the server-image
 repository will execute an incremental nightly(1ONBLD) build. This will
 perform the same actions as if you removed the `0-illumos-stamp` and ran
 `gmake 0-illumos-stamp` at the top-level. However, manually invoking it
@@ -576,7 +619,7 @@ use the path of the repository that you're operating on.
 
 The simplest way to figure out how to rebuild what you need is to examine the
 make output from a build. For example, if you were iterating on gas and the root
-of the smartos-live repository was at `/home/rm/src/mdb_v8`, then you might run
+of the server-image repository was at `/home/rm/src/mdb_v8`, then you might run
 a manual command like:
 
 ```
@@ -603,7 +646,7 @@ target inside of the target directory.
 While working on `vmadm` and `imgadm` there often isn't a need to rebuild
 the platform image every single time that you want to make a change. A
 script called `tools/rsync-to` exists which will synchronize all of your
-local change from the smartos-live `src/vm` and `src/img` directories
+local change from the server-image `src/vm` and `src/img` directories
 and apply them to the target server by copying them into `/var/tmp/` and
 then performing a lofs mount.
 
@@ -618,7 +661,7 @@ specific set of files is determined by the manifests, which will be
 discussed in a later section.
 
 The root of the proto area is in the `proto` directory under the root of
-the smartos-live git clone.
+the server-image git clone.
 
 Binaries in the proto area should be thought of as cross-compiled
 binaries. While in our case, we are building x86 on x86, the binaries
@@ -636,7 +679,7 @@ file.
 
 The manifest files for each repository are combined into one large
 manifest file. This manifest file is used by the `builder` program found
-in smartos-live in the `tools/builder` directory.
+in server-image in the `tools/builder` directory.
 
 Each line of a manifest file contains a single file, directory, symlink,
 or hardlink directive. Comments are done with the `#` character. For example:
@@ -687,26 +730,12 @@ All the repositories contained within this build use GitHub pull requests for
 new changes.
 
 All changes should have an associated issue. You can use the [GitHub
-issue tracker](https://github.com/TritonDataCenter/smartos-live/issues). MNX
-employees use an internal JIRA exposed at
-<https://smartos.org/bugview>. The commit message should be of this form:
-
-```
-TritonDataCenter/smartos-live#9999 make some changes (#23)
-
-TritonDataCenter/smartos-live#10000 make a related change
-Reviewed by: Steve Reviewer <steve.reviewer@gmail.com>
-Approved by: Amy Approver <amy.approver@gmail.com>
-```
-
-The first line should be the bug ID and title, optionally followed by the PR
-number as added by GitHub. After a blank line, the commit body should list any
-additional bugs fixed in this change, along with the usual reviewer tags.
+issue tracker](https://github.com/server-os/server-image/issues). 
 
 In addition to at least one code review, you will need to document your testing
 and gain "integration approval" (the Approved by tag).
 
-If you would like to make a change to `illumos-joyent` specifically, please see
+If you would like to make a change to `illumos` specifically, please see
 [Upstreaming](#upstreaming) below.
 
 ## Review

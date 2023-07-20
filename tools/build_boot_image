@@ -13,6 +13,7 @@
 #
 # Copyright (c) 2019, Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 Server OS.
 #
 
 #
@@ -21,7 +22,7 @@
 # tools in sdc-headnode.git to produce Triton USB and COAL images.  When
 # building SmartOS media, it uses the latest platform file that's been built.
 # This program can be invoked standalone via the "gmake iso", "gmake usb" and
-# "gmake images" targets of the top-level Makefile in "smartos-live.git".
+# "gmake images" targets of the top-level Makefile in "server-image.git".
 #
 # This script needs to be run either as root or as a user that is granted the
 # "Primary Administrator" profile.  When run in a non-global zone, it must be
@@ -113,7 +114,7 @@ function usage()
 	[[ ! -z $1 ]] && printf "%s\n\n" "$1" 1>&2
 
 	print -u2 "Usage: $(basename $0) [-I] [-x] [-c console] " \
-	    "[-p <size>] -r <smartos-live repo>"
+	    "[-p <size>] -r <server-image repo>"
 	print -u2 " -I\tbuild SmartOS ISO image (default: USB image)"
 	print -u2 " -c\tspecify primary console (e.g. ttyb)"
 	print -u2 " -p\tbuild proforma USB image for Triton (e.g. 1gb)"

@@ -39,7 +39,7 @@ pkgin export | sort > /package.list
 
 Because all the base pkgsrc libraries that are used are going to
 change, each build environment will need to be cleaned out. You should
-identify the root of each smartos-live repository clone and for each
+identify the root of each server-image repository clone and for each
 one, run the `gmake clean` target. This will cause all the builds to
 be cleaned out.
 
@@ -304,14 +304,14 @@ pkgin export | sort > /package.list.new
 /opt/local/bin/diff -y /package.list /package.list.new
 ```
 
-Note that the packages normally installed by smartos-live's `configure`
+Note that the packages normally installed by server-image's `configure`
 script might be missing at this point. When you next run `configure` in
-advance of doing a smartos-live build, they will be installed from
+advance of doing a server-image build, they will be installed from
 http://us-east.manta.joyent.com/Joyent_Dev/public/releng/pkgsrc.
 
 At this point, you should be able to build a post-OS-8349 (2021.4) revision
-of smartos-live and repos.  NOTE that illumos-extra must be updated
-concurrently with smartos-live. You may also reboot your dev zone and have it
+of server-image and repos.  NOTE that illumos-extra must be updated
+concurrently with server-image. You may also reboot your dev zone and have it
 come up cleanly. Note that the following files in /etc will now lie to you:
 
 * /etc/motd
@@ -322,11 +322,11 @@ the /opt/local 2021Q4 pkgsrc installation.
 
 ## Testing
 
-To test this, start a fresh clone of smartos-live and build. For
+To test this, start a fresh clone of server-image and build. For
 example:
 
 ```
-$ git clone https://github.com/TritonDataCenter/smartos-live test
+$ git clone https://github.com/server-os/server-image test
 $ cd test
 $ ./configure && gmake live
 $

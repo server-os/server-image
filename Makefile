@@ -46,8 +46,8 @@ endif
 BUILD_PLATFORM := $(shell uname -v)
 
 #
-# This number establishes a maximum for smartos-live, illumos-extra, and
-# illumos-joyent.  Support for it can and should be added to other projects
+# This number establishes a maximum for Server OS, illumos-extra, and
+# illumos.  Support for it can and should be added to other projects
 # as time allows.  The default value on large (16 GB or more) zones/systems
 # is 128; on smaller systems it is 8.  You can override this in the usual way;
 # i.e.,
@@ -260,7 +260,7 @@ tests-tar: $(TESTS_TARBALL)
 
 #
 # Update source code from parent repositories.  We do this for each local
-# project as well as for illumos, illumos-extra, and smartos-live via the
+# project as well as for illumos, illumos-extra, and server-image via the
 # update_base tool.
 #
 update: update-base $(LOCAL_SUBDIRS:%=%.update)
@@ -467,7 +467,7 @@ STRAP_CACHE_BITS_DIR		= $(ROOT)/output/strap-cache/bits
 # PUB_BRANCH_DESC indicates the different 'projects' branches used by the build.
 # Our shell script uniqifies the branches used, then emits a
 # hyphen-separated string of 'projects' branches *other* than ones which
-# match $PLATFORM_BRANCH (the branch of smartos-live.git itself).
+# match $PLATFORM_BRANCH (the branch of server-image.git itself).
 # While this doesn't perfectly disambiguate builds from different branches,
 # it is good enough for our needs.
 #
