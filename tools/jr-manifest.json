@@ -71,13 +71,6 @@
             }
         },
         {
-            "name": "sdc-ur-agent",
-            "labels": {
-                "release": true,
-                "mg": "platform"
-            }
-        },
-        {
             "name": "smartos-changelog"
         },
         {
