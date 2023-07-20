@@ -11,6 +11,7 @@
 #
 # Copyright 2020 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 Server OS.
 #
 
 #
@@ -28,12 +29,9 @@
 # we'll fall back to doing a full strap build of illumos-extra.  This is also
 # true if the user specified non-default compilers.
 #
-# In "upload" mode, we build a strap, then upload it to Manta for use by other
-# builds.
-#
 
 usage="$0 make -a adjunct.tar -j maxjobs -d protodir [-f] [-o tarball]"
-usage="$usage | upload -D bits -d path -t timestamp"
+
 wsroot=$(cd $(dirname $0)/../; pwd)
 pkgin_file="/opt/local/etc/pkgin/repositories.conf"
 manta_host="https://us-east.manta.joyent.com"
@@ -152,7 +150,7 @@ function download
 
 #
 # Do a strap build into the cache directory, then create the tarball for
-# uploading.
+# further use.
 #
 function create_cache
 {
@@ -252,50 +250,6 @@ function populate_strap
 
 }
 
-#
-# Upload a proto.strap tarball.
-#
-function upload_strap
-{
-	local pkgsrc_branch=$(identify_pkgsrc_branch)
-	local srcdirsha=$(identify_srcsha)
-	local bits_dir=""
-	local upload_dir=""
-	local timestamp=""
-
-	while getopts "D:d:ht:" arg; do
-		case $arg in
-		D)
-			bits_dir=$OPTARG ;;
-		d)
-			upload_dir=$OPTARG ;;
-		h)
-			echo "$usage"
-			exit 0 ;;
-		t)
-			timestamp=$OPTARG ;;
-		?)
-			echo "$usage" >&2
-			exit 1 ;;
-		esac
-	done
-
-	[[ -n "$bits_dir" ]] || fatal "missing -D argument"
-	[[ -n "$upload_dir" ]] || fatal "missing -d argument"
-	[[ -n "$timestamp" ]] || fatal "missing -t argument"
-
-	mdir="/$MANTA_USER/$upload_dir/$pkgsrc_branch/$srcdirsha/"
-	mbdir="$mdir/$timestamp"
-
-	verbose mmkdir -p "$mbdir"
-
-	for file in $bits_dir/*; do
-		verbose mput -f $file $mbdir/$(basename $file)
-	done
-
-	echo $mbdir | mput -H "content-type: text/plain" "$mdir/latest"
-}
-
 export PATH=/usr/bin:/usr/sbin:/sbin:/opt/local/bin:/opt/local/sbin:$PATH
 set -o pipefail
 set -e
@@ -305,7 +259,6 @@ shift
 
 case $cmd in
 	make) populate_strap $* ;;
-	upload) upload_strap $* ;;
 	*)
 		echo "$usage" >&2
 		exit 1 ;;

@@ -342,8 +342,8 @@ and/or SmartOS build variety:
 * `common-release`: depends on `check`, `live` and `pkgsrc` targets and
    needs to be run before a subsequent `make` invocation of any of
    the `-release` targets below
-* `smartos-release`: builds, publishes and uploads SmartOS artifacts
-* `triton-release`: builds, publishes and uploads a Triton platform
+* `smartos-release`: builds and publishes SmartOS artifacts
+* `triton-release`: builds and publishes a Triton platform
   image
 * `triton-and-smartos-release`: all of the above
 
@@ -353,46 +353,7 @@ SmartOS and Triton platform image. There are varieties of each target
 for both build flavors.
 
 * `*-publish`: stage bits from the output directory, preparing for
-  upload
-* `*-bits-upload`: upload bits to either Manta, a remote filesystem
-  and optionally, a Triton imgapi instance, defaulting to
-  `updates.tritondatacenter.com`
-* `*-bits-upload-latest`: as above, except attempt to re-upload the
-  latest built bits, useful in case of interrupted uploads
-
-The `bits-upload` tool comes from
-[eng.git](http://github.com/TritonDataCenter/eng) which the build pulls in via
-the `deps/eng` "git submodule" from the top-level of the workspace.
-
-The upload can be influenced by the following shell environment
-variables:
-
-* `ENGBLD_DEST_OUT_PATH`: The path where we wish to upload bits. This is
-  assumed to be relative to `$MANTA_USER` if using a Manta path.
-  Otherwise this can be set to a local (or NFS) path where we wish to
-  upload build arifacts.
-* `ENGBLD_BITS_UPLOAD_LOCAL`: If set to `true`, this causes us to simply
-  `cp(1)` bits to `$ENGBLD_DEST_OUT_PATH` rather than upload using
-  Manta tools.
-* `ENGBLD_BITS_UPLOAD_IMGAPI`: If set to `true`, this causes the build to
-  also attempt to upload any Triton images found in the `output/bits`
-  directory to an imgapi instance, which defaults to
-  `updates.tritondatacenter.com`.
-
-For Manta and imgapi uploads, the following environment variables are
-used to configure the upload:
-
-* `MANTA_USER`
-* `MANTA_KEY_ID`
-* `MANTA_URL`
-* `UPDATES_IMGADM_URL`
-* `UPDATES_IMGADM_IDENTITY`
-* `UPDATES_IMGADM_CHANNEL`
-* `UPDATES_IMGADM_USER`
-
-For details on the default values of these variables, and how they are
-used, see
-[bits-upload.sh](https://github.com/TritonDataCenter/eng/blob/master/tools/bits-upload.sh)
+  further use
 
 ## Common Tasks
 
