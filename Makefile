@@ -12,6 +12,7 @@
 #
 # Copyright 2022 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 Server OS.
 #
 
 #
@@ -536,20 +537,6 @@ PUB_TESTS_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_TESTS_BASE)
 
 PLATFORM_IMAGE_UUID		?= $(shell uuid -v4)
 
-#
-# platform-publish, platform-bits-upload and platform-bits-upload-latest
-# are analogous to the 'publish', 'bits-upload' and 'bits-upload-latest'
-# targets defined in the eng.git Makefile.defs and Makefile.targ files.
-# Typically a user would 'make world && make live' before invoking any
-# of these targets, though the '*-release' targets are likely more convenient.
-# Those are not dependencies to allow more flexibility during the publication
-# process.
-#
-# The platform-bits-publish|upload targets are also used for pushing
-# SmartOS releases to Manta.
-#
-
-
 .PHONY: common-platform-publish
 common-platform-publish:
 	@echo "# Publish common platform$(PLATFORM_DEBUG_SUFFIX) bits"
@@ -583,89 +570,6 @@ triton-platform-publish: common-platform-publish
 	rm -f platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
 	ln -s $(PUB_PLATFORM_MF_BASE) \
 	    platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
-
-#
-# The bits-upload.sh script in deps/eng is used to upload bits
-# either to a Manta instance under $ENGBLD_DEST_OUT_PATH (requiring $MANTA_USER,
-# $MANTA_KEY_ID and $MANTA_URL to be set in the environment, and
-# $MANTA_TOOLS_PATH pointing to the manta-client tools scripts) or, with
-# $ENGBLD_BITS_UPLOAD_LOCAL set to 'true', will upload to $ENGBLD_DEST_OUT_PATH
-# on a local filesystem. If $ENGBLD_BITS_UPLOAD_IMGAPI is set in the environment
-# it also publishes any images from the -D directory to
-# updates.tritondatacenter.com.
-#
-
-ENGBLD_DEST_OUT_PATH ?=	/public/builds
-
-ifeq ($(ENGBLD_BITS_UPLOAD_LOCAL), true)
-BITS_UPLOAD_LOCAL_ARG = -L
-else
-BITS_UPLOAD_LOCAL_ARG =
-endif
-
-ifeq ($(ENGBLD_BITS_UPLOAD_IMGAPI), true)
-BITS_UPLOAD_IMGAPI_ARG = -p
-else
-BITS_UPLOAD_IMGAPI_ARG =
-endif
-
-BITS_UPLOAD_BRANCH = $(PLATFORM_BRANCH)$(PUB_BRANCH_DESC)
-
-SMARTOS_DEST_OUT_PATH := $(ENGBLD_DEST_OUT_PATH)/SmartOS
-
-CTFTOOLS_DEST_OUT_PATH := \
-    $(SMARTOS_DEST_OUT_PATH)/ctftools/$(BITS_UPLOAD_BRANCH)
-
-STRAP_CACHE_DEST_OUT_PATH := \
-    $(SMARTOS_DEST_OUT_PATH)/strap-cache/$(BITS_UPLOAD_BRANCH)
-
-.PHONY: platform-bits-upload
-platform-bits-upload:
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) \
-	    $(ROOT)/deps/eng/tools/bits-upload.sh \
-	        -b $(BITS_UPLOAD_BRANCH) \
-	        $(BITS_UPLOAD_LOCAL_ARG) \
-	        $(BITS_UPLOAD_IMGAPI_ARG) \
-	        -D $(ROOT)/output/bits \
-	        -d $(ENGBLD_DEST_OUT_PATH)/$(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
-	        -n $(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
-	        -t $(PLATFORM_STAMP)
-
-#
-# Clear TIMESTAMP due to TOOLS-2241, where bits-upload would otherwise interpret
-# that environment variable as the '-t' option
-#
-.PHONY: platform-bits-upload-latest
-platform-bits-upload-latest:
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) TIMESTAMP= \
-	    $(ROOT)/deps/eng/tools/bits-upload.sh \
-	        -b $(BITS_UPLOAD_BRANCH) \
-	        $(BITS_UPLOAD_LOCAL_ARG) \
-	        $(BITS_UPLOAD_IMGAPI_ARG) \
-	        -D $(ROOT)/output/bits \
-	        -d $(ENGBLD_DEST_OUT_PATH)/$(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
-	        -n $(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX)
-
-#
-# ctftools and strap-cache do not fit well into the bits-upload.sh
-# infrastructure, as we need to differentiate based on aspects of our build
-# platform. So we do it by hand instead.
-#
-
-.PHONY: ctftools-bits-upload
-ctftools-bits-upload: $(STAMPFILE)
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) ./tools/build_ctftools upload \
-	    -D $(CTFTOOLS_BITS_DIR) \
-	    -d $(CTFTOOLS_DEST_OUT_PATH) \
-	    -p $(BUILD_PLATFORM) \
-	    -t $(PLATFORM_TIMESTAMP)
-
-.PHONY: strap-cache-bits-upload
-strap-cache-bits-upload: $(STAMPFILE)
-	PATH=$(MANTA_TOOLS_PATH):$(PATH) ./tools/build_strap upload \
-	    -D $(STRAP_CACHE_BITS_DIR) \
-	    -d $(STRAP_CACHE_DEST_OUT_PATH) \
-	    -t $(PLATFORM_TIMESTAMP)
 
 #
 # A wrapper to build the additional components that a standard
@@ -734,8 +638,7 @@ common-release: \
 triton-release: \
     images-tar \
     tests-tar \
-    triton-platform-publish \
-    platform-bits-upload
+    triton-platform-publish
 
 .PHONY: triton-smartos-release
 triton-smartos-release: \
@@ -743,28 +646,24 @@ triton-smartos-release: \
     tests-tar \
     triton-platform-publish \
     smartos-build \
-    smartos-publish \
-    platform-bits-upload
+    smartos-publish
 
 .PHONY: smartos-only-release
 smartos-only-release: \
     tests-tar \
     common-platform-publish \
     smartos-build \
-    smartos-publish \
-    platform-bits-upload
+    smartos-publish
 
 .PHONY: ctftools-release
 ctftools-release: \
     $(CTFTOOLS_TARBALL) \
-    ctftools-publish \
-    ctftools-bits-upload
+    ctftools-publish
 
 .PHONY: strap-cache-release
 strap-cache-release: \
     $(STRAP_CACHE_TARBALL) \
-    strap-cache-publish \
-    strap-cache-bits-upload
+    strap-cache-publish
 
 print-%:
 	@echo '$*=$($*)'
