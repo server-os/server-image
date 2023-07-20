@@ -394,10 +394,6 @@ For details on the default values of these variables, and how they are
 used, see
 [bits-upload.sh](https://github.com/TritonDataCenter/eng/blob/master/tools/bits-upload.sh)
 
-Finally, release engineers may find the script
-[`build_jenkins`](/tools/build_jenkins) useful, intended to be run
-directly as part of a Jenkins job, invoking the targets above.
-
 ## Common Tasks
 
 ### Cleaning Up
