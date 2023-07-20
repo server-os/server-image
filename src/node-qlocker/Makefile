@@ -6,39 +6,17 @@
 
 #
 # Copyright 2019 Joyent, Inc.
+# Copyright 2023 Server OS.
 #
 
-TOOLS =		deps/eng/tools
 NPM =		npm
-GIT =		git
-JSL =		deps/javascriptlint/build/install/jsl
-JSL_FLAGS =	--conf=$(TOOLS)/jsl.node.conf
-JSSTYLE =	deps/jsstyle/jsstyle
-JSSTYLE_FLAGS =	-f $(TOOLS)/jsstyle.conf -o indent=4
 
-JS_FILES := index.js $(shell find lib test -name '*.js')
-
-all: build check test
+all: build test
 test: install
 
 .PHONY: build install test
 build install test:
 	$(NPM) $@
-
-.PHONY: check
-check: $(TOOLS) $(JSL) $(JSSTYLE)
-	$(JSL) $(JSL_FLAGS) $(JS_FILES)
-	$(JSSTYLE) $(JSSTYLE_FLAGS) $(JS_FILES)
-
-$(TOOLS):
-	$(GIT) submodule update --init deps/eng
-
-$(JSL):
-	$(GIT) submodule update --init deps/javascriptlint
-	cd deps/javascriptlint && $(MAKE) install
-
-$(JSSTYLE):
-	$(GIT) submodule update --init deps/jsstyle
 
 clean:
 	-rm -rf node_modules
