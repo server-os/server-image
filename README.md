@@ -158,7 +158,6 @@ The current set of local projects include:
 * [illumos-kvm-cmd](https://github.com/TritonDataCenter/illumos-kvm-cmd) aka
 QEMU
 * [mdata-client](https://github.com/TritonDataCenter/mdata-client)
-* [ur-agent](https://github.com/TritonDataCenter/sdc-ur-agent)
 
 # Building SmartOS
 
