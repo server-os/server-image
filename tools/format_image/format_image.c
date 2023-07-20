@@ -141,7 +141,7 @@ usage(const char *fmt, ...)
 	(void) fprintf(stderr,
 	    "Usage: %s -o image.usb -m mbr -e efifs -b biosboot\n"
 	    "\n"
-	    "Format a USB/ISO image for booting SmartOS or Triton.\n"
+	    "Format a USB/ISO image for booting SmartOS.\n"
 	    "\n"
 	    "\t-o  output file\n"
 	    "\t-m  MBR image\n"
