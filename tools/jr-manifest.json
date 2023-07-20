@@ -54,10 +54,24 @@
             }
         },
         {
+            "name": "kbmd",
+            "labels": {
+                "release": true,
+                "mg": "platform"
+            }
+        },
+        {
             "name": "libMicro"
         },
         {
             "name": "mdata-client",
+            "labels": {
+                "release": true,
+                "mg": "platform"
+            }
+        },
+        {
+            "name": "sdc-ur-agent",
             "labels": {
                 "release": true,
                 "mg": "platform"

@@ -14,7 +14,6 @@
 #
 # Copyright 2021 Joyent, Inc.
 # Copyright 2023 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
 #
 shopt -s xpg_echo
 unalias -a
@@ -25,6 +24,8 @@ export PATH
 conf_arg0=$(basename $0)
 conf_arg0_dir=$(dirname $0)
 conf_root=$PWD
+conf_ips=
+conf_priv="pfexec"
 
 #
 # Build defaults which are unlikely to change, but may be overridden by
@@ -67,7 +68,9 @@ function check_loc
 		[[ "$(zonename)" == "global" ]] && fatal \
 		    "building in a GZ on SmartOS is not supported"
 	else
-		fatal "building on SmartOS is required"
+		echo "Not on SmartOS, assuming IPS and sudo"
+		conf_ips=1
+		conf_priv="sudo"
 	fi
 }
 
@@ -178,6 +181,9 @@ function create_projects
 		'illumos')
 			git_name="illumos-joyent.git"
 			;;
+		'ur-agent')
+			git_name="sdc-ur-agent.git"
+			;;
 		esac
 
 		# process URL keywords
@@ -200,28 +206,37 @@ function install_pkgin
 	pkglist="$pkglist coreutils gsed pkg_alternatives cdrtools"
 	pkglist="$pkglist py27-sqlite3 nasm pigz smartos-build-tools"
 
-	pfexec pkgin -f update || fatal "failed to update pkgsrc repository"
+	$conf_priv pkgin -f update || fatal "failed to update pkgsrc repository"
 
 	#
 	# Remove legacy packages replaced by the smartos-build-tools package.
 	#
 	for pkg in astmsgtools dmake rpcgen sgstools; do
 		if pkg_info -qe $pkg; then
-			pfexec pkg_delete ${pkg}
+			$conf_priv pkg_delete ${pkg}
 		fi
 	done
 
 	for pkg in $pkglist; do
 		if ! pkg_info -qe $pkg; then
-			pfexec pkgin -y install $pkg || fatal \
+			$conf_priv pkgin -y install $pkg || fatal \
 		    "failed to install $pkg"
 		fi
 	done
 }
 
+function install_ips
+{
+	fatal "Building on ips based systems has yet to be implemented"
+}
+
 function install_packages
 {
-	install_pkgin
+	if [[ -z "$conf_ips" ]]; then
+		install_pkgin
+	else
+		install_ips
+	fi
 	[[ $? -eq 0 ]] || fatal "failed to install packages"
 }
 

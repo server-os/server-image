@@ -12,7 +12,6 @@
 #
 # Copyright 2022 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
 #
 
 #
@@ -32,6 +31,7 @@ STRAP_PROTO =	$(ROOT)/proto.strap
 MPROTO =	$(ROOT)/manifest.d
 BOOT_MPROTO =	$(ROOT)/boot.manifest.d
 BOOT_PROTO =	$(ROOT)/proto.boot
+IMAGES_PROTO =	$(ROOT)/proto.images
 TESTS_PROTO =	$(ROOT)/proto.tests
 
 # On Darwin/OS X we support running 'make check'
@@ -61,6 +61,11 @@ MAX_JOBS ?=	8
 else
 MAX_JOBS ?=	$(shell tools/optimize_jobs)
 endif
+
+#
+# deps/eng is a submodule that includes build tools, ensure it gets checked out
+#
+ENGBLD_REQUIRE := $(shell git submodule update --init deps/eng)
 
 LOCAL_SUBDIRS :=	$(shell ls projects/local)
 PKGSRC =	$(ROOT)/pkgsrc
@@ -125,6 +130,10 @@ BOOT_VERSION :=	boot-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
     echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
 BOOT_TARBALL :=	output/$(BOOT_VERSION).tgz
 
+IMAGES_VERSION :=	images-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
+    echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
+IMAGES_TARBALL :=	output/$(IMAGES_VERSION).tgz
+
 TESTS_VERSION :=	tests-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
     echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
 TESTS_TARBALL :=	output/$(TESTS_VERSION).tgz
@@ -168,6 +177,32 @@ $(BOOT_TARBALL): world manifest
 	    $(BOOT_PROTO) $(ROOT)/proto
 	cp $(STAMPFILE) $(BOOT_PROTO)/etc/version/boot
 	(cd $(BOOT_PROTO) && pfexec gtar czf $(ROOT)/$@ .)
+
+#
+# Create proforma images for use in assembling bootable USB device images.  The
+# images tar file is used by "make coal" and "make usb" in "sdc-headnode.git"
+# to create Triton boot and installation media.
+#
+$(IMAGES_PROTO)/4gb.img: boot
+	rm -f $@
+	mkdir -p $(IMAGES_PROTO)
+	./tools/build_boot_image -p 4 -r $(ROOT)
+
+$(IMAGES_PROTO)/8gb.img: boot
+	rm -f $@
+	mkdir -p $(IMAGES_PROTO)
+	./tools/build_boot_image -p 8 -r $(ROOT)
+
+$(IMAGES_PROTO)/16gb.img: boot
+	rm -f $@
+	mkdir -p $(IMAGES_PROTO)
+	./tools/build_boot_image -p 16 -r $(ROOT)
+
+$(IMAGES_TARBALL): $(IMAGES_PROTO)/4gb.img $(IMAGES_PROTO)/8gb.img \
+	$(IMAGES_PROTO)/16gb.img
+	cd $(IMAGES_PROTO) && gtar -Scvz --owner=0 --group=0 -f $(ROOT)/$@ *
+
+images-tar: $(IMAGES_TARBALL)
 
 #
 # Manifest construction.  There are 5 sources for manifests we need to collect
@@ -239,6 +274,7 @@ $(TESTS_MANIFEST): world
 	cat $(TEST_IPS_MANIFESTS) | \
 	    ./tools/generate-manifest-from-ips.nawk | \
 	    ./tools/sorter >> $@
+
 
 #
 # We want a copy of the buildstamp in the tests archive, but
@@ -415,9 +451,10 @@ clean:
 	(cd $(ROOT) && [ -h $(STRAP_PROTO) ] || rm -rf $(STRAP_PROTO))
 	(cd $(ROOT) && rm -f $(STRAP_PROTO))
 	(cd $(ROOT) && pfexec rm -rf $(BOOT_PROTO))
+	(cd $(ROOT) && pfexec rm -rf $(IMAGES_PROTO))
 	(cd $(ROOT) && pfexec rm -rf $(TESTS_PROTO))
 	(cd $(ROOT) && mkdir -p $(PROTO) $(BOOT_PROTO) \
-	    $(TESTS_PROTO))
+	    $(IMAGES_PROTO) $(TESTS_PROTO))
 	rm -f tools/cryptpass
 	(cd tools/builder && gmake clean)
 	(cd tools/format_image && gmake clean)
@@ -437,6 +474,10 @@ iso: live
 
 usb: live
 	./tools/build_boot_image -r $(ROOT)
+
+#
+# Targets and macros to create Triton manifests and publish build artifacts.
+#
 
 #
 # The build itself doesn't add debug suffixes to its outputs when running
@@ -479,6 +520,7 @@ PLATFORM_STAMP			= $(PLATFORM_BRANCH)$(PUB_BRANCH_DESC)-$(PLATFORM_TIMESTAMP)
 PLATFORM_TARBALL_BASE		= platform-$(PLATFORM_TIMESTAMP).tgz
 PLATFORM_TARBALL		= output/$(PLATFORM_TARBALL_BASE)
 
+PUB_IMAGES_BASE			= images$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).tgz
 PUB_BOOT_BASE			= boot$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).tgz
 PUB_TESTS_BASE			= tests$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).tgz
 
@@ -488,10 +530,25 @@ PUB_PLATFORM_MF_BASE		= platform$(PLATFORM_DEBUG_SUFFIX)-$(PLATFORM_STAMP).imgma
 PUB_PLATFORM_MF			= $(PLATFORM_BITS_DIR)/$(PUB_PLATFORM_MF_BASE)
 PUB_PLATFORM_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_PLATFORM_IMG_BASE)
 
+PUB_IMAGES_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_IMAGES_BASE)
 PUB_BOOT_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_BOOT_BASE)
 PUB_TESTS_TARBALL		= $(PLATFORM_BITS_DIR)/$(PUB_TESTS_BASE)
 
 PLATFORM_IMAGE_UUID		?= $(shell uuid -v4)
+
+#
+# platform-publish, platform-bits-upload and platform-bits-upload-latest
+# are analogous to the 'publish', 'bits-upload' and 'bits-upload-latest'
+# targets defined in the eng.git Makefile.defs and Makefile.targ files.
+# Typically a user would 'make world && make live' before invoking any
+# of these targets, though the '*-release' targets are likely more convenient.
+# Those are not dependencies to allow more flexibility during the publication
+# process.
+#
+# The platform-bits-publish|upload targets are also used for pushing
+# SmartOS releases to Manta.
+#
+
 
 .PHONY: common-platform-publish
 common-platform-publish:
@@ -508,6 +565,107 @@ common-platform-publish:
 	./tools/build_changelog
 	cp output/gitstatus.json $(PLATFORM_BITS_DIR)
 	cp output/changelog.txt $(PLATFORM_BITS_DIR)
+
+.PHONY: triton-platform-publish
+triton-platform-publish: common-platform-publish
+	@echo "# Publish Triton-specific platform$(PLATFORM_DEBUG_SUFFIX) bits"
+	mkdir -p $(PLATFORM_BITS_DIR)
+	cat src/platform.imgmanifest.in | sed \
+	    -e "s/UUID/$(PLATFORM_IMAGE_UUID)/" \
+	    -e "s/VERSION_STAMP/$(PLATFORM_STAMP)/" \
+	    -e "s/BUILDSTAMP/$(PLATFORM_STAMP)/" \
+	    -e "s/SIZE/$$(stat --printf="%s" $(PLATFORM_TARBALL))/" \
+	    -e "s#SHA#$$(digest -a sha1 $(PLATFORM_TARBALL))#" \
+	    > $(PUB_PLATFORM_MF)
+	cp $(IMAGES_TARBALL) $(PUB_IMAGES_TARBALL)
+	cp $(BOOT_TARBALL) $(PUB_BOOT_TARBALL)
+	cd $(ROOT)/output/bits/platform$(PLATFORM_DEBUG_SUFFIX)
+	rm -f platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
+	ln -s $(PUB_PLATFORM_MF_BASE) \
+	    platform$(PLATFORM_DEBUG_SUFFIX)-latest.imgmanifest
+
+#
+# The bits-upload.sh script in deps/eng is used to upload bits
+# either to a Manta instance under $ENGBLD_DEST_OUT_PATH (requiring $MANTA_USER,
+# $MANTA_KEY_ID and $MANTA_URL to be set in the environment, and
+# $MANTA_TOOLS_PATH pointing to the manta-client tools scripts) or, with
+# $ENGBLD_BITS_UPLOAD_LOCAL set to 'true', will upload to $ENGBLD_DEST_OUT_PATH
+# on a local filesystem. If $ENGBLD_BITS_UPLOAD_IMGAPI is set in the environment
+# it also publishes any images from the -D directory to
+# updates.tritondatacenter.com.
+#
+
+ENGBLD_DEST_OUT_PATH ?=	/public/builds
+
+ifeq ($(ENGBLD_BITS_UPLOAD_LOCAL), true)
+BITS_UPLOAD_LOCAL_ARG = -L
+else
+BITS_UPLOAD_LOCAL_ARG =
+endif
+
+ifeq ($(ENGBLD_BITS_UPLOAD_IMGAPI), true)
+BITS_UPLOAD_IMGAPI_ARG = -p
+else
+BITS_UPLOAD_IMGAPI_ARG =
+endif
+
+BITS_UPLOAD_BRANCH = $(PLATFORM_BRANCH)$(PUB_BRANCH_DESC)
+
+SMARTOS_DEST_OUT_PATH := $(ENGBLD_DEST_OUT_PATH)/SmartOS
+
+CTFTOOLS_DEST_OUT_PATH := \
+    $(SMARTOS_DEST_OUT_PATH)/ctftools/$(BITS_UPLOAD_BRANCH)
+
+STRAP_CACHE_DEST_OUT_PATH := \
+    $(SMARTOS_DEST_OUT_PATH)/strap-cache/$(BITS_UPLOAD_BRANCH)
+
+.PHONY: platform-bits-upload
+platform-bits-upload:
+	PATH=$(MANTA_TOOLS_PATH):$(PATH) \
+	    $(ROOT)/deps/eng/tools/bits-upload.sh \
+	        -b $(BITS_UPLOAD_BRANCH) \
+	        $(BITS_UPLOAD_LOCAL_ARG) \
+	        $(BITS_UPLOAD_IMGAPI_ARG) \
+	        -D $(ROOT)/output/bits \
+	        -d $(ENGBLD_DEST_OUT_PATH)/$(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
+	        -n $(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
+	        -t $(PLATFORM_STAMP)
+
+#
+# Clear TIMESTAMP due to TOOLS-2241, where bits-upload would otherwise interpret
+# that environment variable as the '-t' option
+#
+.PHONY: platform-bits-upload-latest
+platform-bits-upload-latest:
+	PATH=$(MANTA_TOOLS_PATH):$(PATH) TIMESTAMP= \
+	    $(ROOT)/deps/eng/tools/bits-upload.sh \
+	        -b $(BITS_UPLOAD_BRANCH) \
+	        $(BITS_UPLOAD_LOCAL_ARG) \
+	        $(BITS_UPLOAD_IMGAPI_ARG) \
+	        -D $(ROOT)/output/bits \
+	        -d $(ENGBLD_DEST_OUT_PATH)/$(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX) \
+	        -n $(BUILD_NAME)$(PLATFORM_DEBUG_SUFFIX)
+
+#
+# ctftools and strap-cache do not fit well into the bits-upload.sh
+# infrastructure, as we need to differentiate based on aspects of our build
+# platform. So we do it by hand instead.
+#
+
+.PHONY: ctftools-bits-upload
+ctftools-bits-upload: $(STAMPFILE)
+	PATH=$(MANTA_TOOLS_PATH):$(PATH) ./tools/build_ctftools upload \
+	    -D $(CTFTOOLS_BITS_DIR) \
+	    -d $(CTFTOOLS_DEST_OUT_PATH) \
+	    -p $(BUILD_PLATFORM) \
+	    -t $(PLATFORM_TIMESTAMP)
+
+.PHONY: strap-cache-bits-upload
+strap-cache-bits-upload: $(STAMPFILE)
+	PATH=$(MANTA_TOOLS_PATH):$(PATH) ./tools/build_strap upload \
+	    -D $(STRAP_CACHE_BITS_DIR) \
+	    -d $(STRAP_CACHE_DEST_OUT_PATH) \
+	    -t $(PLATFORM_TIMESTAMP)
 
 #
 # A wrapper to build the additional components that a standard
@@ -553,13 +711,17 @@ strap-cache-publish:
 
 #
 # Define a series of phony targets that encapsulate a standard 'release' process
-# for SmartOS platform builds. These are a convenience to allow
+# for both SmartOS and Triton platform builds. These are a convenience to allow
 # callers to invoke only two 'make' commands after './configure' has been run.
 # We can't combine these because our stampfile likely doesn't exist at the point
 # that the various build artifact Makefile macros are set, resulting in
 # misnamed artifacts. Thus, expected usage is:
 #
 # ./configure
+# make common-release; make triton-release
+#  or
+# make common-release; make triton-smartos-release
+# or
 # make common-release; make smartos-only-release
 #
 .PHONY: common-release
@@ -568,22 +730,41 @@ common-release: \
     live \
     pkgsrc
 
+.PHONY: triton-release
+triton-release: \
+    images-tar \
+    tests-tar \
+    triton-platform-publish \
+    platform-bits-upload
+
+.PHONY: triton-smartos-release
+triton-smartos-release: \
+    images-tar \
+    tests-tar \
+    triton-platform-publish \
+    smartos-build \
+    smartos-publish \
+    platform-bits-upload
+
 .PHONY: smartos-only-release
 smartos-only-release: \
     tests-tar \
     common-platform-publish \
     smartos-build \
-    smartos-publish
+    smartos-publish \
+    platform-bits-upload
 
 .PHONY: ctftools-release
 ctftools-release: \
     $(CTFTOOLS_TARBALL) \
-    ctftools-publish
+    ctftools-publish \
+    ctftools-bits-upload
 
 .PHONY: strap-cache-release
 strap-cache-release: \
     $(STRAP_CACHE_TARBALL) \
-    strap-cache-publish
+    strap-cache-publish \
+    strap-cache-bits-upload
 
 print-%:
 	@echo '$*=$($*)'
