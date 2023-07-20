@@ -20,10 +20,13 @@
 # information: Portions Copyright [yyyy] [name of copyright owner]
 #
 # CDDL HEADER END
+
 #
 # Copyright (c) 2019, Joyent, Inc. All rights reserved.
 # Copyright 2019 MNX Cloud, Inc.
+# Copyright 2023 Server OS.
 #
+
 #
 # Run the imgadm tests. This is expected to be run from a SmartOS GZ.
 #
@@ -169,7 +172,7 @@ if [[ $opt_reporter == "tap" ]]; then
     echo "# test output:"
     ls $OUTPUT_DIR/*.tap
 
-    # Colored summary of results (borrowed from smartos-live.git/src/vm/run-tests).
+    # Colored summary of results (borrowed from server-image.git/src/vm/run-tests).
     echo ""
     echo "# test results:"
 

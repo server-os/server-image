@@ -11,13 +11,14 @@
 
 /*
  * Copyright (c) 2017, Joyent, Inc.
+ * Copyright (c) 2023, Server OS.
  */
 
 #ifndef _STRPATH_H
 #define	_STRPATH_H
 
 /*
- * smartos-live: Path manipulation utility functions.
+ * Build Tools: Path manipulation utility functions.
  */
 
 #include "custr.h"

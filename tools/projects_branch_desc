@@ -7,11 +7,12 @@
 
 #
 # Copyright 2020 Joyent, Inc.
+# Copyright 2023 Server OS.
 #
 
 #
 # Query the projects framework to emit a uniquified hyphen-separated list of
-# branch names, omitting any branch names identical to the current smartos-live
+# branch names, omitting any branch names identical to the current server-image
 # branch, passed as $1.
 #
 

@@ -11,13 +11,14 @@
 
 /*
  * Copyright 2015 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 #ifndef _COMMON_H
 #define	_COMMON_H
 
 /*
- * smartos-live: Build Tools: Common Utilities.
+ * Build Tools: Common Utilities.
  */
 
 #ifdef __cplusplus

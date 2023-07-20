@@ -12,12 +12,13 @@
 
 #
 # Copyright 2021 Joyent, Inc.
+# Copyright 2023 Server OS.
 #
 
 #
 # Build the platform image (i.e., "boot_archive", "unix", etc) and the platform
 # tar archive.  This program should be invoked via the "make live" target of
-# the top-level Makefile in "smartos-live.git".
+# the top-level Makefile in "server-image.git".
 #
 
 set -o pipefail

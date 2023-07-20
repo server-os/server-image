@@ -11,10 +11,11 @@
 
 /*
  * Copyright 2015 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 /*
- * smartos-live: String List with variable element count.
+ * Build Tools: String List with variable element count.
  */
 
 #include <stdio.h>

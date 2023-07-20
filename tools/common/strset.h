@@ -11,13 +11,14 @@
 
 /*
  * Copyright 2016 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 #ifndef _STRSET_H
 #define	_STRSET_H
 
 /*
- * smartos-live: Build Tools: String Set data structure backed by libavl.
+ * Build Tools: String Set data structure backed by libavl.
  */
 
 #ifdef __cplusplus

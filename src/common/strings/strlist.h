@@ -11,13 +11,14 @@
 
 /*
  * Copyright 2015 Joyent, Inc.
+ * Copyright 2023 Server OS.
  */
 
 #ifndef _STRLIST_H
 #define	_STRLIST_H
 
 /*
- * smartos-live: String List with variable element count.
+ * Build Tools: String List with variable element count.
  */
 
 #ifdef __cplusplus
