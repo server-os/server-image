@@ -70,12 +70,12 @@ function extract_mountpath()
 function mount_bootpool_fake_usbkey()
 {
 	local mnt=$1
-	local pool=$(/bin/bootparams | awk -F= '/^triton_bootpool=/ {print $2}')
+	local pool=$(/bin/bootparams | awk -F= '/^server-os_bootpool=/ {print $2}')
 	local bootfs="$pool/boot"
 
 	# First some reality checks...
 	if [[ "$pool" == "" ]]; then
-		echo "Boot pool is not specified in triton_bootpool" >&2
+		echo "Boot pool is not specified in server-os_bootpool" >&2
 		return 1
 	fi
 
@@ -104,7 +104,7 @@ function mount_bootpool_fake_usbkey()
 # Evil twins of the {,un}mount_usb_key functions.  These are specific
 # to ISO/hsfs (aka. {C,DV,B}D-ROM) disks.  We may be able to factor-out
 # even more common bits from the usb_key functions, but not today.
-# Now declared prior to mount_usb_key because a Triton installer ISO may
+# Now declared prior to mount_usb_key because a server-os installer ISO may
 # wish to mount itself to make a fake "USB key".
 function mount_ISO
 {
@@ -147,7 +147,7 @@ function mount_installer_fake_usbkey()
 	local tdir=$(TMPDIR=/etc/svc/volatile mktemp -d)
 
 	installertype=$(/bin/bootparams | \
-		awk -F= '/^triton_installer=/ {print $2}')
+		awk -F= '/^server-os_installer=/ {print $2}')
 
 	# Okay, so we need to not only mount an ISO or ISO-image from
 	# the installer, we ALSO need to copy it into tmpfs so it's writable
@@ -165,21 +165,21 @@ function mount_installer_fake_usbkey()
 		# copy it over to $tdir so it can be read-write, and THEN we
 		# lofs mount it.
 
-		echo "Triton installer copying from read-only to fake USB key."
+		echo "ServerOS installer copying from read-only to fake USB key."
 		tar -cf - -C $tmount . | tar -xf - -C $tdir
 		# Let piadm capitalize entries (for now).
 		umount $tmount
 		rmdir $tmount
 	elif [[ "$installertype" == "ipxe" ]]; then
 		# Okay, so we're a bootable image, and we need to copy over
-		# any .txt files from / into $tdir.  The Triton installer
+		# any .txt files from / into $tdir.  The ServerOS installer
 		# will know what to do.
 
 		cp -rp /*.txt /scripts /config.inc $tdir/.
 		# LIE about it.
-		touch $tdir/.joyliveusb
+		touch $tdir/.serverosusb
 	else
-		echo "Unknown Triton installer type: $installertype" >&2
+		echo "Unknown ServerOS installer type: $installertype" >&2
 		rmdir $tdir
 		return 1
 	fi
@@ -208,12 +208,12 @@ function mount_usb_key()
 		return 1
 	fi
 
-	### Triton-boot-from-pool or boot-from-read-only-installer section.
-	if /bin/bootparams | grep -q "^triton_bootpool=" ; then
+	### server-os-boot-from-pool or boot-from-read-only-installer section.
+	if /bin/bootparams | grep -q "^server-os_bootpool=" ; then
 		# Technically we shouldn't ever see "skip" here
 		# because the only caller of mount_usb_key() with skip
 		# is piadm(8)'s `install`, which can't be invoked on
-		# a Triton Head Node.  Checking to be safe.
+		# a ServerOS Head Node.  Checking to be safe.
 		if [[ "$2" == "skip" ]]; then
 			echo "Somehow a piadm(8) install on a Head Node is" \
 				"happening. This is disallowed." >&2
@@ -224,11 +224,11 @@ function mount_usb_key()
 		return $?
 	fi
 
-	if /bin/bootparams | grep -q "^triton_installer=" ; then
+	if /bin/bootparams | grep -q "^server-os_installer=" ; then
 		# Technically we shouldn't ever see "skip" here
 		# because the only caller of mount_usb_key() with skip
 		# is piadm(8)'s `install`, which can't be invoked on
-		# a Triton Head Node.  Checking to be safe.
+		# a ServerOS Head Node.  Checking to be safe.
 		if [[ "$2" == "skip" ]]; then
 			echo "Somehow a piadm(8) install on a Head Node is" \
 				"happening. This is disallowed." >&2

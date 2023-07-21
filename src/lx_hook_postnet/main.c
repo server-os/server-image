@@ -162,7 +162,7 @@ mountNfsVolume(nvlist_t *data)
 
     ret = nvlist_lookup_string(data, "type", &type);
     if (ret == 0) {
-        if (strcmp(type, "tritonnfs") != 0) {
+        if (strcmp(type, "serverosnfs") != 0) {
             fatal(ERR_UNKNOWN_VOLUME_TYPE, "invalid volume type %s", type);
         }
         ret = nvlist_lookup_string(data, "nfsvolume", &nfsvolume);

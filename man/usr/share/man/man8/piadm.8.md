@@ -120,29 +120,29 @@
  [root@server-os ~]#
 ```
 
-## TRITON COMPUTE NODES and iPXE
+## ServerOS COMPUTE NODES and iPXE
 
-    The Triton Cloud Orchestration system is constructed to contain a Head
+    The ServerOS Cloud Orchestration system is constructed to contain a Head
     Node (sometimes more than one) and several Compute Nodes.  The Compute
     Nodes use iPXE, an improved Preboot eXecution Environment (PXE) for
-    network booting. Originally Triton Compute Nodes required a USB key which
+    network booting. Originally ServerOS Compute Nodes required a USB key which
     contained iPXE and booted directly into iPXE.
 
-    piadm(8) can enable a Triton Compute Node's ZFS pool to boot iPXE,
-    obviating the need for a USB key.  It detects if a machine is a Triton
+    piadm(8) can enable a ServerOS Compute Node's ZFS pool to boot iPXE,
+    obviating the need for a USB key.  It detects if a machine is a ServerOS
     Compute Node, and enables maintenance of iPXE on the bootable pool.  Many
-    piadm(8) subcommands are disabled on a Triton Compute Node.
+    piadm(8) subcommands are disabled on a ServerOS Compute Node.
 
-    The layout of a Triton Compute Node bootable pool is limited to `boot`
+    The layout of a ServerOS Compute Node bootable pool is limited to `boot`
     and `platform` symbolic links to a populated-with-iPXE `boot-ipxe`
     directory, and a mostly empty `platform-ipxe` directory.  There is an
     additional platform-STAMP for a backup on-disk PI, in case of emergency.
     This directory contains an additional in-directory `platform` link to
     enable its selection as a backup.
 
-## TRITON HEAD NODES
+## ServerOS HEAD NODES
 
-    The piadm(8) command can convert a USB-key-booting Triton Head Node into
+    The piadm(8) command can convert a USB-key-booting ServerOS Head Node into
     a ZFS-pool-booting one.  It can also transfer boot duties from an
     existing ZFS pool to a new one.
 
@@ -169,9 +169,9 @@
         be issued but the new PI will be activated anyway.
 
         `activate` and `assign` are synonyms, for those used to other
-        distros' `beadm`, or Triton's `sdcadm platform`, respectively.
+        distros' `beadm`, or ServerOS's `sdcadm platform`, respectively.
 
-        This command is disallowed on Triton Compute Nodes.
+        This command is disallowed on ServerOS Compute Nodes.
 
       piadm avail
 
@@ -179,7 +179,7 @@
         listed by PI-Stamp. No PI-Stamps older than the currently running PI
         stamp will be listed.
 
-        This command is disallowed on Triton Compute Nodes.
+        This command is disallowed on ServerOS Compute Nodes.
 
       piadm bootable [-d | -e [-i <source>] | -r] [ZFS-pool-name]
 
@@ -200,23 +200,23 @@
         legacy BIOS mode, while others can also be bootable from UEFI
         systems.  The `bootable` subcommand will indicate this.
 
-        For Triton Compute Nodes, the -i option is disallowed.  Otherwise,
-        this will enable a Triton Compute Node to boot iPXE from the disk,
+        For ServerOS Compute Nodes, the -i option is disallowed.  Otherwise,
+        this will enable a ServerOS Compute Node to boot iPXE from the disk,
         obviating the need for USB key with iPXE on it.  It will also allow
         boot to a backup PI that is either the currently-running PI, or the
-        Triton default PI if the currently-running one is not available.  The
-        iPXE is provided by the Triton Head Node, and if it needs updating,
+        ServerOS default PI if the currently-running one is not available.  The
+        iPXE is provided by the ServerOS Head Node, and if it needs updating,
         the `sdcadm experimental update-gz-tools` command will update it on
         the head node.  See below for post-bootable iPXE updating on the
-        Triton Compute Node.
+        ServerOS Compute Node.
 
-	For Triton Head Nodes, the -i option is also disabled.  When invoked
+	For ServerOS Head Nodes, the -i option is also disabled.  When invoked
 	with -e on a Head Node, the piadm(8) command will attempt to convert
-	a pool to be bootable for a Triton Head Node.  If a Head Node is
+	a pool to be bootable for a ServerOS Head Node.  If a Head Node is
 	booting from a USB key, the boot data comes from the USB Key.  If a
 	Head Node is booting from another pool, the boot data comes from the
 	current booted pool.  After invoking `piadm bootable -e $POOL`, $POOL
-	can boot the Triton Head Node, BUT any pre-reboot operations
+	can boot the ServerOS Head Node, BUT any pre-reboot operations
 	(regardless if the current Head Node boot comes from USB or an
 	existing bootable pool), will not copy over to the newly-enabled
 	bootable pool.  It is therefore recommended that a Head Node reboot
@@ -249,7 +249,7 @@
 
           - A URL to either one of an ISO image or a gzipped PI tarball.
 
-        This command is disallowed on Triton Compute Nodes.
+        This command is disallowed on ServerOS Compute Nodes.
 
       piadm list [ZFS-pool-name]
 
@@ -262,16 +262,16 @@
         image exists with the specified PI-stamp, it will also be removed
         unless it is the only boot image available.
 
-        This command is disallowed on Triton Compute Nodes.
+        This command is disallowed on ServerOS Compute Nodes.
 
       piadm update [ZFS-pool-name]
 
-        This command is exclusive to Triton Compute Nodes.  This command
-        updates iPXE and loader (boot) for the specified pool on the Triton
-        Compute Node.  If the Triton Compute Node has booted to a different
+        This command is exclusive to ServerOS Compute Nodes.  This command
+        updates iPXE and loader (boot) for the specified pool on the ServerOS
+        Compute Node.  If the ServerOS Compute Node has booted to a different
         PI than what is currently cached as the bootable backup PI, this
         command will update the bootable backup PI as well, or attempt to
-        refresh the the Triton default PI.
+        refresh the the ServerOS default PI.
 
 ## EXAMPLES
 

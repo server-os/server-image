@@ -60,22 +60,22 @@ usage() {
 	err ""
 }
 
-not_triton_CN() {
-	if [[ "$TRITON_CN" == "yes" ]]; then
-		err "The $1 command cannot be used on a Triton Compute Node"
+not_serveros_CN() {
+	if [[ "$SERVEROS_CN" == "yes" ]]; then
+		err "The $1 command cannot be used on a ServerOS Compute Node"
 	fi
 }
 
-not_triton_HN() {
-	if [[ "$TRITON_HN" == "yes" ]]; then
-		eecho "The $1 command cannot be used on a Triton Head Node"
+not_serveros_HN() {
+	if [[ "$SERVEROS_HN" == "yes" ]]; then
+		eecho "The $1 command cannot be used on a ServerOS Head Node"
 		err "On a headnode, please use 'sdcadm platform'."
 	fi
 }
 
 standalone_only() {
-	not_triton_CN "$@"
-	not_triton_HN "$@"
+	not_serveros_CN "$@"
+	not_serveros_HN "$@"
 }
 
 vecho() {
@@ -203,7 +203,7 @@ PIADM_CONF=/var/piadm/piadm.conf
 config_check() {
 	# Can't do standalone_only per se as it errors out, but this only
 	# applies to standalone ServerOS.
-	if [[ "$TRITON_CN" == "yes" || "$TRITON_HN" == "yes" ]]; then
+	if [[ "$SERVEROS_CN" == "yes" || "$SERVEROS_HN" == "yes" ]]; then
 		return
 	fi
 
@@ -374,7 +374,7 @@ install() {
 				/bin/rm -rf "${tdir:?}"
 				err "File $1 is not an ISO or a .tgz file."
 			fi
-			# We're most-likely good here.  NOTE: ServerOS/Triton
+			# We're most-likely good here.  NOTE: ServerOS
 			# PI files expand to platform-$STAMP.  Fix it here
 			# before proceeding.
 			vecho "Treating $1 as an .tgz Platform Image file."
@@ -541,8 +541,8 @@ list() {
 		fi
 		cd "/$bootfs" || fatal "Could not chdir to /$bootfs"
 		bootbitsstamp=$(cat etc/version/boot)
-		# Triton Head Nodes are special.
-		if [[ "$TRITON_HN" != "yes" ]]; then
+		# ServerOS Head Nodes are special.
+		if [[ "$SERVEROS_HN" != "yes" ]]; then
 			# Regular standalone ServerOS case.
 			if [[ ! -L /$bootfs/platform ]]; then
 				corrupt "WARNING: Bootable filesystem" \
@@ -552,7 +552,7 @@ list() {
 			mapfile -t pis \
 				< <(cat platform-*/etc/version/platform)
 		else
-			# Triton Head Node case.
+			# ServerOS Head Node case.
 			if [[ ! -d /$bootfs/os ]]; then
 				corrupt "WARNING: Headnode boot filesystem" \
 					"$bootfs has no os/ directory."
@@ -742,7 +742,7 @@ EOF
 # Create the /$bootfs/os/ directory from scratch.  This includes a
 # /bin/rm -rf of the old /$bootfs/os/ directory if it exists.
 #
-# The os/ directory, inspired by the Triton Head Node, allows a
+# The os/ directory, inspired by the ServerOS Head Node, allows a
 # selection of specific platform images that aren't the "default" as
 # symlinked into /$bootfs/platform/.  It is comprised of:
 #
@@ -949,15 +949,15 @@ ispoolenabled() {
 	return 1
 }
 
-# Routines and variables related specifically to Triton Compute Nodes.
+# Routines and variables related specifically to ServerOS Compute Nodes.
 
-# Data for Triton Compute Node (CN) iPXE.
-TRITON_IPXE_PATH=/opt/smartdc/share/usbkey/contents
-TRITON_IPXE_ETC=${TRITON_IPXE_PATH}/etc
-TRITON_IPXE_BOOT=${TRITON_IPXE_PATH}/boot
+# Data for ServerOS Compute Node (CN) iPXE.
+SERVEROS_IPXE_PATH=/opt/smartdc/share/usbkey/contents
+SERVEROS_IPXE_ETC=${SERVEROS_IPXE_PATH}/etc
+SERVEROS_IPXE_BOOT=${SERVEROS_IPXE_PATH}/boot
 
 initialize_as_CN() {
-	TRITON_CN="yes"
+	SERVEROS_CN="yes"
 
 	source /lib/sdc/config.sh
 	load_sdc_config
@@ -970,21 +970,21 @@ initialize_as_CN() {
 
 initialize_as_HN() {
 	#
-	# For the Triton Head Node, we only really want piadm doing one of
+	# For the ServerOS Head Node, we only really want piadm doing one of
 	# four things:
 	#
 	# 1.) Enabling a bootable pool, which will involve a bunch of
-	#     Triton-savvy maneuvers.
+	#     ServerOS-savvy maneuvers.
 	# 2.) Updating the boot sector and/or EFI boot.
 	# 3.) Disabling a bootable pool, which will ALSO involved a bunch of
-	#     Triton-savvy maneuvers.
-	# 4.) List the pools available that are Triton-savvy and bootable.
+	#     ServerOS-savvy maneuvers.
+	# 4.) List the pools available that are ServerOS-savvy and bootable.
 	#
 	# For right now, we merely need to indicate we're a headnode and
 	# if we're booted off of a pool, which one.
 
-	TRITON_HN="yes"
-	TRITON_HN_BOOTPOOL=$(bootparams | awk -F= '/^triton_bootpool=/ {print $2}')
+	SERVEROS_HN="yes"
+	SERVEROS_HN_BOOTPOOL=$(bootparams | awk -F= '/^server-os_bootpool=/ {print $2}')
 }
 
 # README file for /${bootfs}/platform-ipxe/README.
@@ -1048,7 +1048,7 @@ install_pi_CN() {
 	return 0
 }
 
-# Enabling a bootable pool, specifically for a Triton Compute Node.
+# Enabling a bootable pool, specifically for a ServerOS Compute Node.
 bringup_CN() {
 	# Bootfs is already set at this point.
 
@@ -1072,13 +1072,13 @@ bringup_CN() {
 	# Now we set up the "etc" directory, which contains versions of
 	# both loader ("boot") and iPXE ("ipxe").
 	mkdir -p etc/version
-	cp -f ${TRITON_IPXE_ETC}/version/* etc/version/.
+	cp -f ${SERVEROS_IPXE_ETC}/version/* etc/version/.
 	vecho "installing ipxe version: " "$(cat etc/version/ipxe)"
 
 	# Now we set up the "boot-ipxe" directory.
 	mkdir boot-ipxe
 	# Use tar here because it's the first time.
-	tar -cf - -C ${TRITON_IPXE_BOOT} . | tar -xf - -C boot-ipxe
+	tar -cf - -C ${SERVEROS_IPXE_BOOT} . | tar -xf - -C boot-ipxe
 	# Preserve versions in boot-ipxe too in case we need them later.
 	cp -f etc/version/boot boot-ipxe/bootversion
 	cp -f etc/version/ipxe boot-ipxe/ipxeversion
@@ -1100,7 +1100,7 @@ bringup_CN() {
 
 	# Populate loader.conf.
 	# NOTE: One could uncomment the sed below and replace the cp if one
-	# wished to have the CN backup-boot not go into the Triton HN
+	# wished to have the CN backup-boot not go into the ServerOS HN
 	# installer but act in a different kind of weird way.
 	# sed 's/headnode="true"/headnode="false"/g' \ <
 	#	boot-ipxe/loader.conf.tmpl > boot-ipxe/loader.conf
@@ -1129,8 +1129,8 @@ bringup_CN() {
 update_CN() {
 	declare -a pdirs
 
-	if [[ "$TRITON_CN" != "yes" ]]; then
-		err "The update command may only be used on a Triton Compute Node"
+	if [[ "$SERVEROS_CN" != "yes" ]]; then
+		err "The update command may only be used on a ServerOS Compute Node"
 	fi
 
 	piname_present_get_bootfs "ipxe" "$1"
@@ -1177,13 +1177,13 @@ update_CN() {
 	# THEN check to see if we need to update iPXE...
 	diskipxe=$(cat etc/version/ipxe)
 	diskboot=$(cat etc/version/boot)
-	newipxe=$(cat ${TRITON_IPXE_ETC}/version/ipxe)
-	newboot=$(cat ${TRITON_IPXE_ETC}/version/boot)
+	newipxe=$(cat ${SERVEROS_IPXE_ETC}/version/ipxe)
+	newboot=$(cat ${SERVEROS_IPXE_ETC}/version/boot)
 	if [[ "$diskipxe" == "$newipxe" && "$diskboot" == "$newboot" ]]; then
 		vecho "No updates needed for iPXE and its loader."
 		vecho "If you think there should be an update, run"
 		vecho "'sdcadm experimental update-gz-tools' on your"\
-			"Triton Head Node"
+			"ServerOS Head Node"
 		exit 0
 	fi
 
@@ -1191,11 +1191,11 @@ update_CN() {
 		vecho "Updating iPXE provided by headnode (ver: $newipxe)"
 	[[ "$diskboot" != "$newboot" ]] && \
 		vecho "Updating boot loader provided by headnode (ver: $newboot)"
-	cp -f ${TRITON_IPXE_ETC}/version/* etc/version/.
+	cp -f ${SERVEROS_IPXE_ETC}/version/* etc/version/.
 
 	# NOTE:  If there is an illumos loader flag day, one may have to
 	# perform more than simple rsync to update ./boot/.
-	rsync -r ${TRITON_IPXE_BOOT}/. ./boot/.
+	rsync -r ${SERVEROS_IPXE_BOOT}/. ./boot/.
 
 	# Preserve versions in boot-ipxe too in case we need them later.
 	cp -f etc/version/boot boot-ipxe/bootversion
@@ -1208,7 +1208,7 @@ update_CN() {
 bringup_HN() {
 	# One last reality check...
 	# 1.) Check if we're trying to enable our currently booting pool.
-	if [[ "$pool" == "$TRITON_HN_BOOTPOOL" ]]; then
+	if [[ "$pool" == "$SERVEROS_HN_BOOTPOOL" ]]; then
 		err "Pool $pool is already bootable, and we just booted it."
 	fi
 
@@ -1222,7 +1222,7 @@ bringup_HN() {
 	/bin/rm -rf /"$bootfs" >& /dev/null
 	cd /"$bootfs"
 
-	# Mount the Triton USB key (even if it's a virtual one...).
+	# Mount the ServerOS USB key (even if it's a virtual one...).
 	if [[ $(sdc-usbkey status) == "mounted" ]]; then
 		stick_premounted=yes
 	fi
@@ -1249,16 +1249,16 @@ bringup_HN() {
 			"to /$bootfs"
 
 	# Add both fstype="ufs" to loader.conf.
-	vecho "Modifying loader.conf for pool-based Triton Head Node boot"
+	vecho "Modifying loader.conf for pool-based ServerOS Head Node boot"
 	grep -q 'fstype="ufs"' ./boot/loader.conf || \
 		echo 'fstype="ufs"' >> ./boot/loader.conf
-	# Filter out any old triton_ bootparams (either old bootpool OR
+	# Filter out any old server-os_ bootparams (either old bootpool OR
 	# installer properties) and replace them with JUST the new bootpool.
 	# Let's be cautious and use a temp file instead of sed's -i or -I.
 	tfile=$(mktemp)
-	grep -v '^triton_' ./boot/loader.conf > $tfile
+	grep -v '^server-os_' ./boot/loader.conf > $tfile
 	mv -f $tfile ./boot/loader.conf
-	echo "triton_bootpool=\"$pool\"" >> ./boot/loader.conf
+	echo "server-os_bootpool=\"$pool\"" >> ./boot/loader.conf
 
 	# (OPTIONAL) Add "from-pool" indicator to boot.4th.
 
@@ -1303,10 +1303,10 @@ enablepool() {
 
 	# If we're a head node, bail early if we don't have a sufficiently
 	# advanced set of gz-tools.
-	if [[ "$TRITON_HN" == "yes" && ! -f /opt/smartdc/lib/bootpool.js ]]
+	if [[ "$SERVEROS_HN" == "yes" && ! -f /opt/smartdc/lib/bootpool.js ]]
 	then
 		eecho ""
-		eecho "To activate a pool for Triton head node booting, newer"
+		eecho "To activate a pool for ServerOS head node booting, newer"
 		eecho "global-zone tools (namely support for sdc-usbkey to"
 		eecho "treat $bootfs as a USB key equivalent) are required."
 		eecho ""
@@ -1318,10 +1318,10 @@ enablepool() {
 		# NOTE: Different actions depending on standalone, CN, or HN.
 		if [[ -d /${bootfs}/platform/. && -d /${bootfs}/boot/. ]]; then
 			echo "Pool $pool appears to be bootable."
-			if [[ "$TRITON_CN" == "yes" ]]; then
+			if [[ "$SERVEROS_CN" == "yes" ]]; then
 				echo "Use 'piadm update' to update the CN's" \
 					"iPXE and backup PI."
-			elif [[ "$TRITON_HN" == "yes" ]]; then
+			elif [[ "$SERVEROS_HN" == "yes" ]]; then
 				echo "Use 'sdcadm platform' to change PIs."
 			else
 				echo "Use 'piadm install' and" \
@@ -1350,10 +1350,10 @@ enablepool() {
 	# Reset our view of available bootable pools.
 	getbootable
 
-	if [[ "$TRITON_CN" == "yes" ]]; then
+	if [[ "$SERVEROS_CN" == "yes" ]]; then
 		bringup_CN
 		update_boot_sectors "$pool" "$bootfs"
-	elif [[ "$TRITON_HN" == "yes" ]]; then
+	elif [[ "$SERVEROS_HN" == "yes" ]]; then
 		bringup_HN
 		update_boot_sectors "$pool" "$bootfs"
 		echo "NOTE:  Directory $bootfs on pool $pool is now able to be"
@@ -1389,8 +1389,8 @@ refresh_or_disable_pool() {
 		err "Pool $pool is not bootable, and cannot be disabled or refreshed"
 
 	if [[ "$flag" == "-d" ]]; then
-		if [[ "$TRITON_HN" == "yes" ]]; then
-			if [[ "$pool" == "$TRITON_HN_BOOTPOOL" ]]; then
+		if [[ "$SERVEROS_HN" == "yes" ]]; then
+			if [[ "$pool" == "$SERVEROS_HN_BOOTPOOL" ]]; then
 				# The warning says it all.
 				eecho "WARNING: Disabling currently-booting" \
 					"pool"
@@ -1418,7 +1418,7 @@ refresh_or_disable_pool() {
 				# ... if tdir has a usb key, mention it
 				# sdc-usbkey unmount $tdir
 			else
-				vecho "Disabling Triton Head Node inactive" \
+				vecho "Disabling ServerOS Head Node inactive" \
 					"bootable pool."
 			fi
 		fi
@@ -1506,7 +1506,7 @@ else
 	VERBOSE=0
 fi
 
-# Determine if we're running on a Triton Compute Node (CN) or not:
+# Determine if we're running on a ServerOS Compute Node (CN) or not:
 bootparams | grep -E -q 'serveros=|headnode=' || initialize_as_CN
 bootparams | grep -q 'headnode=' && initialize_as_HN
 
