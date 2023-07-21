@@ -1,9 +1,10 @@
 #!/bin/bash
 #
 # Copyright 2020 Joyent, Inc.
+# Copyright 2023 ServerOS.
 #
 # Install (rsync) this local imgadm install image to the given
-# smartos node. The node global zone must have been prepared with
+# ServerOS node. The node global zone must have been prepared with
 # a writeable /usr/img and /usr/man/man8 for testing like this:
 #
 #       rm -rf /var/tmp/img \

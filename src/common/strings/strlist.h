@@ -11,7 +11,7 @@
 
 /*
  * Copyright 2015 Joyent, Inc.
- * Copyright 2023 Server OS.
+ * Copyright 2023 ServerOS.
  */
 
 #ifndef _STRLIST_H

@@ -1,4 +1,4 @@
-# fwadm(8) -- Manage SmartOS firewall rules
+# fwadm(8) -- Manage ServerOS firewall rules
 
 
 ## SYNOPSIS
@@ -31,14 +31,14 @@
 
 ## DESCRIPTION
 
-The fwadm tool allows you to manage firewall data on a SmartOS system. It
+The fwadm tool allows you to manage firewall data on a ServerOS system. It
 is primarily used to manage firewall rules and remote VMs.
 
 Firewall rules are JSON objects. They contain a rule written in a
 Domain-Specific Language, as well as other metadata.  See fwrule(7) and
 the "EXAMPLES" section below for rule syntax.
 
-Remote VMs are JSON objects. They represent VMs on other SmartOS hosts.
+Remote VMs are JSON objects. They represent VMs on other ServerOS hosts.
 The format is similar to the vmadm(8) format with most properties omitted
 and some simplified properties. See the "REMOTE VMS", "REMOTE VM PROPERTIES"
 and "EXAMPLES" sections below for details.
@@ -313,9 +313,9 @@ the firewalls of any VMs affected.
 
 ## REMOTE VMS
 
-    The purpose of remote VMs is to allow VMs on other SmartOS hosts to be
+    The purpose of remote VMs is to allow VMs on other ServerOS hosts to be
     included when generating rules.  For example, if the following remote
-    VM from another SmartOS host was added:
+    VM from another ServerOS host was added:
 
     {{#indent_and_wrap}}
     {{{rvm_rvm1}}}
@@ -385,7 +385,7 @@ the firewalls of any VMs affected.
     VM or update properties on an existing VM that can affect firewall rules,
     it will update firewall rules through fwadm accordingly.
 
-    As an example, if the following rules are present on a SmartOS host:
+    As an example, if the following rules are present on a ServerOS host:
 
     {{#indent_and_wrap}}
     {{{vmadm_rule1}}}

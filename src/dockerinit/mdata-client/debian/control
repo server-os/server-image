@@ -10,4 +10,4 @@ Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Homepage: https://github.com/joyent/mdata-client
 Description: Metadata client tools for use in guest virtual machines
- hosted on a SmartOS hypervisor.
+ hosted on a ServerOS hypervisor.

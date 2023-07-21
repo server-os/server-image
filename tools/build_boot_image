@@ -13,14 +13,14 @@
 #
 # Copyright (c) 2019, Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 #
-# This script automates the process of building ISO and USB images of a SmartOS
+# This script automates the process of building ISO and USB images of a ServerOS
 # build.  It can also be used to produce the proforma disk images used by the
 # tools in sdc-headnode.git to produce Triton USB and COAL images.  When
-# building SmartOS media, it uses the latest platform file that's been built.
+# building ServerOS media, it uses the latest platform file that's been built.
 # This program can be invoked standalone via the "gmake iso", "gmake usb" and
 # "gmake images" targets of the top-level Makefile in "server-image.git".
 #
@@ -50,7 +50,7 @@ bi_make_iso=0
 bi_proforma_only=0
 bi_nocleanup=0
 bi_proforma_prefix="2"
-# Note, if this changes you also need to update SmartOS.vmwarevm/SmartOS.vmdk
+# Note, if this changes you also need to update ServerOS.vmwarevm/ServerOS.vmdk
 # See OS-8386
 bi_imgsz="1940000256"
 bi_wsroot=
@@ -115,7 +115,7 @@ function usage()
 
 	print -u2 "Usage: $(basename $0) [-I] [-x] [-c console] " \
 	    "[-p <size>] -r <server-image repo>"
-	print -u2 " -I\tbuild SmartOS ISO image (default: USB image)"
+	print -u2 " -I\tbuild ServerOS ISO image (default: USB image)"
 	print -u2 " -c\tspecify primary console (e.g. ttyb)"
 	print -u2 " -p\tbuild proforma USB image for Triton (e.g. 1gb)"
 	print -u2 " -x\tdon't cleanup on exit (for debugging use)\n"
@@ -163,7 +163,7 @@ function create_esp()
 }
 
 #
-# Populate the root filesystem with all the SmartOS bits, as well as the loader
+# Populate the root filesystem with all the ServerOS bits, as well as the loader
 # used in legacy boot mode.
 #
 function populate_root()
@@ -195,10 +195,10 @@ ttya-mode="115200,8,n,1,-"
 ttyb-mode="115200,8,n,1,-"
 ttyc-mode="115200,8,n,1,-"
 ttyd-mode="115200,8,n,1,-"
-loader_logo="smartos"
-loader_brand="smartos"
+loader_logo="serveros"
+loader_brand="serveros"
 root_shadow=${shadow}
-smartos="true"
+serveros="true"
 EOF
 	pfrun mv $bi_tmpdir/loader.conf $dir/boot/loader.conf
 	pfrun chmod 644 $dir/boot/loader.conf
@@ -276,7 +276,7 @@ function create_root()
 	local readonly sects=$(( $4 / 512 ))
 
 	print "Creating PCFS filesystem in root partition ... \c"
-	pfrun mkfs -F pcfs -o b=SMARTOSBOOT,size=$sects,nofdisk,fat=32 \
+	pfrun mkfs -F pcfs -o b=SERVEROSBOOT,size=$sects,nofdisk,fat=32 \
 	    $dev </dev/null
 
 	print "done"
@@ -323,7 +323,7 @@ function copy_results()
 	local readonly gid=$(id -g)
 
 	mkdir -p $outdir
-	pfrun mv $bi_tmpdir/smartos.usb* $outdir/$outfile
+	pfrun mv $bi_tmpdir/server-os.usb* $outdir/$outfile
 	pfrun chmod 644 $outdir/$outfile
 	pfrun chown ${uid}:${gid} $outdir/$outfile
 	pfrun cp $bi_tmpdir/partition.map $outdir/${prefix}partition.map
@@ -380,8 +380,8 @@ if [[  $bi_make_iso == 1 ]]; then
 	exit 0
 fi
 
-print "Creating $bi_imgsz byte image at $bi_tmpdir/smartos.usb ... \c"
-create_image $bi_tmpdir $bi_imgsz $bi_tmpdir/smartos.usb
+print "Creating $bi_imgsz byte image at $bi_tmpdir/server-os.usb ... \c"
+create_image $bi_tmpdir $bi_imgsz $bi_tmpdir/server-os.usb
 print "done"
 
 echo "partition.map:"
@@ -397,7 +397,7 @@ bi_lofi_blkdev=$(pfexec lofiadm -a $bi_tmpdir/rootfs.img)
 
 bi_lofi_rawdev=${bi_lofi_blkdev/lofi/rlofi}
 
-create_root $bi_lofi_rawdev $bi_tmpdir/smartos.usb $rootoff $rootsize
+create_root $bi_lofi_rawdev $bi_tmpdir/server-os.usb $rootoff $rootsize
 
 #
 # The proforma image's root partition is populated by sdc-headnode, not us.
@@ -408,7 +408,7 @@ if [[ $bi_proforma_only != 1 ]]; then
 	pfrun umount $bi_rootdir
 fi
 
-copy_root $bi_lofi_rawdev $bi_tmpdir/smartos.usb $rootoff
+copy_root $bi_lofi_rawdev $bi_tmpdir/server-os.usb $rootoff
 
 pfrun lofiadm -d $bi_lofi_blkdev
 
@@ -416,7 +416,7 @@ if [[ $bi_proforma_only == 1 ]]; then
 	copy_results $bi_wsroot/proto.images ${bi_proforma_prefix}gb.img ${bi_proforma_prefix}gb.
 else
 	print "Compressing USB image ..."
-	pfrun /opt/local/bin/pigz $bi_tmpdir/smartos.usb
+	pfrun /opt/local/bin/pigz $bi_tmpdir/server-os.usb
 	copy_results $bi_wsroot/output-usb $bi_usb_image_name ""
 fi
 

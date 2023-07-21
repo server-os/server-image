@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013, Joyent, Inc.
+ * Copyright 2023, ServerOS.
  * See LICENSE file for copyright and license details.
  */
 
@@ -165,7 +166,7 @@ static int
 open_md_gz(int *outfd, char **errmsg, int *permfail)
 {
 	/*
-	 * We're in a global zone in a SmartOS KVM/QEMU instance, so
+	 * We're in a global zone in a ServerOS KVM/QEMU instance, so
 	 * try to use /dev/term/b for metadata.
 	 */
 

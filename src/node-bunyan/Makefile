@@ -4,7 +4,7 @@
 NODEUNIT := ./node_modules/.bin/nodeunit
 SUDO := sudo
 ifeq ($(shell uname -s),SunOS)
-	# On SunOS (e.g. SmartOS) we expect to run the test suite as the
+	# On SunOS (e.g. ServerOS) we expect to run the test suite as the
 	# root user -- necessary to run dtrace. Therefore `pfexec` isn't
 	# necessary.
 	SUDO :=

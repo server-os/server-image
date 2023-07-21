@@ -13,6 +13,7 @@
 #
 # Copyright 2019 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -29,8 +30,8 @@ ber_arg0=$(basename $0)
 ber_wsroot=$(cd "$(dirname "$0")/.." && pwd)
 ber_first=true
 
-ber_template="                     SmartOS %%VERSION%% x86_64
-                       Copyright %%YEAR%% MNX Cloud, Inc.
+ber_template="                     ServerOS %%VERSION%% x86_64
+                       Copyright %%YEAR%% ServerOS.
 
   Built with the following components:
 "

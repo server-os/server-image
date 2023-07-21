@@ -1,4 +1,4 @@
-# sysinfo(8) -- Output information about this SmartOS system.
+# sysinfo(8) -- Output information about this ServerOS system.
 
 ## SYNOPSIS
 
@@ -8,7 +8,7 @@
 ## DESCRIPTION
 
 The sysinfo tool allows you to gather several pieces of information about a
-SmartOS host in one place.  With no arguments system info is written to stdout
+ServerOS host in one place.  With no arguments system info is written to stdout
 as a JSON object.
 
 As some of the data can take some time to gather and most does not change after

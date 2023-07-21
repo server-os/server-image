@@ -6,7 +6,7 @@
 
 #
 # Copyright 2019 Joyent, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 NPM =		npm

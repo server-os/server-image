@@ -1,8 +1,8 @@
 {
     "jrVersion": 1,
-    "description": "SmartOS platform public repositories",
+    "description": "ServerOS platform public repositories",
     "repoCandidateSearch": {
-        "description": "public github.com/joyent repos directly relevant to development of SmartOS",
+        "description": "public github.com/joyent repos directly relevant to development of ServerOS",
         "type": "public",
         "includeArchived": false
     },
@@ -20,7 +20,7 @@
     ],
     "defaults": {
         "labels": {
-            "smartos": true,
+            "serveros": true,
             "public": true
         }
     },
@@ -64,7 +64,7 @@
             }
         },
         {
-            "name": "smartos-changelog"
+            "name": "server-os-changelog"
         },
         {
             "name": "server-image",

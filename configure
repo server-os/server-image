@@ -14,7 +14,7 @@
 #
 # Copyright 2021 Joyent, Inc.
 # Copyright 2023 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 shopt -s xpg_echo
 unalias -a
@@ -65,9 +65,9 @@ function check_loc
 	[[ "$(uname -s)" != "SunOS" ]] && fatal "build only works on SunOS"
 	if [[ "$(uname -v)" =~ "joyent_" ]]; then
 		[[ "$(zonename)" == "global" ]] && fatal \
-		    "building in a GZ on SmartOS is not supported"
+		    "building in a GZ on Sever OS is not supported"
 	else
-		fatal "building on SmartOS is required"
+		fatal "building on ServerOS is required"
 	fi
 }
 
@@ -367,7 +367,7 @@ PYTHON3_PKGVERS=-39;				export PYTHON3_PKGVERS
 PYTHON3_SUFFIX='';				export PYTHON3_SUFFIX
 BLD_JAVA_11='';					export BLD_JAVA_11
 
-# Disable the split 32/64 perl module builds since smartos doesn't exec perl
+# Disable the split 32/64 perl module builds since ServerOS doesn't exec perl
 # via isaexec
 # export BUILDPERL32='#'
 export BUILDPERL64='#'

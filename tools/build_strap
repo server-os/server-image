@@ -11,7 +11,7 @@
 #
 # Copyright 2020 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -21,7 +21,7 @@
 # pkgsrc branch and projects/illumos-extra git HEAD to determine the right
 # tarball.  This avoids a considerable amount of time building.
 #
-# Cached bootstrap directories are kept at /opt/SmartOS/build-cache, and
+# Cached bootstrap directories are kept at /opt/ServerOS/build-cache, and
 # symlinked into the build area; this allows multiple different builds to share
 # a cached strap dir.
 #
@@ -35,8 +35,8 @@ usage="$0 make -a adjunct.tar -j maxjobs -d protodir [-f] [-o tarball]"
 wsroot=$(cd $(dirname $0)/../; pwd)
 pkgin_file="/opt/local/etc/pkgin/repositories.conf"
 manta_host="https://us-east.manta.joyent.com"
-manta_dir="/Joyent_Dev/public/builds/SmartOS/strap-cache/master"
-cache_base="/opt/SmartOS/build-cache/"
+manta_dir="/Joyent_Dev/public/builds/ServerOS/strap-cache/master"
+cache_base="/opt/ServerOS/build-cache/"
 srcdir="$wsroot/projects/illumos-extra"
 adjunct=""
 protodir=""

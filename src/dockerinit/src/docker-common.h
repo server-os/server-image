@@ -6,10 +6,11 @@
 
 /*
  * Copyright (c) 2017, Joyent, Inc.
+ * Copyright 2023, ServerOS.
  */
 
 /*
- * This program acts as an 'exec' helper for a docker zone on SmartOS. When
+ * This program acts as an 'exec' helper for a docker zone on ServerOS. When
  * `docker exec` is run this is used to:
  *
  *  - switch users/groups (based on docker:user)

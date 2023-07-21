@@ -12,10 +12,11 @@
 
 #
 # Copyright (c) 2019, Joyent, Inc.
+# Copyright 2023, ServerOS.
 #
 
 #
-# Generates the SmartOS vmware image
+# Generates the ServerOS vmware image
 #
 
 set -o nounset
@@ -29,7 +30,7 @@ bi_type=${bi_arg0/build_/}
 
 . "${bi_wsroot}/tools/lib/build_common.sh"
 
-bi_template_name='SmartOS.vmwarevm'
+bi_template_name='ServerOS.vmwarevm'
 bi_usb_image=
 
 function bi_ensure_usb_image
@@ -94,7 +95,7 @@ function bi_unpack_usb_image
 {
 	bi_emit_start 'Unpacking USB image into template'
 	if ! gunzip --decompress --stdout "${bi_usb_image}" \
-	    >"${bi_output_dir}/${bi_template_name}/smartos.img"; then
+	    >"${bi_output_dir}/${bi_template_name}/server-os.img"; then
 		fail 'could not unpack USB image'
 	fi
 	bi_emit_done
@@ -105,7 +106,7 @@ function bi_generate_vmware_tar
 	local output_name
 	local output_file
 
-	output_name=$(echo "${bi_platform_name}" | sed 's/^platform/smartos/')
+	output_name=$(echo "${bi_platform_name}" | sed 's/^platform/server-os/')
 	output_file="${output_name}.vmwarevm.tar.gz"
 
 	bi_emit_start 'Generating VMware tarball'

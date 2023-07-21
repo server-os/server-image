@@ -19,7 +19,7 @@ fi
 start_time=$(date +%s)
 
 if [[ $(uname -s) != 'SunOS' ]]; then
-    echo "FATAL: this can only run on SmartOS"
+    echo "FATAL: this can only run on ServerOS"
     exit 1
 fi
 

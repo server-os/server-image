@@ -55,7 +55,7 @@ Supported Platforms
 
 This branch of JSL has been tested on:
 
-- SmartOS (illumos-based), both 32-bit and 64-bit.
+- ServerOS (illumos-based), both 32-bit and 64-bit.
 - Mac OS X Snow Leopard, Lion, and Mountain Lion.
 - Debian Squeeze (6.0.5).
 

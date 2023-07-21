@@ -22,6 +22,7 @@
  * CDDL HEADER END
  *
  * Copyright 2019 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -2629,7 +2630,7 @@ function main()
     });
 }
 
-onlyif.rootInSmartosGlobal(function (err) {
+onlyif.rootInServerOSGlobal(function (err) {
     var log_stream = {
         stream: process.stderr,
         level: 'debug'

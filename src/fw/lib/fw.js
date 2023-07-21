@@ -22,6 +22,7 @@
  *
  *
  * Copyright 2022 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  *
  * fwadm: Main entry points
@@ -1276,7 +1277,7 @@ function prepareIPFdata(opts, log, callback) {
             '#'
         ];
         if (haveIpfEventLogger()) {
-            ipf4Conf.push('# smartos_ipf_version 2');
+            ipf4Conf.push('# serveros_ipf_version 2');
         }
         ipf4Conf.push('#', '');
         var ipf6Conf = ipf4Conf.slice();

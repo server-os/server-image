@@ -1,6 +1,6 @@
 This directory installs man pages corresponding to software delivered by
-Server OS.  For mainly historical reasons, some of these live under
-/smartdc/man, although they're still delivered into Server OS.
+ServerOS.  For mainly historical reasons, some of these live under
+/smartdc/man, although they're still delivered into ServerOS.
 
 Some are built from markdown via ronnjs, others not.
 

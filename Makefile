@@ -12,7 +12,7 @@
 #
 # Copyright 2022 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -46,7 +46,7 @@ endif
 BUILD_PLATFORM := $(shell uname -v)
 
 #
-# This number establishes a maximum for Server OS, illumos-extra, and
+# This number establishes a maximum for ServerOS, illumos-extra, and
 # illumos.  Support for it can and should be added to other projects
 # as time allows.  The default value on large (16 GB or more) zones/systems
 # is 128; on smaller systems it is 8.  You can override this in the usual way;
@@ -510,29 +510,28 @@ common-platform-publish:
 	cp output/changelog.txt $(PLATFORM_BITS_DIR)
 
 #
-# A wrapper to build the additional components that a standard
-# SmartOS release needs.
+# A wrapper to build the additional components that a ServerOS release needs.
 #
-.PHONY: smartos-build
-smartos-build:
+.PHONY: server-os-build
+server-os-build:
 	./tools/build_boot_image -I -r $(ROOT)
 	./tools/build_boot_image -r $(ROOT)
 	./tools/build_vmware -r $(ROOT)
 
-.PHONY: smartos-publish
-smartos-publish:
-	@echo "# Publish SmartOS platform $(PLATFORM_TIMESTAMP) images"
+.PHONY: server-os-publish
+server-os-publish:
+	@echo "# Publish ServerOS $(PLATFORM_TIMESTAMP) images"
 	mkdir -p $(PLATFORM_BITS_DIR)
 	cp output/platform-$(PLATFORM_TIMESTAMP)/root.password \
 	    $(PLATFORM_BITS_DIR)/SINGLE_USER_ROOT_PASSWORD.txt
 	cp output-iso/platform-$(PLATFORM_TIMESTAMP).iso \
-	    $(PLATFORM_BITS_DIR)/smartos-$(PLATFORM_TIMESTAMP).iso
+	    $(PLATFORM_BITS_DIR)/server-os-$(PLATFORM_TIMESTAMP).iso
 	cp output-usb/platform-$(PLATFORM_TIMESTAMP).usb.gz \
-	    $(PLATFORM_BITS_DIR)/smartos-$(PLATFORM_TIMESTAMP)-USB.img.gz
-	cp output-vmware/smartos-$(PLATFORM_TIMESTAMP).vmwarevm.tar.gz \
+	    $(PLATFORM_BITS_DIR)/server-os-$(PLATFORM_TIMESTAMP)-USB.img.gz
+	cp output-vmware/server-os-$(PLATFORM_TIMESTAMP).vmwarevm.tar.gz \
 		$(PLATFORM_BITS_DIR)
 	(cd $(PLATFORM_BITS_DIR) && \
-	    $(ROOT)/tools/smartos-index $(PLATFORM_TIMESTAMP) > index.html)
+	    $(ROOT)/tools/server-os-index $(PLATFORM_TIMESTAMP) > index.html)
 	(cd $(PLATFORM_BITS_DIR) && \
 	    /usr/bin/sum -x md5 * > md5sums.txt)
 
@@ -553,14 +552,14 @@ strap-cache-publish:
 
 #
 # Define a series of phony targets that encapsulate a standard 'release' process
-# for SmartOS platform builds. These are a convenience to allow
+# for ServerOS builds. These are a convenience to allow
 # callers to invoke only two 'make' commands after './configure' has been run.
 # We can't combine these because our stampfile likely doesn't exist at the point
 # that the various build artifact Makefile macros are set, resulting in
 # misnamed artifacts. Thus, expected usage is:
 #
 # ./configure
-# make common-release; make smartos-only-release
+# make common-release; make server-os-release
 #
 .PHONY: common-release
 common-release: \
@@ -568,12 +567,12 @@ common-release: \
     live \
     pkgsrc
 
-.PHONY: smartos-only-release
-smartos-only-release: \
+.PHONY: server-os-release
+server-os-release: \
     tests-tar \
     common-platform-publish \
-    smartos-build \
-    smartos-publish
+    server-os-build \
+    server-os-publish
 
 .PHONY: ctftools-release
 ctftools-release: \

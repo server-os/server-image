@@ -1,12 +1,11 @@
-vmadm(8) -- Manage SmartOS virtual machines
-============================================
+# vmadm(8) -- Manage ServerOS virtual machines
 
 ## SYNOPSIS
     /usr/vm/sbin/vmadm <command> [-d] [-v] [command-specific arguments]
 
 ## DESCRIPTION
 
-The vmadm tool allows you to interact with virtual machines on a SmartOS
+The vmadm tool allows you to interact with virtual machines on a ServerOS
 system. It allows you to create, inspect, modify and delete virtual
 machines on the local system.
 
@@ -17,7 +16,7 @@ be updated as things stabilize. Most properties that apply to OS VMs also
 apply to LX VMs.
 
 The primary reference for a VM is its UUID. Most commands operate on VMs by
-UUID. In SmartOS, there are included bash tab-completion rules so that you can
+UUID. In ServerOS, there are included bash tab-completion rules so that you can
 tab-complete UUIDs rather than having to type them out for every command.
 
 ## COMMANDS
@@ -1231,7 +1230,7 @@ tab-complete UUIDs rather than having to type them out for every command.
     fs_allowed:
 
         This option allows you to specify filesystem types this zone is allowed
-        to mount.  For example on a zone for building SmartOS you probably want
+        to mount.  For example on a zone for building ServerOS you probably want
         to set this to: "ufs,pcfs,tmpfs".  To unset this property, set the
         value to the empty string.
 
@@ -1537,7 +1536,7 @@ tab-complete UUIDs rather than having to type them out for every command.
     nics.*.allow_unfiltered_promisc:
 
         With this property set to true, this VM will be able to have multiple
-        MAC addresses (eg. running SmartOS with VNICs).  Without this option
+        MAC addresses (eg. running ServerOS with VNICs).  Without this option
         these packets will not be picked up as only those unicast packets
         destined for the VNIC's MAC will get through.  Warning: do not enable
         this option unless you fully understand the security implications.
@@ -1609,7 +1608,7 @@ tab-complete UUIDs rather than having to type them out for every command.
 
         An array of IPv4 addresses to use as the network gateway. If multiple
         addresses are specified, the OS-specific behaviour will apply
-        (e.g., round robining on SmartOS). This property is not required if
+        (e.g., round robining on ServerOS). This property is not required if
         using DHCPv4.
 
         The interface for updating this field is liable to change in the
@@ -2114,7 +2113,7 @@ tab-complete UUIDs rather than having to type them out for every command.
     vga:
 
         This property allows one to specify the VGA emulation to be used by
-        kvm VMs. The default is 'std'. NOTE: with the qemu bundled in SmartOS
+        kvm VMs. The default is 'std'. NOTE: with the qemu bundled in ServerOS
         qxl and xenfb do not work.
 
         type: string (one of: 'cirrus','std','vmware','qxl','xenfb')

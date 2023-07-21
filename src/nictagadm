@@ -12,6 +12,7 @@
 
 #
 # Copyright (c) 2018, Joyent, Inc.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -265,9 +266,9 @@ function find_config_paths()
     USB_CONFIG="${USB_MNT}/config"
 
     if [[ -f $USB_CONFIG_COPY ]]; then
-        # SmartOS w/o SDC does not have /mnt/usbkey, so when smartos=true, we'll
+        # ServerOS w/o SDC does not have /mnt/usbkey, so when serveros=true, we'll
         # not try to mount / umount a USB Key that won't exist. (OS-4357)
-        if bootparams | grep -q '^smartos=true'; then
+        if bootparams | grep -q '^serveros=true'; then
             HAVE_USB=
             CONF_FILES=("$USB_CONFIG_COPY")
         else

@@ -14,6 +14,7 @@
 #
 # Copyright 2022 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 # shellcheck disable=1091
@@ -190,7 +191,7 @@ vcurl() {
 	fi
 }
 
-# Default well-known source of SmartOS Platform Images
+# Default well-known source of ServerOS Platform Images
 DEFAULT_URL_PREFIX=https://us-east.manta.joyent.com/Joyent_Dev/public/SmartOS/
 # Default path for piadm's configuration
 PIADM_CONF=/var/piadm/piadm.conf
@@ -201,7 +202,7 @@ PIADM_CONF=/var/piadm/piadm.conf
 #
 config_check() {
 	# Can't do standalone_only per se as it errors out, but this only
-	# applies to standalone SmartOS.
+	# applies to standalone ServerOS.
 	if [[ "$TRITON_CN" == "yes" || "$TRITON_HN" == "yes" ]]; then
 		return
 	fi
@@ -332,14 +333,14 @@ install() {
 		# URL_PREFIX.  Grab the latest-version ISO. Before proceeding,
 		# make sure it's the current one.
 		iso=yes
-		vecho "Downloading latest SmartOS ISO"
-		vcurl -o "${tdir}/smartos.iso" "${URL_PREFIX}/smartos-latest.iso"
+		vecho "Downloading latest ServerOS ISO"
+		vcurl -o "${tdir}/server-os.iso" "${URL_PREFIX}/server-os-latest.iso"
 		code=$?
 		if [[ $code -ne 0 ]]; then
 			/bin/rm -rf "${tdir}"
 			fatal "Curl exit code $code"
 		fi
-		mount -F hsfs "${tdir}/smartos.iso" "${tdir}/mnt"
+		mount -F hsfs "${tdir}/server-os.iso" "${tdir}/mnt"
 
 		# For now, assume boot stamp and PI stamp are the same on an ISO...
 		stamp=$(cat "${tdir}/mnt/etc/version/boot")
@@ -367,13 +368,13 @@ install() {
 			mount -F hsfs "$1" "${tdir}/mnt"
 			stamp=$(cat "${tdir}/mnt/etc/version/boot")
 		elif [[ "$filetype" == "gzip" ]]; then
-			# SmartOS PI.  Let's confirm it's actually a .tgz...
+			# ServerOS PI.  Let's confirm it's actually a .tgz...
 
 			if ! gtar -xzOf "$1" > /dev/null 2>&1; then
 				/bin/rm -rf "${tdir:?}"
 				err "File $1 is not an ISO or a .tgz file."
 			fi
-			# We're most-likely good here.  NOTE: SmartOS/Triton
+			# We're most-likely good here.  NOTE: ServerOS/Triton
 			# PI files expand to platform-$STAMP.  Fix it here
 			# before proceeding.
 			vecho "Treating $1 as an .tgz Platform Image file."
@@ -424,13 +425,13 @@ install() {
 				"is invalid for download from $URL_PREFIX"
 			usage
 		fi
-		vcurl -o "${tdir}/smartos.iso" "${URL_PREFIX}/$1/smartos-${1}.iso"
+		vcurl -o "${tdir}/server-os.iso" "${URL_PREFIX}/$1/server-os-${1}.iso"
 		code=$?
 		if [[ $code -ne 0 ]]; then
 			/bin/rm -rf "${tdir}"
 			fatal "PI-stamp $1 -- curl exit code $code"
 		fi
-		mount -F hsfs "${tdir}/smartos.iso" "${tdir}/mnt"
+		mount -F hsfs "${tdir}/server-os.iso" "${tdir}/mnt"
 		code=$?
 		if [[ $code -ne 0 ]]; then
 			/bin/rm -rf "${tdir}"
@@ -542,7 +543,7 @@ list() {
 		bootbitsstamp=$(cat etc/version/boot)
 		# Triton Head Nodes are special.
 		if [[ "$TRITON_HN" != "yes" ]]; then
-			# Regular standalone SmartOS case.
+			# Regular standalone ServerOS case.
 			if [[ ! -L /$bootfs/platform ]]; then
 				corrupt "WARNING: Bootable filesystem" \
 					"$bootfs has non-symlink platform"
@@ -928,7 +929,7 @@ ispoolenabled() {
 	pool=$1
 	poolpresent "$pool"
 
-	# SmartOS convention is $POOL/boot.
+	# ServerOS convention is $POOL/boot.
 	currbootfs=$(zpool list -Ho bootfs "$pool")
 	if [[ $currbootfs == "${pool}/boot" ]]; then
 		# We're bootable (at least bootable enough)
@@ -939,7 +940,7 @@ ispoolenabled() {
 	elif [[ $currbootfs != "-" ]]; then
 		eecho "It appears pool $pool has a different boot filesystem" \
 			"than the"
-		eecho "standard SmartOS filesystem of ${pool}/boot. It will" \
+		eecho "standard ServerOS filesystem of ${pool}/boot. It will" \
 			"need manual"
 		corrupt "intervention."
 	fi
@@ -1297,7 +1298,7 @@ enablepool() {
 		pool=$1
 	fi
 
-	# SmartOS standard bootable filesystem is POOL/boot.
+	# ServerOS standard bootable filesystem is POOL/boot.
 	bootfs=${pool}/boot
 
 	# If we're a head node, bail early if we don't have a sufficiently
@@ -1341,7 +1342,7 @@ enablepool() {
 	# We MAY need to do some reality checking if the `zfs list` shows
 	# $bootfs. For now, just wing it. and plow forward.
 
-	# At this point we have an existing SmartOS-standard boot filesystem,
+	# At this point we have an existing ServerOS standard boot filesystem,
 	# but it's not specified as bootfs in the pool.  Test if bootfs can be
 	# set...
 	zpool set "bootfs=${bootfs}" "${pool}" || \
@@ -1506,7 +1507,7 @@ else
 fi
 
 # Determine if we're running on a Triton Compute Node (CN) or not:
-bootparams | grep -E -q 'smartos=|headnode=' || initialize_as_CN
+bootparams | grep -E -q 'serveros=|headnode=' || initialize_as_CN
 bootparams | grep -q 'headnode=' && initialize_as_HN
 
 # Check the configuration file out.

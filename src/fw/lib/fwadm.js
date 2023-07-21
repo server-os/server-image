@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright 2016, Joyent, Inc. All rights reserved.
+ * Copyright 2023, ServerOS.
  *
  *
  * fwadm: CLI logic
@@ -860,7 +861,7 @@ function wrapSubcmd(func) {
 
         opts = this.opts = util_obj.mergeObjects(this.opts, opts);
 
-        onlyif.rootInSmartosGlobal(function (err) {
+        onlyif.rootInServerOSGlobal(function (err) {
             if (err) {
                 console.error('FATAL: cannot run: %s', err);
                 return process.exit(2);

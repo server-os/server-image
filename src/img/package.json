@@ -1,6 +1,6 @@
 {
   "name": "imgadm",
-  "description": "Manage SmartOS virtual machine images.",
+  "description": "Manage ServerOS virtual machine images.",
   "version": "3.9.4",
   "author": "MNX Cloud (mnxsolutions.com)",
   "private": true,

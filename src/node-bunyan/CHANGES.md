@@ -226,7 +226,7 @@ Use version 1.1.2.
   installing bunyan, because it is a binary dep. Even as an *optional* dep it
   still caused confusion and install noise.
 
-  Users of Bunyan on dtrace-y platforms (SmartOS, Mac, Illumos, Solaris) will
+  Users of Bunyan on dtrace-y platforms (ServerOS, Mac, Illumos, Solaris) will
   need to manually `npm install dtrace-provider` themselves to get [Bunyan's
   dtrace support](https://github.com/trentm/node-bunyan#runtime-log-snooping-via-dtrace)
   to work. If not installed, bunyan should stub it out properly.
@@ -627,7 +627,7 @@ Please upgrade to bunyan 0.20.0.
 ## bunyan 0.16.2
 
 - Ensure that stderr from the dtrace child process (when using `bunyan -p PID`)
-  gets through. The `pipe` usage wasn't working on SmartOS. This is important
+  gets through. The `pipe` usage wasn't working on ServerOS. This is important
   to show the user if they need to 'sudo'.
 
 
@@ -656,7 +656,7 @@ Please upgrade to bunyan 0.20.0.
   And this can include log levels *below* what the service is actually configured
   to log. E.g. if the service is only logging at INFO level and you need to see
   DEBUG log messages, with this you can. Obviously this only works on dtrace-y
-  platforms: Illumos derivatives of SunOS (e.g. SmartOS, OmniOS), Mac, FreeBSD.
+  platforms: Illumos derivatives of SunOS (e.g. ServerOS, OmniOS), Mac, FreeBSD.
 
   Or get the bunyan CLI to render logs nicely:
 

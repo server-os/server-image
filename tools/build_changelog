@@ -14,11 +14,11 @@
 #
 # Copyright 2020 Joyent, Inc.
 # Copyright (c) 2014 Elysium Digital, L.L.C.
-# Copyright (c) 2023 Server OS.
+# Copyright (c) 2023 ServerOS.
 #
 
 #
-# Generates the changelog published alongside SmartOS images
+# Generates the changelog published alongside ServerOS images
 #
 
 shopt -s xpg_echo
@@ -67,7 +67,7 @@ function build_section
 	# repository, server-image.git itself, we use 'platform' to maintain
 	# consistency with previous changelogs, which used the basename of
 	# release build workspace. That value was always 'platform' in the past.
-	# smartos-changelog.git:/smartos.html currently depends on the exact names
+	# server-os-changelog.git:/serveros.html currently depends on the exact names
 	# of these headers.
 	#
 	if [[ "$directory" = "." ]]; then

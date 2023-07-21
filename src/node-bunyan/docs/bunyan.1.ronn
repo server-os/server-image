@@ -148,7 +148,7 @@ scripts, uppercase symbols like "DEBUG" are defined for convenience.
 ## DTRACE SUPPORT
 
 On systems that support DTrace (e.g., MacOS, FreeBSD, illumos derivatives
-like SmartOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)
+like ServerOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)
 that makes available the following probes:
 
     log-trace

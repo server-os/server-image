@@ -2,7 +2,7 @@
 
 Over time, we update the base development environment that everyone is using.
 The current target is the x86_64 2021.4.x image series as noted in
-[the SmartOS Getting Started Guide](../README.md#importing-the-zone-image).
+[the ServerOS Getting Started Guide](../README.md#importing-the-zone-image).
 
 The purpose of this guide is to describe how an **existing** development zone
 (x86_64 2018.4) should be upgraded from one version of pkgsrc to the next
@@ -46,39 +46,11 @@ be cleaned out.
 ### Backing up / Snapshotting
 
 The next thing you should do is take a snapshot of your instance or
-potentially back up important information. To snapshot your instance,
-you can use the
-[triton](https://github.com/TritonDataCenter/node-triton#node-triton)
-tool. If you have not already, follow the
-[setup](https://github.com/TritonDataCenter/node-triton#setup) instructions
-such that you can point it at the system with your instance.
+potentially back up important information. 
 
-First, identify the name of the instance that you are working on. This
-can usually be done by running `triton inst list`. For example:
+#### Manual Snapshots in ServerOS
 
-```
-$ triton inst list
-SHORTID   NAME       IMG                        STATE    FLAGS  AGE
-122fff4d  march-dev  base-multiarch-lts@16.4    running  -      3y
-b80d08de  python     base-multiarch-lts@15.4.1  running  -      2y
-2de86964  iasl       ubuntu-16.04@20161004      running  -      1y
-```
-
-In this case, we're interested in upgrading the instance called
-`march-dev`. Next we create a snapshot and verify it exists:
-
-```
-$ triton inst snapshot create --name=2021.4-upgrade march-dev
-Creating snapshot 2021.4-upgrade of instance march-dev
-$ triton inst snapshot list march-dev
-NAME            STATE    CREATED
-2021.4-upgrade  created  2018-09-28T18:40:14.000Z
-```
-
-#### Manual Snapshots in SmartOS
-
-When you're not running in a Triton environment, you can use vmadm to
-create the snapshot. First, find the VM you want to use in vmadm list.
+You can use vmadm to create the snapshot. First, find the VM you want to use in vmadm list.
 Then you use the `create-snapshot` option.
 
 ```
@@ -135,7 +107,7 @@ done
 ```
 
 Determining which SMF properties were set locally on SMF services or
-SMF instances vs. which are the shipped defaults is tricky in SmartOS.
+SMF instances vs. which are the shipped defaults is tricky in ServerOS.
 
 Doing a diff of the `svccfg -s <instance> listprop` against the output of:
 
@@ -150,7 +122,7 @@ in the comparison). As 'listprop' output adjusts to column width, stripping
 spaces and sorting with `sed -e 's/ \+/ /g' | sort` will be necessary.
 
 Unfortunately, that diff won't include a list of the properties modified
-on the SMF _service_ itself since SMF snapshots in SmartOS do not track
+on the SMF _service_ itself since SMF snapshots in ServerOS do not track
 properties set at the service level. To find those properties, it might
 be possible to logically compare the XML produced from:
 
@@ -166,6 +138,8 @@ produce a view of a given pair of XML files in order to more easily compare
 them.
 
 ### Update pkgin configuration from 2018.4 to 2021.4
+
+TODO: Figure out if this is still relevant for Server OS
 
 NOTE:  This step is revertable if no subsequent steps are taken.
 
@@ -222,7 +196,7 @@ pkgin upgrade
 The output should look like this:
 
 ```
-smartos-build-2(~)[0]% pfexec pkg_add -U libarchive pkg_install pkgin
+server-os-build-2(~)[0]% pfexec pkg_add -U libarchive pkg_install pkgin
 ===========================================================================
 The following directories are no longer being used by openssl-1.0.2p,
 and they can be removed if no other packages are using them:

@@ -46,7 +46,7 @@ Known issues:
 
 - DOCKER-1118 `imgadm create ...` will no longer set `requirements.min_platform`
   to the current platform version for LX and Docker images. KVM images already
-  did not set `min_platform`. It is still set for SmartOS images.
+  did not set `min_platform`. It is still set for ServerOS images.
 
 ## 3.7.3
 

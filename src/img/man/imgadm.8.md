@@ -1,4 +1,4 @@
-# imgadm(8) -- Manage SmartOS virtual machine images
+# imgadm(8) -- Manage ServerOS virtual machine images
 
 ## SYNOPSIS
 
@@ -29,7 +29,7 @@
 ## DESCRIPTION
 
 The imgadm tool allows you to import and manage virtual machine images on a
-SmartOS system. Virtual machine images (also sometimes referred to as
+ServerOS system. Virtual machine images (also sometimes referred to as
 'datasets') are snapshots of pre-installed virtual machines which are prepared
 for generic and repeated deployments.
 
@@ -115,7 +115,7 @@ supplied channel.
                                       IMGAPI server.
 
         Examples:
-            # SmartOS primary public image repository (defaults to "imgapi")
+            # ServerOS primary public image repository (defaults to "imgapi")
             imgadm sources -a https://images.smartos.org
             # Docker Hub
             imgadm sources -a https://docker.io -t docker
@@ -339,7 +339,7 @@ supplied channel.
         shutdown.
 
         The former involves snapshotting the VM, running the prepare-image script
-        (via the SmartOS mdata operator-script facility), creating the image,
+        (via the ServerOS mdata operator-script facility), creating the image,
         rolling back to the pre-prepared state. This is preferred because it is (a)
         easier (fewer steps to follow for imaging) and (b) safe (gating with
         snapshot/rollback ensures the VM is unchanged by imaging -- the preparation
@@ -462,7 +462,7 @@ captures metadata about the image). "Customized" means software in the VM
 is installed and setup as desired. "Prepared" means that the VM is cleaned up
 (e.g. host keys removed, log files removed or truncated, hardcoded IP
 information removed) and tools required for VM creation (e.g. zoneinit in
-SmartOS VMs, guest tools for Linux and Windows OSes) are layed down.
+ServerOS VMs, guest tools for Linux and Windows OSes) are layed down.
 
 As described above "imgadm create" has two modes: one where a prepare-image
 script is given for "imgadm create" to run (gated by VM snapshotting and
@@ -470,9 +470,9 @@ rollback for safety); and another where one manually prepares and stops a VM
 before calling "imgadm create". This section describes prepare-image and guest
 requirements for the former.
 
-The given prepare-image script is run via the SmartOS mdata
+The given prepare-image script is run via the ServerOS mdata
 "sdc:operator-script" facility. This requires the guest tools in the VM to
-support "sdc:operator-script" (SmartOS zones running on SDC 7.0 platforms
+support "sdc:operator-script" (ServerOS zones running on SDC 7.0 platforms
 with OS-2515, from 24 Sep 2013, support this.)
 
 For orderly VM preparation, a prepare-image script must implement the following

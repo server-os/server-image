@@ -6,10 +6,11 @@
 
 /*
  * Copyright 2020 Joyent, Inc.
+ * Copyright 2023, ServerOS.
  */
 
 /*
- * This program serves as 'init' for a docker zone when running on SmartOS.
+ * This program serves as 'init' for a docker zone when running on ServerOS.
  *
  * It reads control parameters from the metadata service and then attempts to:
  *

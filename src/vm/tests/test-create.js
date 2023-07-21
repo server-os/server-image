@@ -1,4 +1,5 @@
 // Copyright 2016 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that create behaves correctly.
 //
@@ -350,7 +351,7 @@ test('test create with wrong image_uuid type (KVM for OS VM)', function (t) {
     });
 });
 
-test('test create with wrong image_uuid type (SmartOS for LX)', function (t) {
+test('test create with wrong image_uuid type (ServerOS for LX)', function (t) {
 
     var p = JSON.parse(JSON.stringify(payload_with_smartos_zoneroot));
     var state = {brand: p.brand, expect_create_failure: true};
