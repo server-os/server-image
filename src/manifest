@@ -1093,7 +1093,7 @@ f smartdc/bin/sdc-zfs-io-throttle 0555 root bin
 d smartdc/lib 0555 root bin
 f smartdc/lib/ntp_config 0555 root bin
 f smartdc/lib/sdc-on-tty 0555 root bin
-f smartdc/lib/smartos_prompt_config.sh 0555 root bin
+f smartdc/lib/serveros_prompt_config.sh 0555 root bin
 f usr/bin/nictagadm 0555 root bin
 f usr/bin/sysinfo 0555 root bin
 f usr/bin/bootparams 0555 root bin
@@ -1158,4 +1158,4 @@ d var/log/sdc/upload 0755 root sys
 d var/log/vm 0755 root sys
 
 # compatibility symlink to new shipped file manifest location
-s var/log/manifest=../../usr/share/smartos/manifest
+s var/log/manifest=../../usr/share/serveros/manifest

@@ -1,5 +1,6 @@
 /*
  * Copyright 2022 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  * Test utilities for running vmadm commands
  */
@@ -20,7 +21,7 @@ var hasKey = require('../../lib/util/obj').hasKey;
 // Set to 'false' to keep VMs around for later inspection
 var DELETE_VMS = true;
 var IMAGES = {
-    smartos: '7b0b4140-6e98-11e5-b1ae-ff68fe257228'
+    serveros: '7b0b4140-6e98-11e5-b1ae-ff68fe257228'
 };
 var log = mod_log.child({ component: 'vm' });
 var LAST_UUID;

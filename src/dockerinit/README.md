@@ -58,7 +58,7 @@ If you don't want to have ipmgmtd in your zone, you can also add the:
 
 property to your internal_metadata. Doing so will kill ipmgmtd after configuring
 the interfaces. In LX zones you will still be able to list interfaces (using
-`ip addr`) but not make any changes to network configuration. In SmartOS zones
+`ip addr`) but not make any changes to network configuration. In ServerOS zones
 you will not be able to read or write network configuration.
 
 ## Specifying commands

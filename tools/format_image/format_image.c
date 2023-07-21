@@ -9,6 +9,7 @@
  * http://www.illumos.org/license/CDDL.
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023, ServerOS.
  */
 
 /*
@@ -141,7 +142,7 @@ usage(const char *fmt, ...)
 	(void) fprintf(stderr,
 	    "Usage: %s -o image.usb -m mbr -e efifs -b biosboot\n"
 	    "\n"
-	    "Format a USB/ISO image for booting SmartOS.\n"
+	    "Format a USB/ISO image for booting ServerOS.\n"
 	    "\n"
 	    "\t-o  output file\n"
 	    "\t-m  MBR image\n"

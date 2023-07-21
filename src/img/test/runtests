@@ -24,11 +24,11 @@
 #
 # Copyright (c) 2019, Joyent, Inc. All rights reserved.
 # Copyright 2019 MNX Cloud, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 #
-# Run the imgadm tests. This is expected to be run from a SmartOS GZ.
+# Run the imgadm tests. This is expected to be run from a ServerOS GZ.
 #
 # This creates .tap files in the OUTPUT_DIR (/var/tmp/imgadmtest) that
 # can be processed by a TAP reader. Testing config and log files are
@@ -109,7 +109,7 @@ done
 
 
 if [[ $(uname -s) != 'SunOS' ]]; then
-    fatal "this can only run on SmartOS"
+    fatal "this can only run on ServerOS"
 fi
 
 if [[ $(zonename) != 'global' ]]; then

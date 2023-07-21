@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright 2020 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  * * *
  * The main imgadm functionality. The CLI is a light wrapper around this tool.
@@ -91,7 +92,7 @@ var SET_REQUIREMENTS_BRAND_BRANDS = ['bhyve', 'lx', 'kvm'];
 /**
  * For vm filesystems, we have three variations to which an image can be
  * cloned to:
- *  1. /zones/<uuid>        (smartos, lx and docker)
+ *  1. /zones/<uuid>        (serveros, lx and docker)
  *  2. /zones/<uuid>-diskN  (kvm)
  *  3. /zones/<uuid>/diskN  (bhyve)
  */
@@ -2516,7 +2517,7 @@ IMGADM.prototype._installDockerImage = function _installDockerImage(ctx, cb) {
         },
 
         /**
-         * As a rule, we want all installed images on SmartOS to have their
+         * As a rule, we want all installed images on ServerOS to have their
          * single base snapshot (from which VMs are cloned) called "@final".
          * `vmadm` presumes this (tho allows for it not to be there for
          * bwcompat). This "@final" snapshot is also necessary for
@@ -2704,7 +2705,7 @@ IMGADM.prototype._installZfsImage = function _installZfsImage(ctx, cb) {
         },
 
         /**
-         * As a rule, we want all installed images on SmartOS to have their
+         * As a rule, we want all installed images on ServerOS to have their
          * single base snapshot (from which VMs are cloned) called "@final".
          * `vmadm` presumes this (tho allows for it not to be there for
          * bwcompat). This "@final" snapshot is also necessary for
@@ -3451,7 +3452,7 @@ IMGADM.prototype.createImage = function createImage(options, callback) {
                 next();
                 return;
             }
-            // We need `sysinfo` for smartos images. See below.
+            // We need `sysinfo` for serveros images. See below.
             getSysinfo(function (err, sysinfo_) {
                 sysinfo = sysinfo_;
                 next(err);
@@ -3493,15 +3494,15 @@ IMGADM.prototype.createImage = function createImage(options, callback) {
                     && options.manifest.requirements.min_platform))
             {
                 // Unless an explicit min_platform is provided (possibly empty)
-                // the min_platform for a SmartOS image must be the current
-                // platform, b/c that's the SmartOS binary compat story.
+                // the min_platform for a ServerOS image must be the current
+                // platform, b/c that's the ServerOS binary compat story.
                 if (!m.requirements)
                     m.requirements = {};
                 m.requirements.min_platform = {};
                 m.requirements.min_platform[sysinfo['SDC Version']]
                     = sysinfo['Live Image'];
                 log.debug({min_platform: m.requirements.min_platform},
-                    'set smartos image min_platform to current');
+                    'set serveros image min_platform to current');
             }
             if (SET_REQUIREMENTS_BRAND_BRANDS.indexOf(vmInfo.brand) !== -1
                 && !(options.manifest.requirements

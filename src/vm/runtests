@@ -12,6 +12,7 @@
 
 #
 # Copyright (c) 2019, Joyent, Inc.
+# Copyright 2023, ServerOS.
 #
 
 # All tests must pass!
@@ -32,7 +33,7 @@ start_time=$(date +%s)
 test_log_dir="/tmp/vmtest.$start_time.$$"
 
 if [[ $(uname -s) != 'SunOS' ]]; then
-    echo "FATAL: this can only run on SmartOS"
+    echo "FATAL: this can only run on ServerOS"
     exit 1
 fi
 

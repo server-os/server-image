@@ -8,14 +8,15 @@
 
 #
 # Copyright 2019 Joyent, Inc.
+# Copyright 2023 ServerOS.
 #
 
 #
-# This nawk script is used to generate SmartOS 'manifest' files from
+# This nawk script is used to generate ServerOS 'manifest' files from
 # IPS package manifests. This is basic, and doesn't compare to the significant
 # tooling infrastructure that the IPS provides (pkgmogrify transforms,
 # dependency generation, include directives, etc.) but we don't have that
-# available when building SmartOS, so we make do.
+# available when building ServerOS, so we make do.
 # There is limited support here for the pkgmogrify transforms that are commonly
 # found in IPS manifests as checked into the Illumos gate.
 #
@@ -131,7 +132,7 @@ function emit_line() {
     } else if (action_name == "link" || action_name == "hardlink") {
 
         #
-        # SmartOS manifests expect full paths in targets, but IPS manifests
+        # ServerOS manifests expect full paths in targets, but IPS manifests
         # don't require that. Try to catch these cases by looking for link
         # targets that are either relative, or contain no directory
         # separators, and prepend the parent directory of the source path.

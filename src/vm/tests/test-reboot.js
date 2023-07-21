@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that reboot works.
 //
@@ -44,7 +45,7 @@ var common_kvm_payload = {
 };
 var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 
-test('test reboot SmartOS VM', function (t) {
+test('test reboot ServerOS VM', function (t) {
     var payload = JSON.parse(JSON.stringify(common_payload));
     var prev_boot_timestamp;
     var state = {brand: payload.brand};
@@ -88,7 +89,7 @@ test('test reboot SmartOS VM', function (t) {
     ]);
 });
 
-test('test reboot stopped SmartOS VM fails', function (t) {
+test('test reboot stopped ServerOS VM fails', function (t) {
     var payload = JSON.parse(JSON.stringify(common_payload));
     var state = {brand: payload.brand};
 

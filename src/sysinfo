@@ -2,6 +2,7 @@
 #
 # Copyright 2020 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 # Output some info representing the system.  Default: JSON
 #
@@ -53,7 +54,7 @@ do
 done
 
 if [[ ${UNAME_S} != "SunOS" ]]; then
-    echo "This program is for use in SmartOS only."
+    echo "This program is for use in ServerOS only."
     exit 1
 fi
 
@@ -184,7 +185,7 @@ function get_memory_mib()
     #echo "${Memory_in_MiB}"
 }
 
-function get_smartos_cpu_info()
+function get_cpu_info()
 {
     if [[ ${ZONENAME} == "global" ]]; then
         CPU_Version=`smbios -t SMB_TYPE_PROCESSOR | grep -v "Version: 0000000000" \
@@ -403,7 +404,7 @@ function is_aggr() {
     return 1
 }
 
-function get_smartos_network_interfaces()
+function get_network_interfaces()
 {
     count=1
 
@@ -541,7 +542,7 @@ function get_smartos_network_interfaces()
     #done
 }
 
-function get_smartos_vnics()
+function get_vnics()
 {
     count=1
 
@@ -1189,7 +1190,7 @@ else
     get_nonglobal_info
 fi
 get_memory_mib
-get_smartos_cpu_info
+get_cpu_info
 get_bhyve_capability
 get_live_image_buildstamp
 get_system_type
@@ -1199,8 +1200,8 @@ get_overlay_nic_tags
 get_admin_nic_tag
 get_admin_ip
 get_nic_tags
-get_smartos_network_interfaces
-get_smartos_vnics
+get_network_interfaces
+get_vnics
 get_aggr_params
 get_boot_time
 get_dc_info

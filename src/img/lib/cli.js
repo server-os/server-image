@@ -22,6 +22,7 @@
  *
  * Copyright 2020 Joyent, Inc.
  * Copyright 2022 MNX Cloud, Inc.
+ * Copyright 2023 ServerOS.
  *
  * * *
  *
@@ -750,7 +751,7 @@ CLI.prototype.do_sources.help = (
     + '{{options}}'
     + '\n'
     + 'Examples:\n'
-    + '    # SmartOS primary public image repository (defaults to "imgapi")\n'
+    + '    # ServerOS primary public image repository (defaults to "imgapi")\n'
     + '    {{name}} sources -a https://images.smartos.org\n'
     + '    # Docker Hub\n'
     + '    {{name}} sources -a https://docker.io -t docker\n'
@@ -1510,7 +1511,7 @@ CLI.prototype.do_import.options = [
         help: 'Indicate that the source will send a raw ZFS dataset stream for '
             + 'the image file data. Typically this is used in conjunction '
             + 'with -S, so the source is known, and with a source that '
-            + 'stores images in ZFS (e.g. a SmartOS peer node).'
+            + 'stores images in ZFS (e.g. a ServerOS peer node).'
     }
 ];
 
@@ -1911,7 +1912,7 @@ CLI.prototype.do_create.help = (
     + 'shutdown.\n'
     + '\n'
     + 'The former involves snapshotting the VM, running the prepare-image script\n'
-    + '(via the SmartOS mdata operator-script facility), creating the image,\n'
+    + '(via the ServerOS mdata operator-script facility), creating the image,\n'
     + 'rolling back to the pre-prepared state. This is preferred because it is (a)\n'
     + 'easier (fewer steps to follow for imaging) and (b) safe (gating with\n'
     + 'snapshot/rollback ensures the VM is unchanged by imaging -- the preparation\n'

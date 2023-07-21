@@ -1,5 +1,4 @@
-vmadmd(8) -- virtual machine management daemon
-===============================================
+# vmadmd(8) -- virtual machine management daemon
 
 ## SYNOPSIS
 
@@ -7,7 +6,7 @@ vmadmd(8) -- virtual machine management daemon
 
 ## DESCRIPTION
 
-    The vmadmd daemon is designed to run in a SmartOS global zone and support
+    The vmadmd daemon is designed to run in a ServerOS global zone and support
     vmadm(8) by performing some actions which require maintaining open
     connections or waiting for state change events that cannot be handle in a
     single run of vmadm(8).
@@ -42,7 +41,7 @@ vmadmd(8) -- virtual machine management daemon
 
 ## KVM VNC Consoles
 
-    VMs in a SmartOS system run within zones. The zone in which a VM is running
+    VMs in a ServerOS system run within zones. The zone in which a VM is running
     has no network interfaces itself as the vnics for the VM are attached to
     the qemu process rather than being plumbed in the zone. As such there is no
     way to have the qemu processes VNC listening on a TCP socket in the zone.

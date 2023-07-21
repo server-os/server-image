@@ -1,4 +1,4 @@
-# fwrule(7) -- SmartOS fwadm firewall rule syntax
+# fwrule(7) -- ServerOS fwadm firewall rule syntax
 
 
 ## OVERVIEW

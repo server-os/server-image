@@ -1,10 +1,10 @@
-# Server OS Server Image
+# ServerOS Server Image
 
-Build the images used to create Server OS servers.
+Build the images used to create ServerOS servers.
 
 ## Prerequisites
 
-- Server OS based build server is available, recommended 8 Gb memory, 50 Gb HD
+- ServerOS based build server is available, recommended 8 Gb memory, 50 Gb HD
 
 On a clean install, first update the base system:
 
@@ -54,18 +54,18 @@ old docs
 
 # Overview
 
-This repository builds a Server OS platform image
+This repository builds a ServerOS platform image
 containing the illumos core OS components; a set of "extra" mostly
-third-party software required by illumos, by other Server OS software, or
+third-party software required by illumos, by other ServerOS software, or
 for system management; and a collection of utilities comprising
-Server OS specific functionality found in `projects/local/`.
+ServerOS specific functionality found in `projects/local/`.
 
 # Contents
 
 - [Community](#community)
 - [Bug Reports](#bug-reports)
-- [Components of SmartOS](#components-of-smartos)
-- [Building SmartOS](#building-smartos)
+- [Components of ServerOS](#components-of-server-os)
+- [Building ServerOS](#building-serveer-os)
   * [Setting up a Build Environment](#setting-up-a-build-environment)
   * [Common Tasks](#common-tasks)
   * [Incremental Development](#incremental-development)
@@ -79,16 +79,10 @@ Server OS specific functionality found in `projects/local/`.
 
 # Community
 
-You can interact with the SmartOS community in a number of ways. This
+You can interact with the ServerOS community in a number of ways. This
 includes:
 
-* The *smartos-discuss*
-  [mailing list](https://smartos.topicbox.com/groups/smartos-discuss).
-  If you wish to send mail to the list you'll need to join, but you can view
-  and search the archives online without being a member.
-
-* In the *#smartos* IRC channel on the [Libera Chat IRC
-  network](https://libera.chat/).
+* TODO: Setup GitHub discussions and see what else makes sense
 
 # Bug Reports
 
@@ -103,32 +97,32 @@ available.
 
 While there are multiple repositories that make up the server image,
 if you're in doubt about where to file a bug or just are
-uncertain, please file it on the [Server OS live issue
+uncertain, please file it on the [ServerOS live issue
 tracker](https://github.com/server-os/server-image/issues) and we'll
 help from there. It's more important that the bug is recorded and we can work
 on solving it than it end up in the right location.
 
-# Components of Server OS
+# Components of ServerOS
 
-Server OS is made up of several different components. These components are:
+ServerOS is made up of several different components. These components are:
 
 ## server-image
 
 The [server-image](https://github.com/server-os/server-image)
-repository is the root of Server OS. It has logic for how to build all of the
-different components that make up Server OS and has components that are
-specific to the Server OS image environment. For example, it has tools
+repository is the root of ServerOS. It has logic for how to build all of the
+different components that make up ServerOS and has components that are
+specific to the ServerOS image environment. For example, it has tools
 like `vmadm` and `imgadm`.
 
 ## illumos
 
 The [illumos](https://github.com/server-os/illumos)
-repository is the core of the operating system. It represents Server OS's
+repository is the core of the operating system. It represents ServerOS's
 child of [illumos-gate](https://github.com/illumos/illumos-gate). This
 has the core kernel, libraries, and user commands.
 
 The illumos-joyent code can be found in the server-image tree under
-`projects/illumos`. The Server OS build only supports using illumos-joyent
+`projects/illumos`. The ServerOS build only supports using illumos-joyent
 and not stock illumos-gate.
 
 ## illumos-extra
@@ -202,40 +196,15 @@ The current set of local projects include:
 QEMU
 * [mdata-client](https://github.com/server-os/mdata-client)
 
-# Building Server OS
+# Building ServerOS
 
 ## Setting up a Build Environment
 
-The first step when building is to set up a build environment. The Server OS
-build requires building on Server OS.  As of the `base-64-lts 21.4.0` build
-image, the SmartOS Platform Image must be 20211007 or newer. This can be done
-in VMware, on an existing SmartOS machine, or other virtualization. You must
+The first step when building is to set up a build environment. The ServerOS
+build requires building on ServerOS.  As of the `base-64-lts 21.4.0` build
+image, the ServerOS Platform Image must be 20211007 or newer. This can be done
+in VMware, on an existing ServerOS machine, or other virtualization. You must
 build inside of a non-global zone.
-
-### Minimum Platform Image
-
-As of [OS-8412](https://smartos.org/bugview/OS-8412), OpenSSH requires OpenSSL
-3.0 to build, which means that you'll need to use a platform that includes
-[OS-8334](https://smartos.org/bugview/OS-8334). Release builds as of
-20211216T012707Z will satisfy this requirement.
-
-### Importing the Zone Image
-
-The SmartOS build currently uses the `base-64-lts 21.4.0` image
-which has a UUID of `c8715b60-7e98-11ec-82d1-03d16599f529 `. To import
-the image, you should run the imgadm command from the global zone:
-
-```
-# imgadm import c8715b60-7e98-11ec-82d1-03d16599f529
-Importing c8715b60-7e98-11ec-82d1-03d16599f529 (base-64-lts@21.4.0) from "https://images.smartos.org"
-Gather image c8715b60-7e98-11ec-82d1-03d16599f529 ancestry
-Must download and install 1 image (148.6 MiB)
-Download 1 image     [=======================>] 100% 148.62MB 497.77KB/s  5m 5s
-Downloaded image c8715b60-7e98-11ec-82d1-03d16599f529 (148.6 MiB)
-...82d1-03d16599f529 [=======================>] 100% 148.62MB   5.12MB/s    29s
-Imported image c8715b60-7e98-11ec-82d1-03d16599f529 (base-64-lts@21.4.0)
-#
-```
 
 ### Creating the Zone
 
@@ -374,7 +343,7 @@ The following summarizes the primary targets used on a day to day basis:
 ## Build Targets for Release Engineering
 
 This section is likely to only interest users who perform release builds
-of SmartOS, or the Triton Platform Image.
+of ServerOS.
 
 When performing release builds, the following are convenient targets
 which encapsulate the entire release process for a specific build variety:
@@ -382,11 +351,11 @@ which encapsulate the entire release process for a specific build variety:
 * `common-release`: depends on `check`, `live` and `pkgsrc` targets and
    needs to be run before a subsequent `make` invocation of any of
    the `-release` targets below
-* `smartos-release`: builds and publishes SmartOS artifacts
+* `server-os-release`: builds and publishes ServerOS artifacts
 
 The following are used by the targets listed above as part of the
 release engineering process when publishing release builds of the
-SmartOS platform image. There are varieties of each target
+ServerOS platform image. There are varieties of each target
 for both build flavors.
 
 * `*-publish`: stage bits from the output directory, preparing for
@@ -434,7 +403,7 @@ require you to rerun `./configure` before proceeding.
 ### Changing Branches
 
 Most of the time, all development happens on the `master` branch. All
-SmartOS images are built from the master branch and the general theory
+ServerOS images are built from the master branch and the general theory
 is that the master branch should always build, run, and be of a high
 enough quality that we could cut a release at any time.
 
@@ -480,8 +449,8 @@ ILLUMOS_ADJUNCT_TARBALL_URL="https://us-east.manta.joyent.com/Joyent_Dev/public/
 
 ### Debug Builds
 
-By default, all of Server OS is built non-debug. It is possible to build a
-debug build of Server OS. This debug build primarily changes things by
+By default, all of ServerOS is built non-debug. It is possible to build a
+debug build of ServerOS. This debug build primarily changes things by
 creating a debug build of illumos. A debug build of illumos will result
 in various things such as:
 
@@ -581,7 +550,7 @@ From here, you can follow the [illumos Developer's
 Guide](https://www.illumos.org/books/dev/workflow.html#incremental-building)
 with respect to building individual components. If you build everything
 that you need and it has no impact on other components in the broader
-SmartOS build, then once you are complete, you can run `gmake live` again.
+ServerOS build, then once you are complete, you can run `gmake live` again.
 For example, if you're iterating on a driver or command of some kind in
 the platform then you can simply use `dmake install` to get the build
 artifacts into the proto area and then run `gmake live` at the top level
@@ -712,7 +681,7 @@ multiple repositories at once.
 
 ### Device Drivers
 
-For SmartOS, adding a device driver involves updating files that are
+For ServerOS, adding a device driver involves updating files that are
 assembled at run-time under vanilla illumos. You should check and update if
 necessary the following files under `projects/illumos`:
 
@@ -760,7 +729,7 @@ reviewers. For more information on where to reach out, see
 If you are making a change to `illumos-joyent`, please consider contributing
 directly to [illumos-gate](https://github.com/illumos/illumos-gate) instead.
 We automatically merge this into `illumos-joyent` every working day, so your fix
-will soon make it into SmartOS itself.
+will soon make it into ServerOS itself.
 
 The default case should be contributing directly to upstream. However, in areas
 of significant divergence, such as `lx` brand or certain areas of the networking
@@ -772,7 +741,7 @@ When thinking about integrating, the following are questions that you or
 your approver should be asking:
 
 * Have I tested this in all the ways I can think of? Might this impact
-standalone SmartOS in some way?
+standalone ServerOS in some way?
 * Have I documented any new commands or interfaces in manual pages?
 * Have I built this both debug and non-debug?
 * Have I reviewed the `git pbchk` output when working in bldenv in
@@ -815,7 +784,7 @@ If changing a device driver, you may need to track down multiple
 generations of said hardware to test against to verify that there aren't
 regressions.
 
-Along with the various build artifacts created by the SmartOS build that
+Along with the various build artifacts created by the ServerOS build that
 deliver the operating system media, we produce a tarball containing the
 test suites that were included in the 'illumos-joyent' repository.
 
@@ -826,8 +795,8 @@ system, and will optionally execute some of the included test suites.
 It has the following usage:
 
 ```
-[root@kura ~]# /opt/smartos-test/bin/smartos-test -h
-Usage: smartos-test [-h] [-c] [-e] [-r] [-w] <path to tests.tgz>
+[root@kura ~]# /opt/server-os-test/bin/server-os-test -h
+Usage: server-os-test [-h] [-c] [-e] [-r] [-w] <path to tests.tgz>
 
 At least one of -c, -e, -r is required.
 
@@ -835,7 +804,7 @@ At least one of -c, -e, -r is required.
   -c       configure the system for testing
   -e       execute known tests
   -f       skip the check to ensure platform version == test version
-  -r       snapshot or rollback to zones/opt@system-test-smartos-test
+  -r       snapshot or rollback to zones/opt@system-test-server-os-test
            before doing any system configuration or test execution
   -w       when mounting the lofs /usr, make it writable
 
@@ -845,14 +814,14 @@ Developers should extract the script from the test archive, then run it with an
 argument that points to the test archive, and use one or more of the options
 `-r`, `-c`, `-e`.
 
-When called with all of the options listed above, `smartos-test` will do the
+When called with all of the options listed above, `server-os-test` will do the
 following:
 
 * verify we're running on the global zone
 * verify that the user has indicated that no production data exists on this
   system
 * verify that the test archive version matches the version of the running
-  SmartOS instance
+  ServerOS instance
 * take a named-snapshot of /opt if one doesn't already exist, or rollback to
   that snapshot prior to extracting the tests to /opt
 * create an lofs-mount of /usr in order to extract portions of the test archive
@@ -866,136 +835,21 @@ following:
 For example:
 
 ```
-[root@kura /var/tmp]# tar zvxf tests-test_archive-master-20191001T134222Z.tgz ./opt/smartos-test
-Decompressing 'tests-test_archive-master-20191001T134222Z.tgz' with '/usr/bin/gzcat'...
-x ./opt/smartos-test, 0 bytes, 0 tape blocks
-x ./opt/smartos-test/README, 958 bytes, 2 tape blocks
-x ./opt/smartos-test/bin, 0 bytes, 0 tape blocks
-x ./opt/smartos-test/bin/smartos-test, 10062 bytes, 20 tape blocks
+[root@kura /var/tmp]# tar zvxf tests-test_archive-master-20191001T134222Z.tgz ./opt/server-os-test
 
-[root@kura /var/tmp]# ./opt/smartos-test/bin/smartos-test -rce ./tests-test_archive-master-20191001T134222Z.tgz
-Platform version: 20191001T134222Z
-   Tests version: 20191001T134222Z
-To setup and run these tests you must create the file:
-    /lib/sdc/.sdc-test-no-production-data
-after ensuring you have no production data on this system.
-[root@kura /var/tmp]# touch /lib/sdc/.sdc-test-no-production-data
+[root@kura /var/tmp]# ./opt/server-os-test/bin/server-os-test -rce ./tests-test_archive-master-20191001T134222Z.tgz
 
-[root@kura /var/tmp]# ./opt/smartos-test/bin/smartos-test -rce ./tests-test_archive-master-20191001T134222Z.tgz
-Platform version: 20191001T134222Z
-   Tests version: 20191001T134222Z
-Running zfs snapshot zones/opt@system-test-smartos-test
-Creating new lofs mount for /usr on /var/tmp/smartos-test-loopback
-820704 blocks
-Running tar -xzf ./tests-test_archive-master-20191001T134222Z.tgz -C /var/tmp/smartos-test-loopback ./usr
-Running mount -O -F lofs -o ro /var/tmp/smartos-test-loopback/usr /usr
-Running tar -xzf ./tests-test_archive-master-20191001T134222Z.tgz -C / ./opt ./kernel ./tests.manifest.gen ./tests.buildstamp
-adding cyrus user
-adding ztest user
-Running curl -kO https://pkgsrc.smartos.org/packages/SmartOS/bootstrap/bootstrap-2021Q4-tools.tar.gz
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-100 22.9M  100 22.9M    0     0   566k      0  0:00:41  0:00:41 --:--:--  577k
-Running tar -zxpf bootstrap-2021Q4-tools.tar.gz -C /
-Running ln -s /opt/tools /opt/local
-Running pkgin -y in python27 sudo coreutils gcc7 gmake
-reading local summary...
-processing local summary...
-processing remote summary (https://pkgsrc.smartos.org/packages/SmartOS/2021Q4/tools/All)...
-pkg_summary.xz                                                                                        100%  120KB 119.9KB/s   00:00
-calculating dependencies...done.
+[root@kura /var/tmp]# ./opt/server-os-test/bin/server-os-test -rce ./tests-test_archive-master-20191001T134222Z.tgz
 
-1 package to refresh:
-  bzip2-1.0.8
-
-13 packages to install:
-  libiconv-1.14nb3 tcp_wrappers-7.6.4 libffi-3.2.1nb4 gettext-lib-0.19.8.1 db4-4.8.30 openldap-client-2.4.47 cyrus-sasl-2.1.27
-  binutils-2.26.1nb1 python27-2.7.15nb1 sudo-1.8.26 coreutils-8.29nb1 gcc7-7.3.0nb4 gmake-4.2.1nb1
-
-1 to refresh, 0 to upgrade, 13 to install
-137M to download, 415M to install
-
-libiconv-1.14nb3.tgz                                                                                  100% 2068KB 689.3KB/s   00:03
-libffi-3.2.1nb4.tgz                                                                                   100%   59KB  59.4KB/s   00:00
-gettext-lib-0.19.8.1.tgz                                                                              100%   67KB  67.3KB/s   00:00
-
-.
-. (output omitted for brevity)
-.
-
-gcc7-7.3.0nb4: registering info file /opt/tools/gcc7/info/libquadmath.info
-installing gmake-4.2.1nb1...
-gmake-4.2.1nb1: registering info file /opt/tools/info/make.info
-pkg_install warnings: 0, errors: 0
-reading local summary...
-processing local summary...
-marking python27-2.7.15nb1 as non auto-removable
-marking sudo-1.8.26 as non auto-removable
-marking coreutils-8.29nb1 as non auto-removable
-marking gcc7-7.3.0nb4 as non auto-removable
-marking gmake-4.2.1nb1 as non auto-removable
-Starting test runs
-
-Starting test for bhyvetest with /opt/bhyvetest/bin/bhyvetest -ak
-Starting tests...
-output directory: /var/tmp/bhyvetest.23953
-Executing test /opt/bhyvetest/tst/mevent/lists.delete.exe ... passed
-Executing test /opt/bhyvetest/tst/mevent/read.disable.exe ... passed
-Executing test /opt/bhyvetest/tst/mevent/read.pause.exe ... passed
-Executing test /opt/bhyvetest/tst/mevent/read.requeue.exe ... passed
-
--------------
-Results
--------------
-
-Tests passed: 4
-Tests failed: 0
-Tests ran:    4
-
-Congrats, some tiny parts of bhyve aren't completely broken, the tests pass.
-
-Starting test-runner for crypto-tests with /opt/crypto-tests/runfiles/default.run
-Test: /opt/crypto-tests/tests/aes/kcf/setup (run as root)         [00:00] [PASS]
-Test: /opt/crypto-tests/tests/aes/kcf/aes_cbc_32 (run as root)    [00:00] [PASS]
-Test: /opt/crypto-tests/tests/aes/kcf/aes_ccm_32 (run as root)    [00:00] [PASS]
-
-.
-. (output omitted for brevity)
-.
-
-Test: /opt/util-tests/tests/vnic-mtu (run as root)                [00:00] [PASS]
-Test: /opt/util-tests/tests/xargs_test (run as root)              [00:00] [PASS]
-Test: /opt/util-tests/tests/awk/runtests.sh (run as nobody)       [02:35] [PASS]
-Test: /opt/util-tests/tests/ctf/precheck (run as root)            [00:00] [PASS]
-Test: /opt/util-tests/tests/ctf/ctftest (run as root)             [00:06] [PASS]
-Test: /opt/util-tests/tests/demangle/afl-fast (run as root)       [00:01] [PASS]
-Test: /opt/util-tests/tests/demangle/gcc-libstdc++ (run as root)  [00:00] [PASS]
-Test: /opt/util-tests/tests/demangle/llvm-stdcxxabi (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_00_blank (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_01_boolean (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_02_numbers (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_03_empty_arrays (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_04_number_arrays (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_05_strings (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_06_nested (run as root) [00:00] [PASS]
-Test: /opt/util-tests/tests/libnvpair_json/json_07_nested_arrays (run as root) [00:00] [PASS]
-
-Results Summary
-PASS      30
-
-Running Time:   00:02:47
-Percent passed: 100.0%
-Log directory:  /var/tmp/test_results/20191002T101510
-[root@kura /var/tmp]#
 ```
 
 Note that each test suite emits its own results summary. If any test suites
-failed, the names of those suites are emitted by `smartos-test` just before
+failed, the names of those suites are emitted by `server-os-test` just before
 the script exits.
 
 When developers are adding tests to illumos, they should ensure that new
 tests are added to `$SRC/usr/src/pkg/manifests/\*.p5m` as these IPS
-manifests are used to generate the test archive during the SmartOS build.
+manifests are used to generate the test archive during the ServerOS build.
 
 ## Public Interfaces
 

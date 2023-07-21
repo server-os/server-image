@@ -11,7 +11,7 @@
 
 /*
  * Copyright (c) 2017, Joyent, Inc.
- * Copyright (c) 2023, Server OS.
+ * Copyright (c) 2023, ServerOS.
  */
 
 #ifndef _STRPATH_H

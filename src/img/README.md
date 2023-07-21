@@ -15,12 +15,12 @@ This can only be run in the global zone (GZ).
 ## Development
 
 The src/img tree has no binary components, so you can get away
-with faster edit/test cycle than having to do a full smartos platform
+with faster edit/test cycle than having to do a full ServerOS platform
 build and rebooting on it. Here is how:
 
-    # On the target SmartOS GZ (e.g. MY-SMARTOS-BOX), make /usr/img
+    # On the target ServerOS GZ (e.g. MY-SERVEROS-BOX), make /usr/img
     # and /usr/man/man1m writeable for testing:
-    ssh root@MY-SMARTOS-BOX
+    ssh root@MY-SERVEROS-BOX
     rm -rf /var/tmp/img \
         && cp -RP /usr/img /var/tmp/img \
         && mount -O -F lofs /var/tmp/img /usr/img \
@@ -38,13 +38,13 @@ build and rebooting on it. Here is how:
 
     # Build a dev install image (in /var/tmp/img-install-image)
     # and rsync that to the target node.
-    ./tools/dev-install root@MY-SMARTOS-BOX
+    ./tools/dev-install root@MY-SERVEROS-BOX
 
     # Test that it worked by checking for the version change:
-    ssh root@MY-SMARTOS-BOX imgadm --version
+    ssh root@MY-SERVEROS-BOX imgadm --version
 
     # Or run the test suite:
-    ssh root@MY-SMARTOS-BOX /var/img/test/runtests
+    ssh root@MY-SERVEROS-BOX /var/img/test/runtests
 
 Note that at the time of writing, version 3.9.4, we have backported
 imgapi channel support to the version of sdc-clients that is included

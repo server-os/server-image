@@ -11,7 +11,7 @@
 
 #
 # Copyright 2019 Joyent, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 BASE =		$(CURDIR)
@@ -346,7 +346,7 @@ BUILT_SMARTDC_LIB_TARGETS = \
 
 SMARTDC_LIB_TARGETS = \
 	$(BUILT_SMARTDC_LIB_TARGETS) \
-	smartdc/lib/smartos_prompt_config.sh
+	smartdc/lib/serveros_prompt_config.sh
 
 LIBSDC_TARGETS = \
 	lib/sdc/config.sh \

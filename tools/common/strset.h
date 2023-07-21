@@ -11,7 +11,7 @@
 
 /*
  * Copyright 2016 Joyent, Inc.
- * Copyright 2023 Server OS.
+ * Copyright 2023 ServerOS.
  */
 
 #ifndef _STRSET_H

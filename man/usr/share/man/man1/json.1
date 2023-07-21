@@ -732,7 +732,7 @@ Since v1\.2\.0 \fBjson\fR will give position information and context for JSON sy
 
 $ cat config\.json | json
 json: error: input is not JSON: Unexpected \',\' at line 17, column 5:
-            , { "name": "smartos64\-1\.4\.7"
+            , { "name": "server-os64\-1\.4\.7"
         \.\.\.\.^
 {
     "use\-proxy": false
@@ -753,7 +753,7 @@ Processing and output of the input JSON can be suppressed with the \fB\-\-valida
 
 $ cat config\.json | json \-\-validate
 json: error: input is not JSON: Unexpected \',\' at line 17, column 5:
-            , { "name": "smartos64\-1\.4\.7"
+            , { "name": "server-os64\-1\.4\.7"
         \.\.\.\.^
 .
 .fi

@@ -7,7 +7,7 @@ isNativeSnapshot="no"
 createType="monolithicFlat"
 
 # Extent description
-RW 3789063 FLAT "smartos.img" 0
+RW 3789063 FLAT "server-os.img" 0
 
 # The Disk Data Base
 #DDB

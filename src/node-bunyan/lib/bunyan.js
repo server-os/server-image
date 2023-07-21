@@ -1,6 +1,7 @@
 /**
  * Copyright (c) 2014 Trent Mick. All rights reserved.
  * Copyright (c) 2014 Joyent Inc. All rights reserved.
+ * Copyright 2023 ServerOS.
  *
  * The bunyan logging library for node.js.
  *
@@ -615,7 +616,7 @@ Logger.prototype.child = function (options, simple) {
 /**
  * A convenience method to reopen 'file' streams on a logger. This can be
  * useful with external log rotation utilities that move and re-open log files
- * (e.g. logrotate on Linux, logadm on SmartOS/Illumos). Those utilities
+ * (e.g. logrotate on Linux, logadm on ServerOS/Illumos). Those utilities
  * typically have rotation options to copy-and-truncate the log file, but
  * you may not want to use that. An alternative is to do this in your
  * application:

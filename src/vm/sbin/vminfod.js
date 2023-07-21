@@ -22,6 +22,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023, ServerOS.
  *
  */
 
@@ -57,7 +58,7 @@ function startVminfod() {
     });
 }
 
-onlyif.rootInSmartosGlobal(function rootInSmartosGlobalDone(err) {
+onlyif.rootInServerOSGlobal(function rootInServerOSGlobalDone(err) {
     if (err) {
         log.error({err: err},
             'Fatal: cannot run because: %s', err.message);

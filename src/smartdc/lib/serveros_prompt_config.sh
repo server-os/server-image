@@ -8,6 +8,7 @@
 #
 # Copyright 2022 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 # XXX - TODO
@@ -20,7 +21,7 @@ export BASH_XTRACEFD=4
 set -o xtrace
 
 if [[ -z $(/bin/bootparams | grep "^smartos=true") ]]; then
-	echo "This script should only be run on SmartOS"
+	echo "This script should only be run on ServerOS"
 	exit 1
 fi
 
@@ -624,7 +625,7 @@ printheader()
 	fi
 
 	clear
-	printf " %-40s\n" "SmartOS Setup"
+	printf " %-40s\n" "ServerOS Setup"
 	printf " %-40s%38s\n" "$subheader" "https://docs.smartos.org/install"
 
 	printruler
@@ -788,7 +789,7 @@ WARNING: failed to determine possible disk layout. It is possible that
 the system detected no disks. We are launching a shell to allow you to
 investigate the problem. Check for disks and their sizes with the
 diskinfo(8) command. If you do not see disks that you expect, please
-determine your storage controller and reach out to the SmartOS community
+determine your storage controller and reach out to the ServerOS community
 if you require assistence.
 
 If you create or import a zpool named "zones" then installation will continue.
@@ -1090,7 +1091,7 @@ trap sig_doshell SIGINT
 printheader "Triton"
 
 message="
-You must answer the following questions to configure your SmartOS node.
+You must answer the following questions to configure your ServerOS node.
 You will have a chance to review and correct your answers, as well as a
 chance to edit the final configuration, before it is applied.
 
@@ -1134,7 +1135,7 @@ while [ /usr/bin/true ]; do
 To set up networking you must first configure a network tag. A network tag
 refers to a physical NIC or an aggregation. Virtual machines will be created on
 top of a network tag. Setup will first create a network tag and configure a NIC
-so that you can access the SmartOS global zone. After setup has been completed,
+so that you can access the ServerOS global zone. After setup has been completed,
 you will have the option of creating additional network tags and configuring
 additional NICs for accessing the global zone through the nictagadm(8) command.
 
@@ -1148,7 +1149,7 @@ Press [enter] to continue"
 
 	printheader "Networking - Admin"
 	message="
-The admin network is the primary network in SmartOS. It is the default network
+The admin network is the primary network in ServerOS. It is the default network
 that is created. The configured NIC will be used to access the global zone. If
 you wish to use a VLAN on this network, you must configure VLAN ACCESS mode for
 this network.\n\n"
@@ -1211,7 +1212,7 @@ connected to your 'admin' network. Use 'none' if you have no gateway.\n\n"
 
 	message="
 The DNS servers set here will be used to provide name resolution abilities to
-the SmartOS global zone itself. These DNS servers are independent of anything
+the ServerOS global zone itself. These DNS servers are independent of anything
 you use to create virtual machines through vmadm(8).\n\n"
 
 	if [[ $(getanswer "skip_instructions") != "true" ]]; then
@@ -1251,7 +1252,7 @@ fi
 	printheader "Storage"
 
 	message="
-SmartOS will automatically determine what we think is
+ServerOS will automatically determine what we think is
 the best zpool layout from your current disks. You may use this
 suggestion, change to another built in storage profile, or simply create
 your own zpool.\n"
@@ -1265,9 +1266,9 @@ your own zpool.\n"
 	printheader "Self-booting"
 
 	message="
-SmartOS can boot off either the \"zones\" zpool, or a dedicated named
+ServerOS can boot off either the \"zones\" zpool, or a dedicated named
 zpool in lieu of a USB stick or a CD-ROM.  Enter a pool name if you wish to
-try and make a SmartOS zpool self-booting.  Enter \"none\" to not create
+try and make a ServerOS zpool self-booting.  Enter \"none\" to not create
 a self-booting pool.\n"
 
 	if [[ $(getanswer "skip_instructions") != "true" ]]; then
@@ -1282,11 +1283,11 @@ a self-booting pool.\n"
 	if [[ "$val" != "none" ]]; then
 		boot_from_zpool="yes"
 		echo ""
-		echo "A source for SmartOS can be the boot media itself," \
+		echo "A source for ServerOS can be the boot media itself," \
 			"\"media\","
 		echo "or for a network boot, use \"latest\", or the URL of" \
 			"an ISO"
-		promptopt "Source for SmartOS to install" \
+		promptopt "Source for ServerOS to install" \
 			  ${PI_SOURCE-"media"} "pisource"
 		PI_SOURCE=$val
 		# If someone didn't take "media" by default or "latest",
@@ -1299,7 +1300,7 @@ a self-booting pool.\n"
 	message="
 Would you like to install 3rd party add-on software tools?
 
-These tools, while not part of SmartOS, have been compiled to work
+These tools, while not part of ServerOS, have been compiled to work
 in the global zone.
 
 Note that external Internet access is required to install pkgsrc.\n\n"
@@ -1328,7 +1329,7 @@ setting a hostname.\n\n"
 
 	printheader "Verify Configuration"
 	message="
-Please verify your SmartOS Configuration. After this point the system will set
+Please verify your ServerOS Configuration. After this point the system will set
 up and all data on the disks will be erased.\n\n"
 
 	if [[ $(getanswer "skip_instructions") != "true" ]]; then

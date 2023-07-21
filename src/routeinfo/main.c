@@ -11,12 +11,13 @@
 
 /*
  * Copyright (c) 2017, Joyent, Inc.
+ * Copyright 2023, ServerOS.
  */
 
 /*
  * This program forms a private interface between the LX brand in
  * illumos-joyent and the route configuration information stored by vmadm(8)
- * in SmartOS/SDC.
+ * in ServerOS.
  *
  * When an LX branded zone boots, a special replacement for init(8) is used,
  * viz.  "/usr/lib/brand/lx/lxinit".  This program is responsible for

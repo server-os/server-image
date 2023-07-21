@@ -22,9 +22,10 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2013, Joyent, Inc. All rights reserved.
+ * Copyright 2023, ServerOS.
  *
  * * *
- * imgadm -- manage images on SmartOS
+ * imgadm -- manage images on ServerOS
  */
 
 var cmdln = require('cmdln');
@@ -34,7 +35,7 @@ var CLI = require('../lib/cli');
 
 
 function main(argv) {
-    onlyif.rootInSmartosGlobal(function (onlyifErr) {
+    onlyif.rootInServerOSGlobal(function (onlyifErr) {
         if (onlyifErr) {
             console.error('imgadm: error: cannot run: ' + onlyifErr);
             process.exit(2);

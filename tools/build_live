@@ -12,7 +12,7 @@
 
 #
 # Copyright 2021 Joyent, Inc.
-# Copyright 2023 Server OS.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -425,7 +425,7 @@ function bi_gen_version_files
 function bi_ship_manifest
 {
 	local fl_manifest="$bi_archive.manifest"
-	local fl_manifest_img="$bi_mnt_usr/share/smartos/manifest"
+	local fl_manifest_img="$bi_mnt_usr/share/server-os/manifest"
 
 	bi_emit_start 'Generating shipped file manifest'
 

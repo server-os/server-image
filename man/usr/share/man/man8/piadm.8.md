@@ -1,5 +1,4 @@
-piadm(8) -- Manage SmartOS Platform Images
-===========================================
+# piadm(8) -- Manage ServerOS Platform Images
 
 
 ## SYNOPSIS
@@ -15,10 +14,11 @@ piadm(8) -- Manage SmartOS Platform Images
     piadm remove <PI-stamp> [ZFS-pool-name]
     piadm update [ZFS-pool-name]
 
+
 ## DESCRIPTION
 
-    Historically, SmartOS booted off of a USB key or a read-only media like
-    CD-ROM.  The copy and version of the SmartOS software on one of these
+    Historically, ServerOS booted off of a USB key or a read-only media like
+    CD-ROM.  The copy and version of the ServerOS software on one of these
     media is called a Platform Image.  A Platform Image is described in
     detail in the next section.  The piadm(8) utility enables and manages
     the ability to instead boot directly off of a ZFS pool.
@@ -26,18 +26,18 @@ piadm(8) -- Manage SmartOS Platform Images
     piadm(8) manages multiple Platform Images on a bootable ZFS pool,
     allowing easier updates to Platform Images and maintaining multiple
     Platform Images on a single boot media.  The method and implementation of
-    SmartOS booting does not change vs. a USB key or CD-ROM, but merely uses
+    ServerOS booting does not change vs. a USB key or CD-ROM, but merely uses
     a bootable ZFS pool as the source of the Platform Image, which can be the
-    traditional SmartOS `zones` pool if it is a bootable pool.
+    traditional ServerOS `zones` pool if it is a bootable pool.
 
 ## PLATFORM IMAGES
 
-    A SmartOS Platform Image (PI) is identified by creation timestamp,
+    A ServerOS Platform Image (PI) is identified by creation timestamp,
     referred to here as a PI-stamp.  One can see it in uname(1):
 
-        smartos-build(~)[0]% uname -a
-        SunOS smartos-build 5.11 joyent_20200602T173751Z i86pc i386 i86pc
-        smartos-build(~)[0]%
+        server(~)[0]% uname -a
+        SunOS ServerOS-build 5.11 joyent_20200602T173751Z i86pc i386 i86pc
+        server(~)[0]%
 
     The PI-stamp for this system's Platform Image is `20200602T173751Z`.
 
@@ -45,16 +45,16 @@ piadm(8) -- Manage SmartOS Platform Images
 
         - A directory structure in a format used by loader(7).
 
-        - The SmartOS `unix` kernel
+        - The ServerOS `unix` kernel
 
-        - The SmartOS boot archive containing kernel modules, libraries,
+        - The ServerOS boot archive containing kernel modules, libraries,
           commands, and more.
 
         - A manifest and hash.
 
         - A file containing the PI-stamp.
 
-    The SmartOS loader(7) will find a path to a Platform Image on the
+    The ServerOS loader(7) will find a path to a Platform Image on the
     bootable ZFS pool, and will load `unix` and then the boot archive.
 
     Platform images are supplied by either a gzipped tarball containing the
@@ -80,7 +80,7 @@ piadm(8) -- Manage SmartOS Platform Images
 
 ## BOOTABLE POOLS
 
-    A SmartOS bootable pool (POOL in the examples) contains:
+    A ServerOS bootable pool (POOL in the examples) contains:
 
         - A dataset named POOL/boot
 
@@ -104,20 +104,20 @@ piadm(8) -- Manage SmartOS Platform Images
     For example:
 
 ```
- [root@smartos ~]# piadm bootable
+ [root@server-os ~]# piadm bootable
  standalone                     ==> BIOS and UEFI
  zones                          ==> non-bootable
- [root@smartos ~]# piadm list
+ [root@server-os ~]# piadm list
  PI STAMP           BOOTABLE FILESYSTEM            BOOT IMAGE   NOW   NEXT
  20200714T195617Z   standalone/boot                next         yes   yes
- [root@smartos ~]# ls -l /standalone/boot
+ [root@server-os ~]# ls -l /standalone/boot
  total 7
  lrwxrwxrwx   1 root     root          23 Jul 15 04:22 boot -> ./boot-20200714T195617Z
  drwxr-xr-x   4 root     root          15 Jul 15 04:12 boot-20200714T195617Z
  drwxr-xr-x   3 root     root           3 Jul 15 04:22 etc
  lrwxrwxrwx   1 root     root          27 Jul 15 04:22 platform -> ./platform-20200714T195617Z
  drwxr-xr-x   4 root     root           5 Jul 15 04:12 platform-20200714T195617Z
- [root@smartos ~]#
+ [root@server-os ~]#
 ```
 
 ## TRITON COMPUTE NODES and iPXE
@@ -175,7 +175,7 @@ piadm(8) -- Manage SmartOS Platform Images
 
       piadm avail
 
-        Query the well-known SmartOS PI repository for available ISO images,
+        Query the well-known ServerOS PI repository for available ISO images,
         listed by PI-Stamp. No PI-Stamps older than the currently running PI
         stamp will be listed.
 
@@ -230,16 +230,16 @@ piadm(8) -- Manage SmartOS Platform Images
         pools, a pool name will be required.  piadm(8) requires a Platform
         Image source.  That source can be:
 
-          - A PI-stamp, which will consult the well-known SmartOS PI
+          - A PI-stamp, which will consult the well-known ServerOS PI
             repository for an ISO image.  This requires network reachability
             and working name resolution.
 
-          - The word "latest", which will consult the well-known SmartOS PI
+          - The word "latest", which will consult the well-known ServerOS PI
             repository for the latest ISO image.  This requires network
             reachability and working name resolution.
 
           - The word "media", which will attempt to find a mountable optical
-            media (CD or DVD) or USB-key with SmartOS on it.  The SmartOS
+            media (CD or DVD) or USB-key with ServerOS on it.  The ServerOS
             installer uses this keyword.
 
           - An ISO image file path.
@@ -278,47 +278,47 @@ piadm(8) -- Manage SmartOS Platform Images
 ### Making a new bootable pool, and seeing the handiwork
 
 ```
- [root@smartos ~]# zpool create -f -B standalone c1t1d0
- [root@smartos ~]# piadm bootable
+ [root@server-os ~]# zpool create -f -B standalone c1t1d0
+ [root@server-os ~]# piadm bootable
  standalone                     ==> non-bootable
  zones                          ==> non-bootable
- [root@smartos ~]# piadm -v bootable -e -i latest standalone
+ [root@server-os ~]# piadm -v bootable -e -i latest standalone
  Installing PI 20200701T231659Z
  Platform Image 20200701T231659Z will be loaded on next boot,
      with a new boot image,
      boot image  20200701T231659Z
- [root@smartos ~]# piadm bootable
+ [root@server-os ~]# piadm bootable
  standalone                     ==> BIOS and UEFI
  zones                          ==> non-bootable
- [root@smartos ~]# piadm list
+ [root@server-os ~]# piadm list
  PI STAMP           BOOTABLE FILESYSTEM            BOOT IMAGE   NOW   NEXT
  20200701T231659Z   standalone/boot                next         no    yes
- [root@smartos ~]#
+ [root@server-os ~]#
 ```
 
 ### Installing a PI-only (use an old boot image) update and activating it
 
 ```
- [root@smartos ~]# piadm list
+ [root@server-os ~]# piadm list
  PI STAMP           BOOTABLE FILESYSTEM            BOOT IMAGE   NOW   NEXT
  20200714T195617Z   standalone/boot                next         yes   yes
- [root@smartos ~]# piadm -v install https://example.com/PIs/platform-20200715T192200Z.tgz
+ [root@server-os ~]# piadm -v install https://example.com/PIs/platform-20200715T192200Z.tgz
  Installing https://example.com/PIs/platform-20200715T192200Z.tgz
          (downloaded to /tmp/tmp.Bba0Ac)
  Installing PI 20200715T192200Z
- [root@smartos ~]# piadm list
+ [root@server-os ~]# piadm list
  PI STAMP           BOOTABLE FILESYSTEM            BOOT IMAGE   NOW   NEXT
  20200714T195617Z   standalone/boot                next         yes   yes
  20200715T192200Z   standalone/boot                none         no    no
- [root@smartos ~]# piadm -v activate 20200715T192200Z
+ [root@server-os ~]# piadm -v activate 20200715T192200Z
  Platform Image 20200715T192200Z will be loaded on next boot,
      WARNING:  20200715T192200Z has no matching boot image, using
      boot image  20200714T195617Z
- [root@smartos ~]# piadm list
+ [root@server-os ~]# piadm list
  PI STAMP           BOOTABLE FILESYSTEM            BOOT IMAGE   NOW   NEXT
  20200714T195617Z   standalone/boot                next         yes   no
  20200715T192200Z   standalone/boot                none         no    yes
- [root@smartos ~]#
+ [root@server-os ~]#
 ```
 
 ## EXIT STATUS
@@ -354,9 +354,9 @@ The following exit values are returned:
       - Mirror
       - RaidZ (any parity)
 
-    SmartOS still loads a ramdisk root with a read-only /usr filesystem, even
+    ServerOS still loads a ramdisk root with a read-only /usr filesystem, even
     when booted from a bootable pool.  This means a bootable pool that isn't
-    the SmartOS `zones` pool receives relatively few writes unless it is used
+    the ServerOS `zones` pool receives relatively few writes unless it is used
     for some other purpose as well.
 
     A bootable pool created without the -B option, but using whole disks,
@@ -367,5 +367,5 @@ The following exit values are returned:
 
     If a bootable pool's boot image or platform image becomes corrupt, even
     if it's `zones`, a machine can still be booted with a USB stick, CD-ROM,
-    or other method of booting SmartOS.  A bootable pool can then be
+    or other method of booting ServerOS.  A bootable pool can then be
     repaired using piadm(8) from the USB stick or CD-ROM.

@@ -658,7 +658,7 @@ can result in unexpected file rotation. You must not have multiple processes
 in the cluster logging to the same file path. In other words, you must have
 a separate log file path for the master and each worker in the cluster.
 Alternatively, consider using a system file rotation facility such as
-`logrotate` on Linux or `logadm` on SmartOS/Illumos. See
+`logrotate` on Linux or `logadm` on ServerOS/Illumos. See
 [this comment on issue #117](https://github.com/trentm/node-bunyan/issues/117#issuecomment-44804938)
 for details.
 
@@ -743,7 +743,7 @@ used for anything else.</td>
 
 
 **Note on log rotation**: Often you may be using external log rotation utilities
-like `logrotate` on Linux or `logadm` on SmartOS/Illumos. In those cases, unless
+like `logrotate` on Linux or `logadm` on ServerOS/Illumos. In those cases, unless
 your are ensuring "copy and truncate" sematics (via `copytruncate` with
 logrotate or `-c` with logadm) then the fd for your 'file' stream will change.
 You can tell bunyan to reopen the file stream with code like this in your
@@ -833,7 +833,7 @@ This example emits:
 the "dtrace-provider" lib separately via `npm install dtrace-provider`.
 
 On systems that support DTrace (e.g., MacOS, FreeBSD, illumos derivatives
-like SmartOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)
+like ServerOS and OmniOS), Bunyan will create a DTrace provider (`bunyan`)
 that makes available the following probes:
 
     log-trace

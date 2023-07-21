@@ -17,7 +17,7 @@ CPPFLAGS += -DNDEBUG -D_REENTRANT					\
 	-I/usr/include							\
 
 # Try to get a Python 2. On macOS there isn't a "python2". On
-# SmartOS pkgsrc 2019Q2 minimal "python" is v3.
+# ServerOS pkgsrc 2019Q2 minimal "python" is v3.
 ifeq ($(BUILDOS),Darwin)
 #	As of macOS 12, we can't use the system python anymore, so take the
 #	first one that's not in /usr/bin.

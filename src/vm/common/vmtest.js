@@ -22,12 +22,13 @@
  *
  * Copyright 2019 Joyent, Inc.
  * Copyright 2022 MNX Cloud, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
 /*
  * This is the common set of functions for things like ensuring we have a
- * SmartOS and Ubuntu image to work with.
+ * ServerOS and Ubuntu image to work with.
  */
 
 process.env['TAP'] = 1;

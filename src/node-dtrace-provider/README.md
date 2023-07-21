@@ -146,7 +146,7 @@ is available whether or not the platform supports it.
 ## PLATFORM SUPPORT
 
 This libusdt-based Node.JS module supports 64 and 32 bit processes on
-Mac OS X and Solaris-like systems such as illumos or SmartOS. As more
+Mac OS X and Solaris-like systems such as illumos or ServerOS. As more
 platform support is added to libusdt, those platforms will be
 supported by this module. See libusdt's status at:
 

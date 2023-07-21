@@ -59,7 +59,7 @@ out of all further processing.
 
 Even though the goal is generally to ship entire sections of the manual, some
 components will install pages into the wrong part of the proto area or will
-install pages that are explicitly not relevant to SmartOS.  If a specific page
+install pages that are explicitly not relevant to ServerOS.  If a specific page
 is to be excluded, a page-level exclusion directive may be used.
 
 For example, say that section `3lib` is being shipped.  That section may
