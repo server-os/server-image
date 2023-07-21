@@ -1,4 +1,5 @@
 // Copyright 2018 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 
 var async = require('/usr/node/node_modules/async');
 var common = require('./common');
@@ -24,7 +25,7 @@ var vmobj;
 
 var smartos_payload = {
     alias: 'test-reprovision-' + process.pid,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     image_uuid: smartos_image_uuid,
     do_not_inventory: true,
     delegate_dataset: true,
@@ -60,7 +61,7 @@ var lxdocker_payload = {
 var payload_test_zfs_on_reprovision = {
     alias: 'test-reprovision-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     image_uuid: vmtest.CURRENT_SMARTOS_UUID,
     do_not_inventory: true
 };

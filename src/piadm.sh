@@ -111,7 +111,7 @@ getbootable() {
 }
 
 declare activestamp
-activestamp=$(uname -v | sed 's/joyent_//g')
+activestamp=$(uname -v | sed 's/server-os_//g')
 declare installstamp
 
 poolpresent() {
@@ -291,7 +291,7 @@ mount_installmedia() {
 
 	mntdir=$1
 
-	# Try the USB key first, quietly and without $mntdir/.joyentusb check
+	# Try the USB key first, quietly and without $mntdir/.serverosusb check
 	if ! mount_usb_key "$mntdir" skip > "$tfile" 2>&1 ; then
 		# If the USB key fails, try mounting the ISO.
 		if ! mount_ISO "$mntdir" > "$tfile2" 2>&1; then

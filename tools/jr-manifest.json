@@ -2,7 +2,7 @@
     "jrVersion": 1,
     "description": "ServerOS platform public repositories",
     "repoCandidateSearch": {
-        "description": "public github.com/joyent repos directly relevant to development of ServerOS",
+        "description": "public github.com/server-os repos directly relevant to development of ServerOS",
         "type": "public",
         "includeArchived": false
     },
@@ -33,7 +33,7 @@
             }
         },
         {
-            "name": "illumos-joyent",
+            "name": "illumos",
             "labels": {
                 "release": true,
                 "mg": "platform"

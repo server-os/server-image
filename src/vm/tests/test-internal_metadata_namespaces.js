@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -78,7 +79,7 @@ test('test exercising internal_metadata_namespaces', function (t) {
     var payload = {
         alias: 'test-internal_metadata_namespaces-' + process.pid,
         autoboot: false,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         do_not_inventory: true,
         internal_metadata_namespaces: ['baz', 'foo'],
         max_locked_memory: 512,

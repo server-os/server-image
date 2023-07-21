@@ -36,7 +36,7 @@
     referred to here as a PI-stamp.  One can see it in uname(1):
 
         server(~)[0]% uname -a
-        SunOS ServerOS-build 5.11 joyent_20200602T173751Z i86pc i386 i86pc
+        SunOS ServerOS-build 5.11 server-os_20200602T173751Z i86pc i386 i86pc
         server(~)[0]%
 
     The PI-stamp for this system's Platform Image is `20200602T173751Z`.

@@ -94,7 +94,7 @@ exports.on_new_vm = function(t, uuid, payload, state, fnlist, callback)
         state.brand = payload.brand;
     }
 
-    if ((['joyent', 'joyent-minimal', 'lx'].indexOf(state.brand) !== -1)
+    if ((['server-os', 'server-os-minimal', 'lx'].indexOf(state.brand) !== -1)
         && (!payload.hasOwnProperty('image_uuid'))) {
 
         payload.image_uuid = uuid;

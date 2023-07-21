@@ -113,7 +113,7 @@ TEST_IPS_MANIFEST_ROOT = projects/illumos/usr/src/pkg/manifests
 #
 # To avoid cross-repository flag days, the list of IPS manifest
 # files which define the files included in the test archive is
-# stored in the illumos-joyent.git repository. By including the
+# stored in the illumos.git repository. By including the
 # following Makefile, we get the $(TEST_IPS_MANIFEST_FILES) macro.
 #
 include projects/illumos/usr/src/Makefile.testarchive

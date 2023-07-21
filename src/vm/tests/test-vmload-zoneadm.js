@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2018, Joyent, Inc. All rights reserved.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -29,7 +30,7 @@ var simple_tests = [
         test_name: 'test w/ 1 OS zone',
         arg1: null,
         stdout: '0:global:running:/::liveimg:shared:0\n'
-            + '1:c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e:running:/zones/c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e:c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e:joyent-minimal:excl:1\n',
+            + '1:c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e:running:/zones/c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e:c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e:server-os-minimal:excl:1\n',
         json: {
             "c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e" : {
                 "zonedid" : 1,
@@ -38,7 +39,7 @@ var simple_tests = [
                 "state" : "running",
                 "zonepath" : "/zones/c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e",
                 "uuid" : "c0f63bf1-aa36-4c78-8c3c-a9cfe3b0001e",
-                "brand" : "joyent-minimal",
+                "brand" : "server-os-minimal",
                 "ip_type" : "excl"
             }
         }

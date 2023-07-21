@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -69,10 +70,10 @@ function hasSnapshot(snapshots, snapname)
 
 // create VM try to snapshot, should fail
 
-test('create joyent-minimal VM with delegated dataset', function (t) {
+test('create server-os-minimal VM with delegated dataset', function (t) {
     var payload = {
         alias: 'test-snapshots-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         autoboot: false,
         image_uuid: image_uuid,
         do_not_inventory: true,
@@ -101,7 +102,7 @@ test('create joyent-minimal VM with delegated dataset', function (t) {
     });
 });
 
-test('create joyent-minimal snapshot that should fail with delegated dataset',
+test('create server-os-minimal snapshot that should fail with delegated dataset',
 function (t) {
     if (abort) {
         t.ok(false, 'skipping snapshot as test run is aborted.');
@@ -123,7 +124,7 @@ function (t) {
     });
 });
 
-test('delete joyent-minimal VM w/ delegated dataset', function (t) {
+test('delete server-os-minimal VM w/ delegated dataset', function (t) {
     if (abort) {
         t.ok(false, 'skipping send as test run is aborted.');
         t.end();
@@ -242,10 +243,10 @@ test('delete KVM VM', function (t) {
 //    create 100 snapshots
 //    delete 100 snapshots
 
-test('create joyent-minimal VM w/o delegated', function (t) {
+test('create server-os-minimal VM w/o delegated', function (t) {
     var payload = {
         alias: 'test-snapshots-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         autoboot: true,
         image_uuid: image_uuid,
         do_not_inventory: true
@@ -357,7 +358,7 @@ test('create snapshot with bad name', function (t) {
     });
 });
 
-test('write file to joyent-minimal zoneroot then snapshot1', function (t) {
+test('write file to server-os-minimal zoneroot then snapshot1', function (t) {
 
     var filename;
 
@@ -395,7 +396,7 @@ test('write file to joyent-minimal zoneroot then snapshot1', function (t) {
     });
 });
 
-test('write file to joyent-minimal zoneroot again then snapshot2',
+test('write file to server-os-minimal zoneroot again then snapshot2',
 function (t) {
     var filename;
 
@@ -434,7 +435,7 @@ function (t) {
     });
 });
 
-test('try joyent-minimal snapshot2 again', function (t) {
+test('try server-os-minimal snapshot2 again', function (t) {
 
     if (abort) {
         t.ok(false, 'skipping writing as test run is aborted.');
@@ -449,7 +450,7 @@ test('try joyent-minimal snapshot2 again', function (t) {
     });
 });
 
-test('write file to joyent-minimal zoneroot one last time, then snapshot3',
+test('write file to server-os-minimal zoneroot one last time, then snapshot3',
 function (t) {
     var filename;
 
@@ -490,7 +491,7 @@ function (t) {
     });
 });
 
-test('rollback joyent-minimal to snapshot2 and test data', function (t) {
+test('rollback server-os-minimal to snapshot2 and test data', function (t) {
     if (abort) {
         t.ok(false, 'skipping rollback as test run is aborted.');
         t.end();
@@ -532,7 +533,7 @@ test('rollback joyent-minimal to snapshot2 and test data', function (t) {
     });
 });
 
-test('rollback joyent-minimal to snapshot1 and test data', function (t) {
+test('rollback server-os-minimal to snapshot1 and test data', function (t) {
     if (abort) {
         t.ok(false, 'skipping rollback as test run is aborted.');
         t.end();
@@ -573,7 +574,7 @@ test('rollback joyent-minimal to snapshot1 and test data', function (t) {
     });
 });
 
-test('delete snapshot1 from joyent-minimal', function (t) {
+test('delete snapshot1 from server-os-minimal', function (t) {
 
     if (abort) {
         t.ok(false, 'skipping deletion as test run is aborted.');
@@ -590,7 +591,7 @@ test('delete snapshot1 from joyent-minimal', function (t) {
     });
 });
 
-test('create snapshot on joyent-minimal with numeric name that should succeed',
+test('create snapshot on server-os-minimal with numeric name that should succeed',
 function (t) {
     if (abort) {
         t.ok(false, 'skipping snapshot as test run is aborted.');
@@ -708,7 +709,7 @@ function createXSnapshots(t, x, callback)
     });
 }
 
-test('create 50 snapshots on joyent-minimal', function (t) {
+test('create 50 snapshots on server-os-minimal', function (t) {
 
     createXSnapshots(t, 50, function (err) {
         t.end();
@@ -716,7 +717,7 @@ test('create 50 snapshots on joyent-minimal', function (t) {
 
 });
 
-test('delete 50 snapshots on joyent-minimal', function (t) {
+test('delete 50 snapshots on server-os-minimal', function (t) {
 
     if (abort) {
         t.ok(false, 'skipping create-delete as test run is aborted.');
@@ -750,7 +751,7 @@ test('delete 50 snapshots on joyent-minimal', function (t) {
     });
 });
 
-test('create/delete snapshot on joyent-minimal should update last_modified',
+test('create/delete snapshot on server-os-minimal should update last_modified',
 function (t) {
 
     var pre_snap_timestamp;
@@ -822,7 +823,7 @@ function (t) {
     });
 });
 
-test('create/delete joyent-minimal snapshot should handle mounting '
+test('create/delete server-os-minimal snapshot should handle mounting '
     + '/checkpoints', function (t) {
     var snapname = 'mountie';
     var checkpoint_dir
@@ -935,7 +936,7 @@ function (t) {
 });
 
 // create 10 snapshots (to test that deleting a VM with snapshots works)
-test('create 10 more snapshots of joyent-minimal VM', function (t) {
+test('create 10 more snapshots of server-os-minimal VM', function (t) {
 
     createXSnapshots(t, 10, function (err) {
         t.end();
@@ -943,7 +944,7 @@ test('create 10 more snapshots of joyent-minimal VM', function (t) {
 
 });
 
-test('delete joyent-minimal VM', function (t) {
+test('delete server-os-minimal VM', function (t) {
 
     if (abort) {
         t.ok(false, 'skipping send as test run is aborted.');
@@ -969,10 +970,10 @@ test('delete joyent-minimal VM', function (t) {
     }
 });
 
-test('create stopped joyent-minimal VM', function (t) {
+test('create stopped server-os-minimal VM', function (t) {
     var payload = {
         alias: 'test-snapshots-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         autoboot: false,
         image_uuid: image_uuid,
         do_not_inventory: true
@@ -1000,7 +1001,7 @@ test('create stopped joyent-minimal VM', function (t) {
     });
 });
 
-test('take snapshot of stopped joyent-minimal VM (should not mount)',
+test('take snapshot of stopped server-os-minimal VM (should not mount)',
 function (t) {
 
     if (abort) {
@@ -1033,7 +1034,7 @@ function (t) {
     });
 });
 
-test('delete stopped joyent-minimal VM', function (t) {
+test('delete stopped server-os-minimal VM', function (t) {
 
     if (abort) {
         t.ok(false, 'skipping send as test run is aborted.');
@@ -1059,11 +1060,11 @@ test('delete stopped joyent-minimal VM', function (t) {
     }
 });
 
-test('create joyent-minimal VM to test metadata through rollback',
+test('create server-os-minimal VM to test metadata through rollback',
 function (t) {
     var payload = {
         alias: 'test-snapshots-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         autoboot: false,
         image_uuid: image_uuid,
         do_not_inventory: true

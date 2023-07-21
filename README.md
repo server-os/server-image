@@ -121,8 +121,8 @@ repository is the core of the operating system. It represents ServerOS's
 child of [illumos-gate](https://github.com/illumos/illumos-gate). This
 has the core kernel, libraries, and user commands.
 
-The illumos-joyent code can be found in the server-image tree under
-`projects/illumos`. The ServerOS build only supports using illumos-joyent
+The illumos code can be found in the server-image tree under
+`projects/illumos`. The ServerOS build is based on illumos-joyent
 and not stock illumos-gate.
 
 ## illumos-extra
@@ -208,10 +208,10 @@ build inside of a non-global zone.
 
 ### Creating the Zone
 
-To create a zone, you need to create a `joyent` branded zone with
+To create a zone, you need to create a `server-os` branded zone with
 `vmadm`. We recommend that the zone have the following attributes:
 
-* The brand set to `"joyent"`
+* The brand set to `"server-os"`
 * The `image_uuid` set to `"c8715b60-7e98-11ec-82d1-03d16599f529"`
 * At least 25 GiB of disk space specified in the `quota` property
 * At least 2-4 GiB of DRAM specified in the `max-physical-memory`
@@ -369,7 +369,7 @@ To clean out all the built contents of the various repositories, there
 is a top level 'clean' target. This will remove all of the built
 artifacts, the proto area, and will descend into each component and
 clean them up. For example, this will end up running `dmake clobber` in
-illumos-joyent to clean up all of its contents.
+illumos to clean up all of its contents.
 
 Occasionally, there are bugs which cause some files to be missed. If you
 encounter that, you can use git's `git clean -fdx` command to clean up.
@@ -440,8 +440,8 @@ or include additional pre-build customization.
 If this file does not exist, the following defaults are set by `configure`:
 
 ```
-PUBLISHER="joyent"
-RELEASE_VER="joyent_147"
+PUBLISHER="server-os"
+RELEASE_VER="server-os_001"
 ON_CLOSED_BINS_URL="https://us-east.manta.joyent.com/Joyent_Dev/public/releng/illumos/on-closed-bins.i386.tar.bz2"
 ON_CLOSED_BINS_ND_URL="https://us-east.manta.joyent.com/Joyent_Dev/public/releng/illumos/on-closed-bins-nd.i386.tar.bz2"
 ILLUMOS_ADJUNCT_TARBALL_URL="https://us-east.manta.joyent.com/Joyent_Dev/public/releng/adjuncts/illumos-adjunct.20210922.tgz"
@@ -673,9 +673,9 @@ s usr/bin/coolgrep=usr/bin/grep
 ```
 
 Something that we deliver should only ever be added to the manifest file
-from the repository that builds it. For example, because illumos-joyent
+from the repository that builds it. For example, because illumos
 delivers `/usr/sbin/dtrace` it should be in the manifest file for
-illumos-joyent and not any other repository. Keeping them separate this
+illumos and not any other repository. Keeping them separate this
 way allows us to minimize build-time flag days that require updating
 multiple repositories at once.
 
@@ -726,9 +726,9 @@ reviewers. For more information on where to reach out, see
 
 ## Upstreaming
 
-If you are making a change to `illumos-joyent`, please consider contributing
+If you are making a change to `illumos`, please consider contributing
 directly to [illumos-gate](https://github.com/illumos/illumos-gate) instead.
-We automatically merge this into `illumos-joyent` every working day, so your fix
+We automatically merge this into `illumos` every working day, so your fix
 will soon make it into ServerOS itself.
 
 The default case should be contributing directly to upstream. However, in areas
@@ -745,7 +745,7 @@ standalone ServerOS in some way?
 * Have I documented any new commands or interfaces in manual pages?
 * Have I built this both debug and non-debug?
 * Have I reviewed the `git pbchk` output when working in bldenv in
-illumos-joyent?
+illumos?
 * Have I run any appropriate `make check` targets?
 * Have I looked for memory leaks?
 * Have I performed appropriate stress testing to try and find issues
@@ -786,7 +786,7 @@ regressions.
 
 Along with the various build artifacts created by the ServerOS build that
 deliver the operating system media, we produce a tarball containing the
-test suites that were included in the 'illumos-joyent' repository.
+test suites that were included in the 'illumos' repository.
 
 A wrapper script is included in the archive which can configure a test system
 to run these tests, will extract the tests to the correct location on the
@@ -875,12 +875,12 @@ to the change.
 ## Mapfiles
 
 We have a hard rule: a public mapfile version should not be added directly
-to illumos-joyent. Instead, if you need to add a new version to a mapfile,
+to illumos. Instead, if you need to add a new version to a mapfile,
 it should be done directly via contributing to illumos-gate.
 
 If for some reason that's not feasible, then it should be added to a private
 version and moved to a public version if/when it is upstreamed to illumos.
 
-If the library in question is specific to illumos-joyent, then it's
+If the library in question is specific to illumos, then it's
 alright to version it. However, this is not true for the vast majority
 of libraries.

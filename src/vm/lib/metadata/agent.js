@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright 2019 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  *
  * # OVERVIEW
@@ -225,7 +226,7 @@ function MetadataAgent(options) {
  *               "name": "metadata",
  *               "hostname": "headnode",
  *               "pid": 83175,
- *               "brand": "joyent-minimal",
+ *               "brand": "server-os-minimal",
  *               "zonename": "4149818f-44d1-4798-875c-ff37aec11042",
  *               "level": 30,
  *               "msg": "starting socket server",

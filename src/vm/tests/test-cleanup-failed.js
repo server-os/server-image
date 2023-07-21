@@ -1,5 +1,6 @@
 //
 // Copyright 2019 Joyent, Inc.
+// Copyright 2023 ServerOS.
 //
 // This test ensures that we can halt and delete a failed zone.
 //
@@ -18,7 +19,7 @@ VM.loglevel = 'DEBUG';
 var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 
 test('create failed VM', function(t) {
-    state = {brand: 'joyent-minimal'};
+    state = {brand: 'server-os-minimal'};
     vmtest.on_new_vm(t, image_uuid, {
         alias: 'test-cleanup-failed-' + process.pid,
         do_not_inventory: true,

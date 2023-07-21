@@ -39,7 +39,7 @@ fi
 # We configure the projects framework using a 'configure-projects' file. This
 # is a plain text file which contains the project name, the branch we wish to
 # build it at, and either a URL to a git repository or 'origin' to denote the
-# github.com/joyent/<repo> location. See create_projects.
+# github.com/server-os/<repo> location. See create_projects.
 #
 read -r -d '' configure_projects < default.configure-projects
 
@@ -63,7 +63,7 @@ function check_loc
 	[[ "$(readlink -f "$PWD")" != "$(readlink -f "$conf_arg0_dir")" ]] && \
 	    fatal "configure must be run from inside $conf_arg0_dir"
 	[[ "$(uname -s)" != "SunOS" ]] && fatal "build only works on SunOS"
-	if [[ "$(uname -v)" =~ "joyent_" ]]; then
+	if [[ "$(uname -v)" =~ "server-os_" ]]; then
 		[[ "$(zonename)" == "global" ]] && fatal \
 		    "building in a GZ on Sever OS is not supported"
 	else

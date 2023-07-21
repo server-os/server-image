@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 
 var async = require('/usr/node/node_modules/async');
 var cp = require('child_process');
@@ -19,7 +20,7 @@ var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 var vmobj;
 var payload = {
     alias: 'test-delegate-' + process.pid,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     image_uuid: image_uuid,
     do_not_inventory: true,
     delegate_dataset: true,

@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2019, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  * These tests ensure that delete behaves correctly.
  */
@@ -78,7 +79,7 @@ test('test deleting "configured" VM', function (t) {
     var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
     var payload = {
         alias: 'test-delete-configure-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         image_uuid: image_uuid,
         autoboot: false,
         do_not_inventory: true,

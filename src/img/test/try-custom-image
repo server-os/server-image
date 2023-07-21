@@ -70,7 +70,7 @@ echo "Create vm $vm_uuid from custom image"
 vmadm create <<EOM
 {
   "uuid": "$vm_uuid",
-  "brand": "joyent",
+  "brand": "server-os",
   "cpu_cap": 100,
   "zfs_io_priority": 30,
   "quota": 20,

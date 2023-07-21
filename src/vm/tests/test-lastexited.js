@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -45,7 +46,7 @@ VM.loglevel = 'DEBUG';
 var common_payload = {
     alias: 'test-lastexited-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     max_locked_memory: 512,
     max_physical_memory: 512,

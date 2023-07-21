@@ -441,7 +441,7 @@ the firewalls of any VMs affected.
     And then a VM is created with these parameters:
 
     {
-        "brand": "joyent",
+        "brand": "server-os",
         "image_uuid": "7b0b4140-6e98-11e5-b1ae-ff68fe257228",
         "firewall_enabled": true,
         "nics": [

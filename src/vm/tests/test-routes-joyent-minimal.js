@@ -1,6 +1,7 @@
 // Copyright 2018 Joyent, Inc.
+// Copyright 2023 ServerOS.
 //
-// Tests for specifying static routes in joyent-minimal zones
+// Tests for specifying static routes in server-os-minimal zones
 //
 
 var assert = require('assert');
@@ -30,9 +31,9 @@ var INVALID_NIC = 'Route gateway: "%s" '
 var INVALID_VAL = 'Invalid value(s) for: %s';
 
 var payload = {
-    alias: 'test-routes-joyent-minimal' + process.pid,
+    alias: 'test-routes-server-os-minimal' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true
 };
 
@@ -447,7 +448,7 @@ test('validation failures', function(t) {
         var desc = ' (' + fail[0] + ')';
         var newPayload = {};
         var state = {
-            brand: 'joyent-minimal',
+            brand: 'server-os-minimal',
             expect_create_failure: true
         };
 
@@ -478,7 +479,7 @@ test('validation failures', function(t) {
 
 test('update routes and resolvers', function(t) {
     var state = {
-        brand: 'joyent-minimal'
+        brand: 'server-os-minimal'
     };
     var vm;
 
@@ -930,7 +931,7 @@ test('update routes and resolvers', function(t) {
 
 test('create zone without maintain_resolvers', function(t) {
     var state = {
-        'brand': 'joyent-minimal'
+        'brand': 'server-os-minimal'
     };
     var vm;
 

@@ -1,6 +1,7 @@
 #
 # Copyright 2020 Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 ROOT = $(PWD)/..
@@ -25,7 +26,7 @@ MAN_FILES = \
 	usr/share/man/man1/gzfgrep.1 \
 	usr/share/man/man1/json.1 \
 	usr/share/man/man7/fwrule.7 \
-	usr/share/man/man7/joyent.7 \
+	usr/share/man/man7/server-os.7 \
 	usr/share/man/man7/openssl.7 \
 	usr/share/man/man8/disklayout.8 \
 	usr/share/man/man8/fssstat.8 \

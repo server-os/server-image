@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that create works with specific options set.
 //
@@ -15,7 +16,7 @@ VM.loglevel = 'DEBUG';
 var payload_missing_netmask = {
     alias: 'test-required-nic-props-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -29,7 +30,7 @@ var payload_missing_netmask = {
 var payload_missing_nic_tag = {
     alias: 'test-required-nic-props-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -43,7 +44,7 @@ var payload_missing_nic_tag = {
 var payload_good = {
     alias: 'test-required-nic-props-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -60,7 +61,7 @@ var payload_good = {
 var payload_good_dhcp = {
     alias: 'test-required-nic-props-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -212,7 +213,7 @@ var payload_kvm_good_dhcp = {
 var payload_network_uuid = {
     alias: 'test-required-nic-props-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -228,7 +229,7 @@ var payload_network_uuid = {
 var payload_network_uuid_invalid = {
     alias: 'test-required-nic-props-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {

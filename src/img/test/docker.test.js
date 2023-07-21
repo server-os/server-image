@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright 2018 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  * * *
  *
@@ -53,7 +54,7 @@ var sourcesHadDockerHub;
 // Use a test image that is ideally small and typically unused. This
 // should be an older image accessible via the v1 Registry API, since
 // that is what imgadm currently supports.
-var testImgArg = 'joyentunsupported/test-nginx:1.0.0';
+var testImgArg = 'server-os-unsupported/test-nginx:1.0.0';
 var testImg;
 
 

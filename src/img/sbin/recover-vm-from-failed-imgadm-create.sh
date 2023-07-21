@@ -3,6 +3,7 @@
 #
 # Copyright (c) 2018, Joyent, Inc.
 # Copyright 2022 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -102,8 +103,8 @@ zfs list -Ho name "$rollbackSnap" >/dev/null \
     || fatal "vm $RECOVER_VM is not in the expected failed state: cannot find $rollbackSnap snapshot"
 
 vmBrand=$(echo "$vmInfo" | json brand)
-if [[ "$vmBrand" != "joyent" && "$vmBrand" != "joyent-minimal" ]]; then
-    fatal "do not yet support recovery of non-joyent brand zones: $vmBrand"
+if [[ "$vmBrand" != "server-os" && "$vmBrand" != "server-os-minimal" ]]; then
+    fatal "do not yet support recovery of non-server-os brand zones: $vmBrand"
 fi
 
 echo '

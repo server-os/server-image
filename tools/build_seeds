@@ -20,6 +20,7 @@
 # CDDL HEADER END
 #
 # Copyright (c) 2012 Joyent, Inc.  All rights reserved.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -102,10 +103,10 @@ function build_database
 
 #
 # We need to walk through a few different sources of brands and work through it.
-# For now we only care about doing this for the Joyent minimal zone. Some day we
+# For now we only care about doing this for the ServerOS minimal zone. Some day we
 # can extend this to everything.
 #
-build_database $ROOT/usr/lib/brand/joyent-minimal/manifests \
-    $ROOT/usr/lib/brand/joyent-minimal/repository.db
-chmod 444 $ROOT/usr/lib/brand/joyent-minimal/repository.db
-chown root:root $ROOT/usr/lib/brand/joyent-minimal/repository.db
+build_database $ROOT/usr/lib/brand/server-os-minimal/manifests \
+    $ROOT/usr/lib/brand/server-os-minimal/repository.db
+chmod 444 $ROOT/usr/lib/brand/server-os-minimal/repository.db
+chown root:root $ROOT/usr/lib/brand/server-os-minimal/repository.db

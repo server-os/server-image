@@ -1,4 +1,5 @@
 // Copyright 2017 Joyent, Inc.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that tmpfs works as expected when setting/unsetting
 //
@@ -78,7 +79,7 @@ test('test with default tmpfs', function (t) {
     var payload = {
         alias: 'test-tmpfs-' + process.pid,
         autoboot: true,
-        brand: 'joyent',
+        brand: 'server-os',
         do_not_inventory: true,
         max_locked_memory: 512,
         max_physical_memory: 512,
@@ -155,7 +156,7 @@ test('test with tmpfs=0', function (t) {
     var payload = {
         alias: 'test-tmpfs-' + process.pid,
         autoboot: true,
-        brand: 'joyent',
+        brand: 'server-os',
         do_not_inventory: true,
         max_locked_memory: 512,
         max_physical_memory: 512,
