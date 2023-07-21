@@ -216,13 +216,8 @@ $(MPROTO)/illumos-extra.manifest: 0-extra-stamp \
 
 $(MPROTO)/%.sd.manifest: projects/local/%/Makefile projects/local/%/manifest
 	cd $(ROOT)/projects/local/$* && \
-	    if [[ -f Makefile.joyent ]]; then \
-		gmake DESTDIR=$(MPROTO) DESTNAME=$*.sd.manifest \
-		    -f Makefile.joyent manifest; \
-	    else \
 		gmake DESTDIR=$(MPROTO) DESTNAME=$*.sd.manifest \
 		    manifest; \
-	    fi
 
 $(MANIFEST): $(WORLD_MANIFESTS) $(SUBDIR_MANIFESTS)
 	-rm -f $@
@@ -273,11 +268,7 @@ update-base:
 .PHONY: %.update
 %.update:
 	cd $(ROOT)/projects/local/$* && \
-	    if [[ -f Makefile.joyent ]]; then \
-		gmake -f Makefile.joyent update; \
-	    else \
 		gmake update; \
-	    fi
 	-rm -f 0-subdir-$*-stamp
 
 0-local-stamp: $(LOCAL_SUBDIRS:%=0-subdir-%-stamp)
@@ -286,12 +277,7 @@ update-base:
 0-subdir-%-stamp: 0-illumos-stamp
 	@echo "========== building $* =========="
 	cd "$(ROOT)/projects/local/$*" && \
-	    if [[ -f Makefile.joyent ]]; then \
-		gmake -f Makefile.joyent $(SUBDIR_DEFS) DESTDIR=$(PROTO) \
-		    world install; \
-	    else \
 		gmake $(SUBDIR_DEFS) DESTDIR=$(PROTO) world install; \
-	    fi
 	touch $@
 
 0-devpro-stamp:
@@ -404,11 +390,7 @@ clean:
 	    (cd $(ROOT)/projects/illumos-extra && gmake clean)
 	[ ! -d projects/local ] || for dir in $(LOCAL_SUBDIRS); do \
 		cd $(ROOT)/projects/local/$${dir} && \
-		if [[ -f Makefile.joyent ]]; then \
-			gmake -f Makefile.joyent clean; \
-		else \
 			gmake clean; \
-		fi; \
 	done
 	(cd $(PKGSRC) && gmake clean)
 	(cd $(ROOT) && rm -rf $(PROTO))
