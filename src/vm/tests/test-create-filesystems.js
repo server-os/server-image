@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that docker volumes are created correctly.
 //
@@ -19,7 +20,7 @@ VM.loglevel = 'DEBUG';
 var common_payload = {
     alias: 'test-create-filesystems-' + process.pid,
     autoboot: true,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     docker: true,
     do_not_inventory: true,
     internal_metadata: {

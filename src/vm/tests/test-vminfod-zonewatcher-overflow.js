@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -106,7 +107,7 @@ test('create VMs', function (t) {
         var payload = {
             alias: 'test-vminfod-zonewatcher-overflow-' + idx,
             autoboot: true,
-            brand: 'joyent-minimal',
+            brand: 'server-os-minimal',
             image_uuid: '01b2c898-945f-11e1-a523-af1afbe22822',
             do_not_inventory: true,
             quota: 10

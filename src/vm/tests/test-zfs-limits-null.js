@@ -1,4 +1,5 @@
 // Copyright 2020 Joyent, Inc.
+// Copyright 2023 ServerOS.
 
 var async = require('/usr/node/node_modules/async');
 var exec = require('child_process').exec;
@@ -20,7 +21,7 @@ test('test create vm with snapshot limits, disabled by null', function (t) {
     var payload = {
         alias: 'test-zfs-limits-null-' + process.pid,
         autoboot: true,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         delegate_dataset: true,
         do_not_inventory: true,
         max_locked_memory: 512,

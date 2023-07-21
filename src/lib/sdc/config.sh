@@ -9,6 +9,7 @@
 #
 # Copyright 2018 Joyent Inc.
 # Copyright 2023 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 CACHE_FILE_JSON="/tmp/.config.json"
@@ -96,9 +97,9 @@ function load_sdc_config_filename {
     COMPUTE_NODE_CONFIG_FILENAME="/opt/smartdc/config/node.config"
 
     if [[ -z "${SDC_CONFIG_FILENAME}" ]]; then
-        SDC_CONFIG_FILENAME="$(svcprop -p 'joyentfs/usb_copy_path' svc:/system/filesystem/smartdc:default)/config"
+        SDC_CONFIG_FILENAME="$(svcprop -p 'serverosfs/usb_copy_path' svc:/system/filesystem/smartdc:default)/config"
         if [[ ! -f ${SDC_CONFIG_FILENAME} ]]; then
-            SDC_CONFIG_FILENAME="/mnt/$(svcprop -p 'joyentfs/usb_mountpoint' svc:/system/filesystem/smartdc:default)/config"
+            SDC_CONFIG_FILENAME="/mnt/$(svcprop -p 'serverosfs/usb_mountpoint' svc:/system/filesystem/smartdc:default)/config"
         fi
 
         if [[ -f ${SDC_CONFIG_FILENAME} ]]; then

@@ -3489,7 +3489,7 @@ IMGADM.prototype.createImage = function createImage(options, callback) {
                     }
                 });
             }
-            if ((vmInfo.brand === 'joyent' || vmInfo.brand === 'joyent-minimal')
+            if ((vmInfo.brand === 'server-os' || vmInfo.brand === 'server-os-minimal')
                 && !(options.manifest.requirements
                     && options.manifest.requirements.min_platform))
             {

@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that default values don't change accidentally.
 //
@@ -18,7 +19,7 @@ var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 var loops = 10;
 
 test('create zone', function(t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
     var functions = [
         function (cb) {
             VM.load(state.uuid, function(err, obj) {

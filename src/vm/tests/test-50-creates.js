@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2017, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  * These tests ensure that default values don't change accidentally.
  */
@@ -46,7 +47,7 @@ test('create and destroy 50 zones', function(t) {
             return i < 50;
         },
         function (callback) {
-            var state = {'brand': 'joyent-minimal'};
+            var state = {'brand': 'server-os-minimal'};
             vmtest.on_new_vm(t, image_uuid, {
                 alias: 'test-50-creates-' + i,
                 autoboot: false,

@@ -20,7 +20,7 @@ VM.loglevel = 'DEBUG';
 var common_payload = {
     alias: 'test-reboot-' + process.pid,
     autoboot: true,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     max_locked_memory: 512,
     max_physical_memory: 512,

@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -59,7 +60,7 @@ var kvm_payload = {
 
 var smartos_payload = {
     alias: 'test-send-recv-' + process.pid,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     image_uuid: image_uuid,
     do_not_inventory: true,
     ram: 256,

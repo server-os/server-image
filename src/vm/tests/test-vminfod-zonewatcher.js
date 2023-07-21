@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -60,7 +61,7 @@ test('create zone (autoboot=true) and stop and destroy',
 
         payload = {
             autoboot: true,
-            brand: 'joyent-minimal',
+            brand: 'server-os-minimal',
             do_not_inventory: true,
             image_uuid: '01b2c898-945f-11e1-a523-af1afbe22822'
         };

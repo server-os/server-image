@@ -1,7 +1,8 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 
 var brand;
-var os_brands = ['joyent', 'joyent-minimal'];
+var os_brands = ['server-os', 'server-os-minimal'];
 var VM = require('/usr/vm/node_modules/VM');
 var vmtest = require('../common/vmtest.js');
 
@@ -26,7 +27,7 @@ test('test nonexistent brand', function (t) {
     });
 });
 
-// These tests we'll do with both joyent and joyent-minimal
+// These tests we'll do with both server-os and server-os-minimal
 for (brand in os_brands) {
     brand = os_brands[brand];
 
@@ -52,9 +53,9 @@ for (brand in os_brands) {
         });
     });
 
-    test('minimal joyent payload', function (t) {
+    test('minimal server-os payload', function (t) {
         VM.validate(brand, 'create', {brand: brand, image_uuid: smartos_image_uuid}, function (errors) {
-            t.ok(!errors, 'creating minimal joyent: ' + JSON.stringify(errors));
+            t.ok(!errors, 'creating minimal server-os: ' + JSON.stringify(errors));
             t.end();
         });
     });
@@ -460,11 +461,11 @@ for (brand in os_brands) {
         });
     });
 
-    test('typical joyent smartdc_role create payload', function (t) {
+    test('typical server-os smartdc_role create payload', function (t) {
         var payload = {
             alias: 'zapi0',
             autoboot: true,
-            brand: 'joyent',
+            brand: 'server-os',
             tags: {
                 smartdc_role: 'zapi',
                 smartdc_type: 'core',
@@ -522,7 +523,7 @@ for (brand in os_brands) {
         });
     });
 
-    test('all options on joyent create payload', function (t) {
+    test('all options on server-os create payload', function (t) {
         var payload = {
             alias: 'maximumpower',
             autoboot: 'true',
@@ -534,7 +535,7 @@ for (brand in os_brands) {
             image_uuid: '01b2c898-945f-11e1-a523-af1afbe22822',
             delegate_dataset: 'true',
             do_not_inventory: 'true',
-            dns_domain: 'joyent.com',
+            dns_domain: 'server-os.com',
             filesystems: [{type: 'lofs', source: '/var/tmp', target: '/gztmp', options: ['ro', 'nodevices']}],
             fs_allowed: ['ufs', 'tmpfs', 'pcfs'],
             hostname: 'maximumpower',
@@ -826,8 +827,8 @@ test('kvm create with good disk (just size)', function (t) {
 });
 
 test('create OS VM with non-existent image_uuid', function (t) {
-    VM.validate('joyent-minimal', 'create', {
-        brand: 'joyent-minimal',
+    VM.validate('server-os-minimal', 'create', {
+        brand: 'server-os-minimal',
         image_uuid: 'a1fac27c-85fb-11e2-ae84-276612e8990c',
         ram: 256
         }, function (errors) {

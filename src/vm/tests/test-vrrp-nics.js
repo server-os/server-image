@@ -1,4 +1,5 @@
 // Copyright 2018 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // Test invalid nic tag detection
 //
@@ -47,7 +48,7 @@ function alias() {
  * Create a VM with the expected error message of opts.err
  */
 function expectCreateError(opts, cb) {
-    var state = {brand: 'joyent-minimal', expect_create_failure: true };
+    var state = {brand: 'server-os-minimal', expect_create_failure: true };
     vmtest.on_new_vm(opts.t, IMAGE_UUID, {
         autoboot: false,
         do_not_inventory: true,
@@ -72,7 +73,7 @@ function expectCreateError(opts, cb) {
 }
 
 test('vrrp vnics: updating', function (t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
     var vm;
     var vm_params = {
         autoboot: true,

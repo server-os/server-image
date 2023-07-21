@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 
 var async = require('/usr/node/node_modules/async');
 var cp = require('child_process');
@@ -20,7 +21,7 @@ var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 test('create zone with fs_allowed', function(t) {
     var payload = {
         alias: 'test-fsallowed-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         autoboot: false,
         image_uuid: image_uuid,
         do_not_inventory: true,

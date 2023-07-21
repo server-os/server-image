@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // Test invalid nic tag detection
 //
@@ -152,7 +153,7 @@ function reset_nic_tags(t, callback) {
 
 
 test('create with invalid nic tag', function(t) {
-    var state = {brand: 'joyent-minimal', expect_create_failure: true };
+    var state = {brand: 'server-os-minimal', expect_create_failure: true };
     vmtest.on_new_vm(t, IMAGE_UUID,
         {
           alias: 'test-invalid-nic-tags-' + process.pid,
@@ -174,7 +175,7 @@ test('create with invalid nic tag', function(t) {
 
 test('reboot / shutdown / start / update with invalid nic tag',
     function(t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
     var vm;
 
     add_admin_nic_tags(t, ['new_tag1', 'new_tag2'], function (err) {
@@ -310,7 +311,7 @@ test('create etherstub', function(t) {
 });
 
 test('booting with invalid etherstub', function(t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
     var vm;
 
     // Create a VM with a nic on new_tag1

@@ -1,4 +1,5 @@
 // Copyright 2018 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // Test setting antispoof opts on nics
 //
@@ -712,14 +713,14 @@ function brand_test(brand, image, t) {
 }
 
 
-test('joyent-minimal: antispoof options update without reboot',
+test('server-os-minimal: antispoof options update without reboot',
     function (t) {
-    brand_test('joyent-minimal', smartos_uuid, t);
+    brand_test('server-os-minimal', smartos_uuid, t);
 });
 
-test('joyent: antispoof options update without reboot',
+test('server-os: antispoof options update without reboot',
     function (t) {
-    brand_test('joyent', smartos_uuid, t);
+    brand_test('server-os', smartos_uuid, t);
 });
 
 test('kvm: antispoof options update without reboot',

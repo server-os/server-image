@@ -35,7 +35,7 @@ For a KVM VM (brand === kvm):
   vmadm delete ${UUID}
   [ destroy the temp files if you stored them]
 
-For an OS VM (brand === joyent):
+For an OS VM (brand === server-os):
 
   vmadm get ${UUID} > ${UUID}.json
   vmadm get ${UUID} | json zfs_filesystem datasets filesystems

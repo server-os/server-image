@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // These tests ensure that default values don't change accidentally.
 //
@@ -15,7 +16,7 @@ VM.loglevel = 'DEBUG';
 var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 
 test('check autoboot when autoboot=true', function(t) {
-    state = {brand: 'joyent-minimal'};
+    state = {brand: 'server-os-minimal'};
     vmtest.on_new_vm(t, image_uuid, {
         alias: 'test-autoboot-' + process.pid,
         do_not_inventory: true,
@@ -44,7 +45,7 @@ test('check autoboot when autoboot=true', function(t) {
 });
 
 test('check autoboot when autoboot=false', function(t) {
-    state = {brand: 'joyent-minimal'};
+    state = {brand: 'server-os-minimal'};
     vmtest.on_new_vm(t, image_uuid, {
         alias: 'test-autoboot-' + process.pid,
         do_not_inventory: true,

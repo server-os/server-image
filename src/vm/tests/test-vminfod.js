@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -50,7 +51,7 @@ var IMAGE_UUID = vmtest.CURRENT_SMARTOS_UUID;
 var PAYLOAD = {
     alias: f('test-vminfod-%d', process.pid),
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     image_uuid: IMAGE_UUID,
     quota: 5,

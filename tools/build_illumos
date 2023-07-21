@@ -13,6 +13,7 @@
 #
 # Copyright 2020 Joyent, Inc.
 # Copyright 2023 MNX Cloud, Inc.
+# Copyright 2023 ServerOS.
 #
 
 # Setup for building stuff!
@@ -37,7 +38,7 @@ set -e
 
 cd ${ROOT}/projects/illumos
 [[ -d "log" ]] || mkdir -p log
-gsed -i -e "s|^GATE=.*$|GATE=\"joyent_${BUILDSTAMP}\"; export GATE|" illumos.sh
+gsed -i -e "s|^GATE=.*$|GATE=\"server-os_${BUILDSTAMP}\"; export GATE|" illumos.sh
 if [[ -n ${MAX_JOBS} ]]; then
     MJ=${MAX_JOBS}
 else

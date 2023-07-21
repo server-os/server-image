@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // Tests for VM.lookup()
 //
@@ -16,7 +17,7 @@ VM.loglevel = 'DEBUG';
 var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 
 test('test tag lookup', function(t) {
-    state = {brand: 'joyent-minimal'};
+    state = {brand: 'server-os-minimal'};
     vmtest.on_new_vm(t, image_uuid, {
         alias: 'test-lookup-' + process.pid,
         do_not_inventory: true,

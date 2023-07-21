@@ -75,9 +75,9 @@ if [[ -z ${FORCE} ]]; then
 fi
 
 # configfile here is only used on headnode
-configfile="$(svcprop -p 'joyentfs/usb_copy_path' svc:/system/filesystem/smartdc:default 2>/dev/null)/config"
+configfile="$(svcprop -p 'serverosfs/usb_copy_path' svc:/system/filesystem/smartdc:default 2>/dev/null)/config"
 if [[ ! -f ${configfile} ]]; then
-    configfile="/mnt/$(svcprop -p 'joyentfs/usb_mountpoint' svc:/system/filesystem/smartdc:default 2>/dev/null)/config"
+    configfile="/mnt/$(svcprop -p 'serverosfs/usb_mountpoint' svc:/system/filesystem/smartdc:default 2>/dev/null)/config"
 fi
 
 # helper to set global "normalized" to the expanded version of MAC ($1)
@@ -251,7 +251,7 @@ function get_bhyve_capability()
 
 function get_live_image_buildstamp()
 {
-    # Add joyent buildstamp to SYSTEM_INFO
+    # Add ServerOS buildstamp to SYSTEM_INFO
     Live_Image=$(uname -v | sed -e "s/.*_//")
 
     #echo "${Live_Image}"

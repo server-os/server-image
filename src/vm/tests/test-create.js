@@ -16,7 +16,7 @@ VM.loglevel = 'DEBUG';
 var payload_invalid_mac = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -32,7 +32,7 @@ var payload_invalid_mac = {
 var payload_invalid_ip = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -47,7 +47,7 @@ var payload_invalid_ip = {
 var payload_with_tags = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     tags: {
         hello: 'world'
@@ -63,7 +63,7 @@ var payload_with_tags = {
 var payload_with_null_alias = {
     alias: null,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -76,7 +76,7 @@ var payload_with_null_alias = {
 var payload_with_zvol_as_zoneroot = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     image_uuid: vmtest.CURRENT_UBUNTU_UUID,
     do_not_inventory: true,
     nics: [
@@ -104,7 +104,7 @@ var payload_with_smartos_zoneroot = {
 var payload_with_rctls = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     max_physical_memory: 1024,
     max_shm_memory: 4096,
@@ -116,7 +116,7 @@ var payload_with_rctls = {
 var payload_with_addrconf = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -129,7 +129,7 @@ var payload_with_addrconf = {
 var payload_with_ipv6 = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -142,7 +142,7 @@ var payload_with_ipv6 = {
 var payload_with_mixed_afs = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -155,7 +155,7 @@ var payload_with_mixed_afs = {
 var payload_with_mixed_auto = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     do_not_inventory: true,
     nics: [
         {
@@ -168,7 +168,7 @@ var payload_with_mixed_auto = {
 var payload_test_zfs_default_properties = {
     alias: 'test-create-' + process.pid,
     autoboot: false,
-    brand: 'joyent-minimal',
+    brand: 'server-os-minimal',
     image_uuid: vmtest.CURRENT_SMARTOS_UUID,
     do_not_inventory: true
 };

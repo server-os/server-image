@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright (c) 2018, Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  * These tests ensure that default values don't change accidentally.
  */
@@ -47,7 +48,7 @@ var image_uuid = vmtest.CURRENT_SMARTOS_UUID;
 var zone_defaults = {
     autoboot: [true],
     billing_id: ['00000000-0000-0000-0000-000000000000'],
-    brand: ['joyent'],
+    brand: ['server-os'],
     boot_timestamp: ['<NON-EMPTY>'],
     cpu_shares: [100],
     create_timestamp: ['<NON-EMPTY>'],
@@ -223,7 +224,7 @@ function check_values(t, state)
     var prop;
     var transform;
 
-    if (state.brand === 'joyent-minimal') {
+    if (state.brand === 'server-os-minimal') {
         defaults = zone_defaults;
     } else if (state.brand === 'kvm') {
         defaults = kvm_defaults;
@@ -256,7 +257,7 @@ function check_values(t, state)
 }
 
 test('check default zone properties', function (t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
 
     vmtest.on_new_vm(t, image_uuid, {
         do_not_inventory: true
@@ -301,7 +302,7 @@ test('check default kvm properties', function (t) {
 });
 
 test('check default create_timestamp', function (t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
     var vmobj;
 
     vmtest.on_new_vm(t, image_uuid, {

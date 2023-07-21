@@ -497,7 +497,7 @@ tab-complete UUIDs rather than having to type them out for every command.
        be read from the file with that name.  Output from this command in the
        case the payload is valid will be something like:
 
-         "VALID create payload for joyent brand VMs."
+         "VALID create payload for ServerOS brand VMs."
 
        and the exit code will be 0.  When the payload is not valid the exit code
        will be 1 and you will get back a json object which will have at least
@@ -560,7 +560,7 @@ tab-complete UUIDs rather than having to type them out for every command.
         type -- type of the properties value.
 
         vmtype -- This value can be one of the following groups:
-                  - OS:  all types of OS VMs (joyent, joyent-minimal, and lx)
+                  - OS:  all types of OS VMs (server-os, server-os-minimal, and lx)
                   - HVM: all types of HVM VMs (bhyve and kvm)
                   - ANY: all types of VMs
                   or an explicit brand name such as 'lx'.
@@ -689,11 +689,11 @@ tab-complete UUIDs rather than having to type them out for every command.
 
     brand:
 
-        This will be one of 'joyent', 'joyent-minimal' or 'lx' for OS
+        This will be one of 'server-os', 'server-os-minimal' or 'lx' for OS
         virtualization, or 'kvm' or 'bhyve' for full hardware virtualization.
         This is a required value for VM creation.
 
-        type: string (joyent|joyent-minimal|lx|kvm|bhyve)
+        type: string (server-os|server-os-minimal|lx|kvm|bhyve)
         vmtype: ANY
         listable: yes
         create: yes
@@ -2076,7 +2076,7 @@ tab-complete UUIDs rather than having to type them out for every command.
     type:
 
         This is a virtual field and cannot be updated. It will be 'OS' when the
-        brand == 'joyent*', 'LX' when the brand == 'lx', 'KVM' when the
+        brand == 'server-os*', 'LX' when the brand == 'lx', 'KVM' when the
         brand == 'kvm', and 'BHYVE' when the brand == 'bhyve'.
 
         type: string value, one of: ['OS', 'LX', 'KVM', 'BHYVE']
@@ -2641,7 +2641,7 @@ stopping
 
         vmadm create <<EOF
         {
-          "brand": "joyent",
+          "brand": "server-os",
           "zfs_io_priority": 30,
           "quota": 20,
           "image_uuid": "47e6af92-daf0-11e0-ac11-473ca1173ab0",

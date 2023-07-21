@@ -1,4 +1,5 @@
 // Copyright 2017 Joyent, Inc.
+// Copyright 2023 ServerOS.
 //
 // Tests for VM.lookup()
 //
@@ -107,11 +108,11 @@ function setAndCheckAlias(t, uuid, alias, base64, callback)
 }
 
 test('test alias', function (t) {
-    var state = {brand: 'joyent-minimal'};
+    var state = {brand: 'server-os-minimal'};
 
     vmtest.on_new_vm(t, image_uuid, {
         alias: 'test-alias-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         do_not_inventory: true
     }, state, [
         function (cb) {

@@ -1,7 +1,7 @@
 {
   "zonename": "e9f6d7c2-49c5-4b54-9414-ca1405663e4f",
   "autoboot": true,
-  "brand": "joyent",
+  "brand": "server-os",
   "limit_priv": "default,-file_link_any,-net_access",
   "fs_allowed": "ufs,pcfs",
   "v": 1,
@@ -24,7 +24,7 @@
   "cpu_cap": 800,
   "default_gateway": "10.10.10.1",
   "do_not_inventory": true,
-  "dns_domain": "joyent.io",
+  "dns_domain": "server-os.io",
   "filesystems": [
     {
       "source": "/var/tmp",

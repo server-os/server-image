@@ -4,6 +4,7 @@
 # These routines are for use prior to sdc-usbkey being installed.
 #
 # Copyright 2021, Joyent, Inc.
+# Copyright 2023 ServerOS.
 #
 
 #
@@ -56,7 +57,7 @@ function extract_mountpath()
 	local mnt=$1
 
 	if [[ -z "$mnt" ]]; then
-		mnt=/mnt/$(svcprop -p "joyentfs/usb_mountpoint" \
+		mnt=/mnt/$(svcprop -p "serverosfs/usb_mountpoint" \
 		    "svc:/system/filesystem/smartdc:default")
 	fi
 
@@ -331,7 +332,7 @@ function edit_param
 #
 function usb_key_disable_ipxe()
 {
-	local readonly mnt=/mnt/$(svcprop -p "joyentfs/usb_mountpoint" \
+	local readonly mnt=/mnt/$(svcprop -p "serverosfs/usb_mountpoint" \
 	    "svc:/system/filesystem/smartdc:default")
 	local readonly dev=$(mount | nawk "\$0~\"^$mnt\" { print \$3 ; }")
 	local readonly dsk=${dev%[ps]?}
@@ -372,7 +373,7 @@ function usb_key_disable_ipxe()
 #
 function usb_key_set_console()
 {
-	local readonly mnt=/mnt/$(svcprop -p "joyentfs/usb_mountpoint" \
+	local readonly mnt=/mnt/$(svcprop -p "serverosfs/usb_mountpoint" \
 	    "svc:/system/filesystem/smartdc:default")
 	local readonly dev=$(mount | nawk "\$0~\"^$mnt\" { print \$3 ; }")
 	local readonly dsk=${dev%[ps]?}

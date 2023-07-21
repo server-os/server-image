@@ -259,9 +259,9 @@ function find_config_paths()
         return
     fi
 
-    USB_CONFIG_COPY="$(svcprop -p 'joyentfs/usb_copy_path' \
+    USB_CONFIG_COPY="$(svcprop -p 'serverosfs/usb_copy_path' \
         svc:/system/filesystem/smartdc:default)/config"
-    USB_MNT="/mnt/$(svcprop -p 'joyentfs/usb_mountpoint' \
+    USB_MNT="/mnt/$(svcprop -p 'serverosfs/usb_mountpoint' \
         svc:/system/filesystem/smartdc:default)"
     USB_CONFIG="${USB_MNT}/config"
 

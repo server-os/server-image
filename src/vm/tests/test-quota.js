@@ -21,6 +21,7 @@
  * CDDL HEADER END
  *
  * Copyright 2019 Joyent, Inc.
+ * Copyright 2023 ServerOS.
  *
  */
 
@@ -58,15 +59,15 @@ var vmobj = {};
 
 var test_cases = [
     {
-        payload: {brand: 'joyent-minimal', quota: 0,
+        payload: {brand: 'server-os-minimal', quota: 0,
             image_uuid: smartos_image_uuid}
     }, {
-        payload: {brand: 'joyent-minimal', quota: 1024,
+        payload: {brand: 'server-os-minimal', quota: 1024,
             image_uuid: smartos_image_uuid}
     }, {
-        payload: {brand: 'joyent', quota: 0, image_uuid: smartos_image_uuid}
+        payload: {brand: 'server-os', quota: 0, image_uuid: smartos_image_uuid}
     }, {
-        payload: {brand: 'joyent', quota: 1048576,
+        payload: {brand: 'server-os', quota: 1048576,
             image_uuid: smartos_image_uuid}
     }, {
         payload: {brand: 'kvm', quota: 0}
@@ -98,11 +99,11 @@ var test_cases = [
      * into non-bhyve instances' configuration or affect the quota.
      */
     {
-        payload: {brand: 'joyent-minimal', quota: 10,
+        payload: {brand: 'server-os-minimal', quota: 10,
             flexible_disk_size: 12 * 1024, image_uuid: smartos_image_uuid},
         expected: {quota: 10, flexible_disk_size: undefined}
     }, {
-        payload: {brand: 'joyent', quota: 10,
+        payload: {brand: 'server-os', quota: 10,
             flexible_disk_size: 12 * 1024, image_uuid: smartos_image_uuid},
         expected: {quota: 10, flexible_disk_size: undefined}
     }, {
@@ -137,11 +138,11 @@ var test_cases = [
         expected: {quota: 10}
     },
     {
-        payload: {brand: 'joyent', image_uuid: smartos_image_uuid},
+        payload: {brand: 'server-os', image_uuid: smartos_image_uuid},
         expected: {quota: 10}
     },
     {
-        payload: {brand: 'joyent-minimal', image_uuid: smartos_image_uuid},
+        payload: {brand: 'server-os-minimal', image_uuid: smartos_image_uuid},
         expected: {quota: 10}
     },
     {
@@ -482,10 +483,10 @@ for (test_case in test_cases) {
     do_test(test_case);
 }
 
-test('create joyent-minimal zone with invalid type of quota', function (t) {
+test('create server-os-minimal zone with invalid type of quota', function (t) {
     var payload = {
         alias: 'test-invalid-quota-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         quota: 'none',
         image_uuid: smartos_image_uuid,
         autoboot: false,

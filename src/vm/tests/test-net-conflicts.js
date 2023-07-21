@@ -1,4 +1,5 @@
 // Copyright 2015 Joyent, Inc.  All rights reserved.
+// Copyright 2023 ServerOS.
 //
 // Test detection of network-related conflicts
 //
@@ -51,8 +52,8 @@ should_fail_with_conflict('KVM with same IP',
 );
 
 should_fail_with_conflict('OS with same IP',
-    {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.172', netmask: '255.255.255.0'}]},
-    {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '0f:0e:0d:0c:0b:0a', ip: '172.17.2.172', netmask: '255.255.255.0'}]}
+    {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.172', netmask: '255.255.255.0'}]},
+    {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '0f:0e:0d:0c:0b:0a', ip: '172.17.2.172', netmask: '255.255.255.0'}]}
 );
 
 should_fail_with_conflict('KVM with same MAC',
@@ -61,8 +62,8 @@ should_fail_with_conflict('KVM with same MAC',
 );
 
 should_fail_with_conflict('OS with same MAC',
-    {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.172', netmask: '255.255.255.0'}]},
-    {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.173', netmask: '255.255.255.0'}]}
+    {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.172', netmask: '255.255.255.0'}]},
+    {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.173', netmask: '255.255.255.0'}]}
 );
 
 should_fail_with_conflict('KVM with same IP and MAC',
@@ -77,10 +78,10 @@ test('no conflict when reusing IP of failed VM', function (t) {
     var state;
     var tagName = 'test_tag_' + process.pid;
 
-    var payloadA = {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.172', netmask: '255.255.255.0'}]};
-    var payloadB = {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '0f:0e:0d:0c:0b:0a', ip: '172.17.2.172', netmask: '255.255.255.0'}]};
+    var payloadA = {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '01:02:03:04:05:06', ip: '172.17.2.172', netmask: '255.255.255.0'}]};
+    var payloadB = {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: 'admin', mac: '0f:0e:0d:0c:0b:0a', ip: '172.17.2.172', netmask: '255.255.255.0'}]};
     // Identical to B, but with a different MAC and nic_tag
-    var payloadC = {brand: 'joyent-minimal', image_uuid: image_uuid, nics: [{nic_tag: tagName, mac: '0e:0e:0d:0c:0b:0b', ip: '172.17.2.172', netmask: '255.255.255.0'}]};
+    var payloadC = {brand: 'server-os-minimal', image_uuid: image_uuid, nics: [{nic_tag: tagName, mac: '0e:0e:0d:0c:0b:0b', ip: '172.17.2.172', netmask: '255.255.255.0'}]};
 
 
     for (p in payload) {

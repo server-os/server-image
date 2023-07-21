@@ -1,4 +1,5 @@
 // Copyright 2019 Joyent, Inc.
+// Copyright 2023 ServerOS.
 
 var async = require('/usr/node/node_modules/async');
 var cp = require('child_process');
@@ -22,7 +23,7 @@ var vm_image_uuid = vmtest.CURRENT_UBUNTU_UUID;
 test('create zone with root_recsize 64k', function(t) {
     var payload = {
         alias: 'test-blocksizes-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         cpu_cap: 100,
         autoboot: false,
         image_uuid: image_uuid,
@@ -245,7 +246,7 @@ test('delete root_recsize test zone', function(t) {
 test('create zone with data_recsize 64k', function(t) {
     var payload = {
         alias: 'test-blocksizes-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         cpu_cap: 100,
         autoboot: false,
         image_uuid: image_uuid,
@@ -459,7 +460,7 @@ test('delete data_recsize test zone', function(t) {
 test('create zone with compression', function(t) {
     var payload = {
         alias: 'test-blocksizes-' + process.pid,
-        brand: 'joyent-minimal',
+        brand: 'server-os-minimal',
         cpu_cap: 100,
         autoboot: false,
         image_uuid: image_uuid,

@@ -1,5 +1,6 @@
 #
 # Copyright (c) 2019, Joyent, Inc.
+# Copyright 2023 ServerOS.
 #
 
 CC=gcc
@@ -15,7 +16,7 @@ LIBS=-lsmbios -luuid
 # Yes, we're directly pulling in a local copy of libefi source: see do_ioctl()
 # there for why.
 #
-# There is an obvious risk of trying to use illumos-joyent code directly on the
+# There is an obvious risk of trying to use illumos code directly on the
 # build platform.  However, this code is pretty self-contained, and its ioctl()
 # usage fairly stable. The biggest risk here is probably the libsmbios usage:
 # but even there, we don't actually care about any H/W workarounds in that code.
