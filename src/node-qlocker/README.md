@@ -6,11 +6,12 @@
 
 <!--
     Copyright 2019 Joyent, Inc.
+    Copyright 2023 ServerOS.
 -->
 
 # node-qlocker: Ordered file locks
 
-This repository is part of the Joyent Triton project. See the [contribution
+This repository is part of the ServerOS project. See the [contribution
 guidelines](https://github.com/joyent/triton/blob/master/CONTRIBUTING.md).
 Github pull requests are welcome.
 

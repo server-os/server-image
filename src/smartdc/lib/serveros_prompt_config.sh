@@ -1088,7 +1088,7 @@ export TERM=xterm-color
 
 trap sig_doshell SIGINT
 
-printheader "Triton"
+printheader "ServerOS"
 
 message="
 You must answer the following questions to configure your ServerOS node.

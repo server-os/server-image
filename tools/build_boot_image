@@ -18,9 +18,7 @@
 
 #
 # This script automates the process of building ISO and USB images of a ServerOS
-# build.  It can also be used to produce the proforma disk images used by the
-# tools in sdc-headnode.git to produce Triton USB and COAL images.  When
-# building ServerOS media, it uses the latest platform file that's been built.
+# build. When building ServerOS media, it uses the latest platform file that's been built.
 # This program can be invoked standalone via the "gmake iso", "gmake usb" and
 # "gmake images" targets of the top-level Makefile in "server-image.git".
 #
@@ -117,7 +115,7 @@ function usage()
 	    "[-p <size>] -r <server-image repo>"
 	print -u2 " -I\tbuild ServerOS ISO image (default: USB image)"
 	print -u2 " -c\tspecify primary console (e.g. ttyb)"
-	print -u2 " -p\tbuild proforma USB image for Triton (e.g. 1gb)"
+	print -u2 " -p\tbuild proforma USB image for ServerOS (e.g. 1gb)"
 	print -u2 " -x\tdon't cleanup on exit (for debugging use)\n"
 	exit 2
 }

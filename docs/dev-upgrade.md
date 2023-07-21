@@ -309,8 +309,7 @@ $
 ## Cleaning Up
 
 Once you're satisfied, you should go through and delete the snapshots
-that you created in the beginning. To do so, you would either use the
-`triton inst snapshot delete` or `vmadm delete-snapshot`.
+that you created in the beginning. To do so, you would use `vmadm delete-snapshot`.
 
 ## Known Issues
 
