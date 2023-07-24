@@ -16,6 +16,11 @@
 # Copyright 2023 MNX Cloud, Inc.
 # Copyright 2023 ServerOS.
 #
+
+#
+# Configures a ServerOS build.
+#
+
 shopt -s xpg_echo
 unalias -a
 
@@ -36,12 +41,14 @@ if [[ -f configure-build ]]; then
 fi
 
 #
-# We configure the projects framework using a 'configure-projects' file. This
-# is a plain text file which contains the project name, the branch we wish to
-# build it at, and either a URL to a git repository or 'origin' to denote the
-# github.com/server-os/<repo> location. See create_projects.
+# Read the projects configuratopn file with the list of projects to include. 
 #
-read -r -d '' configure_projects < default.configure-projects
+# For each project, the projects comfguration defines the project name, the branch to use
+# and the url of the git repository.
+#
+# Use 'origin' to use the default, which is github.com/server-os/server-os/@projectname.
+#
+read -r -d '' projects_configuration < projects.config
 
 function warn
 {
@@ -59,7 +66,7 @@ function fatal
 }
 
 #
-# Runs a series of preflight checks and fails when any of them fails.
+# Runs the preflight checks and fails when any of them fails.
 #
 function run_preflight_checks
 {
@@ -88,11 +95,12 @@ function run_preflight_checks
 }
 
 #
-# Checkout a project at the specific branch if the repository doesn't exist,
-# or isn't already at the required branch. Warn if the repository contains
-# uncommitted contents.
+# Initializes the project at the specific location, based on 
+# the provided repo branch and url,
 #
-function checkout_project
+# Warn if the repository contain uncommitted changes.
+#
+function initialize_project
 {
 	local dir="$1"
 	local branch="$2"
@@ -154,49 +162,42 @@ function checkout_project
 }
 
 #
-# Read a flat file called 'configure-projects' of the form:
-# <project name>:<project branch>:[project git repo URL or path]
+# Initializes the projects defined in the projects configuration.
 #
-# The special token 'origin' can be used in place of a full git
-# repo URL to denote the standard github.com URL for that project.
-# If no URL is given, we default to github.com.
+# Projects are defined in the form:
+# <project name>:<repo branch>:[repo url]
 #
-# Once the configure-projects file has been read (or we've parsed the
-# defaults), invoke checkout_project for each one.
+# 'origin' can be used as repo url to used the default git location.
 #
-function create_projects
+function initialize_projects
 {
-	local dir="projects/local"
-	local git_stem="git@github.com:server-os"
+	echo "Initializing projects:"
+	echo "$projects_configuration"
 
-	[[ -d "$dir" ]] || mkdir -p "$dir" || fatal "failed to create $dir"
+	local local_projexts_dir="projects/local"
+	[[ -d "$local_projexts_dir" ]] || mkdir -p "$local_projexts_dir" || fatal \
+		"failed to create local projects dir  $local_projexts_dir"
 
-	if [[ -f "configure-projects" ]]; then
-		# note we're not attempting to merge configure-projects with the default
-		read -r -d '' configure_projects  < configure-projects
-		echo "Info: using the following configure-projects file:"
-		echo "$configure_projects"
-	else
-		echo "Info: no configure-projects file found, using defaults."
-	fi
+	local default_git_location="git@github.com:server-os"
 
-	echo "$configure_projects" | grep -v '^#' | while read -r line; do
-		local project_dir=$(echo $line | cut -d: -f 1 | sed -e 's/ //g')
-		local project_name=$(basename $project_dir)
-		local git_name="${project_name}.git"
-		local project_branch=$(echo $line | cut -d: -f 2 | sed -e 's/ //g')
-		local project_url=$(echo $line | cut -d: -f 3- | sed -e 's/ //g')
+	echo "$projects_configuration" | grep -v '^#' | while read -r line; do
+		local repo_folder=$(echo $line | cut -d: -f 1 | sed -e 's/ //g')
+		local repo_name="${basename $repo_folder}.git"
+		local repo_branch=$(echo $line | cut -d: -f 2 | sed -e 's/ //g')
+		local repo_url=$(echo $line | cut -d: -f 3- | sed -e 's/ //g')
 
-		# process URL keywords
-		case $project_url in
+		# use default git location for origin
+		case $repo_url in
 		'origin'|'')
-			project_url="$git_stem/$git_name"
+			repo_url="$default_git_location/$repo_name"
 			;;
 		esac
 
-		checkout_project "projects/$project_dir" "$project_branch" \
-		    "$project_url"
-	done || fatal "Error encountered when creating projects directory"
+		initialize_project "projects/$repo_folder" "$repo_branch" "$repo_url"
+			
+	done || fatal "Error occured while creating projects"
+
+	echo "done."
 }
 
 function install_pkgin
@@ -498,10 +499,9 @@ EOF
 [[ -n "$PLATFORM_PASSWORD" ]] && \
 	echo "PLATFORM_PASSWORD=$PLATFORM_PASSWORD" >> build.env
 
+echo "Configuring ServerOS Build on $(date)..."
 run_preflight_checks
-echo "Creating and updating projects directory ..."
 create_projects
-echo "done."
 echo "Installing packages ... \c "
 install_packages
 echo "done."
