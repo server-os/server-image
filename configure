@@ -501,16 +501,20 @@ EOF
 
 echo "Configuring ServerOS Build on $(date)..."
 run_preflight_checks
-create_projects
+initialize_projects
+
 echo "Installing packages ... \c "
 install_packages
 echo "done."
+
 echo "Fetching adjuncts tgz... \c "
 fetch_adjuncts
 echo "done."
+
 echo "Fetching and extracting closed bins ... \c "
 fetch_closed
 echo "done."
+
 echo "Generating illumos environment file... \c "
 generate_env
 echo "done."
