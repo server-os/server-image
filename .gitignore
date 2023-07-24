@@ -6,7 +6,6 @@
 /illumos-adjunct*.tgz
 /illumos-extra-*.tgz
 /log
-/manifest.new
 /output
 /output*.old
 /output-iso
@@ -52,10 +51,11 @@
 /tools/pwgen
 /tools/pwgen-2.06/configure
 boot.manifest.d/
-boot.manifest.gen
+boot.manifest
 mancheck.conf
 manifest.d/
-manifest.gen
+manifest
+repository.db
 pkgsrc/*.tgz
 src/cryptpass
 src/diskinfo
@@ -77,6 +77,6 @@ src/sysinfo_mod.so
 src/vm/node_modules/props.js
 src/zonememstat
 src/zonemon
-tests.manifest.gen
+tests.manifest
 tools/pwgen-2.06/Makefile
 tools/pwgen-2.06/autom4te.cache

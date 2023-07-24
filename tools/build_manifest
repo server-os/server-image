@@ -29,10 +29,11 @@ shopt -s xpg_echo
 unalias -a
 
 bm_arg0=$(basename $0)
+manifest_dir=$1
 
 function fail
 {
-	local msg="$*"
+	local msg="$*" 
 	[[ -z "$msg" ]] && msg="failed"
 	echo "$bm_arg0: $msg" >&2
 	exit 1
@@ -41,18 +42,18 @@ function fail
 function validate
 {
 	local count
-	[[ ! -d $bm_mdir ]] && \
-	    fail "manifest snippet directory doesn't exist: $bm_mdir"
+	[[ ! -d $manifest_dir ]] && \
+	    fail "Manifest directory does not exist: $manifest_dir"
 
-	count=$(ls $bm_mdir | wc -l)
+	count=$(ls $manifest_dir | wc -l)
 	[[ $? -eq 0 ]] || fail "ls and wc inexplicably failed"
-	[[ $count -gt 0 ]] || fail "no files in $bm_mdir"
+	[[ $count -gt 0 ]] || fail "no files in $manifest_dir"
 }
 
 function build
 {
-	for file in $bm_mdir/*; do
-		echo "Adding manifest files from $file... \c " >&2
+	for file in $manifest_dir/*; do
+		echo "Adding manifest files from $file..." >&2
 		grep -v "^#" $file
 		[[ $? -eq 0 ]] || fail "failed to append to manifest"
 		echo "done" >&2
@@ -63,8 +64,6 @@ function build
 if [[ -z "$1" ]]; then
 	fail "Manifest directory is required"
 fi
-
-bm_mdir=$1
 
 validate
 build

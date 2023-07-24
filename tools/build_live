@@ -16,8 +16,8 @@
 #
 
 #
-# Build the platform image (i.e., "boot_archive", "unix", etc) and the platform
-# tar archive.  This program should be invoked via the "make live" target of
+# Build the server os image (i.e., "boot_archive", "unix", etc) and tar archive.
+# This program is invoked by the "gmake live" target of
 # the top-level Makefile in "server-image.git".
 #
 

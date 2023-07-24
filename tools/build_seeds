@@ -82,21 +82,22 @@ function import_manifest
 
 function build_database
 {
-	local input output
-	input=$1
-	output=$2
-	export SVCCFG_REPOSITORY=$output
+	local manifest_file repository_file
+	manifest_file=$1
+	repository_file=$2
+	export SVCCFG_REPOSITORY=$repository_file
 	export SVCCFG_CONFIGD_PATH=$CONFIGD
 	rm -f $SVCCFG_REPOSITORY
 
-	[[ -f $input ]] || fail "can't read manifest input file: $input"
+	[[ -f $manifest_file ]] || fail "can't read manifest file: $manifest_file"
+
 	while read service enabled; do
 		[[ -z "$service" ]] && continue
 		[[ "$service" =~ ^\# ]] && continue
 		import_manifest $service $enabled
 		
 		echo $service $enabled
-	done < $input
+	done < $manifest_file
 }
 
 [[ -z "$ROOT" ]] && fail "missing ROOT argument"
@@ -106,7 +107,6 @@ function build_database
 # For now we only care about doing this for the ServerOS minimal zone. Some day we
 # can extend this to everything.
 #
-build_database $ROOT/usr/lib/brand/server-os-minimal/manifests \
-    $ROOT/usr/lib/brand/server-os-minimal/repository.db
-chmod 444 $ROOT/usr/lib/brand/server-os-minimal/repository.db
-chown root:root $ROOT/usr/lib/brand/server-os-minimal/repository.db
+build_database $ROOT/manifest $ROOT/repository.db
+chmod 444 $ROOT/repository.db
+chown root:root $ROOT/repository.db

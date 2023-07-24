@@ -29,8 +29,8 @@ endif
 ROOT =		$(PWD)
 PROTO =		$(ROOT)/proto
 STRAP_PROTO =	$(ROOT)/proto.strap
-MPROTO =	$(ROOT)/manifest.d
-BOOT_MPROTO =	$(ROOT)/boot.manifest.d
+MANIFEST_DIR =	$(ROOT)/manifest.d
+BOOT_MANIFEST_DIR =	$(ROOT)/boot.manifest.d
 BOOT_PROTO =	$(ROOT)/proto.boot
 TESTS_PROTO =	$(ROOT)/proto.tests
 
@@ -64,8 +64,8 @@ endif
 
 LOCAL_SUBDIRS :=	$(shell ls projects/local)
 PKGSRC =	$(ROOT)/pkgsrc
-MANIFEST =	manifest.gen
-BOOT_MANIFEST =	boot.manifest.gen
+MANIFEST_FILE =	manifest
+BOOT_MANIFEST =	boot.manifest
 JSSTYLE =	$(ROOT)/tools/jsstyle/jsstyle
 JSLINT =	$(ROOT)/tools/javascriptlint/build/install/jsl
 CSTYLE =	$(ROOT)/tools/cstyle
@@ -91,11 +91,11 @@ STAMPFILE :=	$(ROOT)/proto/buildstamp
 
 MANCF_FILE :=	$(ROOT)/proto/usr/share/man/man.cf
 
-WORLD_MANIFESTS := \
-	$(MPROTO)/illumos.manifest \
-	$(MPROTO)/live.manifest \
-	$(MPROTO)/man.manifest \
-	$(MPROTO)/illumos-extra.manifest
+BASE_MANIFESTS := \
+	$(MANIFEST_DIR)/illumos.manifest \
+	$(MANIFEST_DIR)/illumos-extra.manifest \
+	$(MANIFEST_DIR)/server-os.manifest \
+	$(MANIFEST_DIR)/man.manifest \
 
 MANCHECK_CONFS := \
 	$(ROOT)/man/mancheck.conf \
@@ -104,9 +104,9 @@ MANCHECK_CONFS := \
 	$(shell ls projects/local/*/mancheck.conf 2>/dev/null)
 
 BOOT_MANIFESTS := \
-	$(BOOT_MPROTO)/illumos.manifest
+	$(BOOT_MANIFEST_DIR)/illumos.manifest
 
-SUBDIR_MANIFESTS :=	$(LOCAL_SUBDIRS:%=$(MPROTO)/%.sd.manifest)
+LOCAL_MANIFESTS :=	$(LOCAL_SUBDIRS:%=$(MANIFEST_DIR)/%.manifest)
 
 TEST_IPS_MANIFEST_ROOT = projects/illumos/usr/src/pkg/manifests
 
@@ -119,7 +119,7 @@ TEST_IPS_MANIFEST_ROOT = projects/illumos/usr/src/pkg/manifests
 include projects/illumos/usr/src/Makefile.testarchive
 
 TEST_IPS_MANIFESTS = $(TEST_IPS_MANIFEST_FILES:%=$(TEST_IPS_MANIFEST_ROOT)/%)
-TESTS_MANIFEST = $(ROOT)/tests.manifest.gen
+TESTS_MANIFEST = $(ROOT)/tests.manifest
 
 BOOT_VERSION :=	boot-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
     echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
@@ -149,9 +149,9 @@ world: 0-preflight-stamp 0-strap-stamp 0-illumos-stamp 0-extra-stamp \
 	$(TOOLS_TARGETS)
 
 live: world manifest boot $(TOOLS_TARGETS) $(MANCF_FILE) mancheck
-	@echo $(SUBDIR_MANIFESTS)
+	@echo $(LOCAL_MANIFESTS)
 	mkdir -p ${ROOT}/log
-	./tools/build_live -m $(ROOT)/$(MANIFEST) -o $(ROOT)/output \
+	./tools/build_live -m $(ROOT)/$(MANIFEST_FILE) -o $(ROOT)/output \
 	    $(PLATFORM_PASSWORD_OPT) $(ROOT)/proto
 
 boot: $(BOOT_TARBALL)
@@ -170,8 +170,11 @@ $(BOOT_TARBALL): world manifest
 	(cd $(BOOT_PROTO) && pfexec gtar czf $(ROOT)/$@ .)
 
 #
-# Manifest construction.  There are 5 sources for manifests we need to collect
-# in $(MPROTO) before running the manifest tool.  One each comes from
+# Manifest construction.  
+#
+# The manifest is a result of combining 5 sources for manifests that are collected
+# in the MANIFEST_DIR.
+# The illumos manifest is copied from 
 # illumos, illumos-extra, and the root of live (covering mainly what's in src).
 # Additional manifests come from each of $(LOCAL_SUBDIRS), which may choose
 # to construct them programmatically.
@@ -184,52 +187,54 @@ $(BOOT_TARBALL): world manifest
 #
 # Look ma, no for loops in these shell fragments!
 #
-manifest: $(MANIFEST) $(BOOT_MANIFEST)
+manifest: $(MANIFEST_FILE) $(BOOT_MANIFEST)
 
 mancheck.conf: $(MANCHECK_CONFS)
 	cat $(MANCHECK_CONFS) >$@ 2>/dev/null
 
 .PHONY: mancheck
 mancheck: manifest mancheck.conf $(MANCHECK)
-	$(MANCHECK) -f manifest.gen -s -c $(ROOT)/mancheck.conf
+	$(MANCHECK) -f manifest -s -c $(ROOT)/mancheck.conf
 
-$(MPROTO) $(BOOT_MPROTO):
+$(MANIFEST_DIR) $(BOOT_MANIFEST_DIR):
 	mkdir -p $@
 
-$(MPROTO)/live.manifest: src/manifest | $(MPROTO)
-	gmake DESTDIR=$(MPROTO) DESTNAME=live.manifest \
-	    -C src manifest
+# copies the illumos manifest file, which is under source control in the illumos repo
+$(MANIFEST_DIR)/illumos.manifest: projects/illumos/manifest | $(MANIFEST_DIR)
+	cp projects/illumos/manifest $(MANIFEST_DIR)/illumos.manifest
 
-$(MPROTO)/man.manifest: man/manifest | $(MPROTO)
-	cp man/manifest $@
+# copies the illumos extra manifest file, which is under source control in the illumos-extra repo
+$(MANIFEST_DIR)/illumos-extra.manifest: projects/illumos-extra/manifest | $(MANIFEST_DIR)
+	cp projects/illumos-extra/manifest $(MANIFEST_DIR)/illumos-extra.manifest
 
-$(MPROTO)/illumos.manifest: projects/illumos/manifest | $(MPROTO)
-	cp projects/illumos/manifest $(MPROTO)/illumos.manifest
+# copies the ServerOS manifest file, which is under source control as /src/manifest
+$(MANIFEST_DIR)/server-os.manifest: src/manifest | $(MANIFEST_DIR)
+	cp src/manifest $(MANIFEST_DIR)/server-os.manifest
 
-$(BOOT_MPROTO)/illumos.manifest: projects/illumos/manifest | $(BOOT_MPROTO)
-	cp projects/illumos/boot.manifest $(BOOT_MPROTO)/illumos.manifest
+# copies the man manifest file, which is under source control as /man/manifest
+$(MANIFEST_DIR)/man.manifest: man/manifest | $(MANIFEST_DIR)
+	cp man/manifest $(MANIFEST_DIR)/man.manifest
 
-$(MPROTO)/illumos-extra.manifest: 0-extra-stamp \
-    projects/illumos-extra/manifest | $(MPROTO)
-	gmake DESTDIR=$(MPROTO) DESTNAME=illumos-extra.manifest \
-	    -C projects/illumos-extra manifest; \
-
-$(MPROTO)/%.sd.manifest: projects/local/%/Makefile projects/local/%/manifest
+# copies the manifest files of the local projects, under source control in the local project repo
+$(MANIFEST_DIR)/%.manifest: projects/local/%/manifest
 	cd $(ROOT)/projects/local/$* && \
-		gmake DESTDIR=$(MPROTO) DESTNAME=$*.sd.manifest \
-		    manifest; \
+		cp manifest $(MANIFEST_DIR)/$*.manifest \
 
-$(MANIFEST): $(WORLD_MANIFESTS) $(SUBDIR_MANIFESTS)
+# copies the illumos boot manifest file, which is under source control in the illumos repo
+$(BOOT_MANIFEST_DIR)/illumos.manifest: projects/illumos/manifest | $(BOOT_MANIFEST_DIR)
+	cp projects/illumos/boot.manifest $(BOOT_MANIFEST_DIR)/illumos.manifest
+
+$(MANIFEST_FILE): $(BASE_MANIFESTS) $(LOCAL_MANIFESTS)
 	-rm -f $@
-	./tools/build_manifest $(MPROTO) | ./tools/sorter > $@
+	./tools/build_manifest $(MANIFEST_DIR) | ./tools/sorter > $@
 
 $(BOOT_MANIFEST): $(BOOT_MANIFESTS)
 	-rm -f $@
-	./tools/build_manifest $(BOOT_MPROTO) | ./tools/sorter > $@
+	./tools/build_manifest $(BOOT_MANIFEST_DIR) | ./tools/sorter > $@
 
 $(TESTS_MANIFEST): world
 	-rm -f $@
-	echo "f tests.manifest.gen 0444 root sys" >> $@
+	echo "f tests.manifest 0444 root sys" >> $@
 	echo "f tests.buildstamp 0444 root sys" >> $@
 	cat $(TEST_IPS_MANIFESTS) | \
 	    ./tools/generate-manifest-from-ips.nawk | \
@@ -384,7 +389,7 @@ check: $(JSLINT)
 clean:
 	./tools/clobber_illumos
 	rm -f $(MANIFEST) $(BOOT_MANIFEST) $(TESTS_MANIFEST)
-	rm -rf $(MPROTO)/* $(BOOT_MPROTO)/*
+	rm -rf $(MANIFEST_DIR)/* $(BOOT_MANIFEST_DIR)/*
 	(cd $(ROOT)/src && gmake clean)
 	[ ! -d $(ROOT)/projects/illumos-extra ] || \
 	    (cd $(ROOT)/projects/illumos-extra && gmake clean)
