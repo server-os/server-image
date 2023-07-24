@@ -63,22 +63,22 @@ function fatal
 #
 function run_preflight_checks
 {
-	echo "Running pre-flight checks... \c "
+	echo "Running pre-flight checks..."
 
 	[[ "$(readlink -f "$PWD")" != "$(readlink -f "$conf_arg0_dir")" ]] && \
 	    fatal "Configure must run in  $conf_arg0_dir"
 
 	[[ "$(uname -s)" != "SunOS" ]] && \
-	    fatal "Build must run on SunOS. See definition in $conf_arg0_dir"
+	    fatal "Build must run on SunOS. See configuration in $conf_arg0_dir"
 
 	[[ "$(zonename)" == "global" ]] && \
-	    fatal "building in a global zone is not supported. See definition in $conf_arg0_dir"
+	    fatal "building in a global zone is not supported. See configuration in $conf_arg0_dir"
 
 	if [[ "$(uname -v)" =~ "server-os_" ]]; then
-		echo "Building on $(uname -n), based on ServerOS "$(uname -v)" in zone $zonename"
+		echo "Building on $(uname -n), based on ServerOS "$(uname -v)" in zone $(zonename)"
 	else
 		if [[ "$(uname -v)" =~ "joyent" ]]; then
-			echo "Building $(uname -n), based on SmartOS "$(uname -v)" in zone $zonename"
+			echo "Building on $(uname -n), based on SmartOS "$(uname -v)" in zone $(zonename)"
 		else
 			fatal "build must run on ServerOS or SmartOS"
 		fi
