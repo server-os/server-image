@@ -58,17 +58,33 @@ function fatal
 	exit 1
 }
 
-function check_loc
+#
+# Runs a series of preflight checks and fails when any of them fails.
+#
+function run_preflight_checks
 {
+	echo "Running pre-flight checks... \c "
+
 	[[ "$(readlink -f "$PWD")" != "$(readlink -f "$conf_arg0_dir")" ]] && \
-	    fatal "configure must be run from inside $conf_arg0_dir"
-	[[ "$(uname -s)" != "SunOS" ]] && fatal "build only works on SunOS"
+	    fatal "Configure must run in  $conf_arg0_dir"
+
+	[[ "$(uname -s)" != "SunOS" ]] && \
+	    fatal "Build must run on SunOS. See definition in $conf_arg0_dir"
+
+	[[ "$(zonename)" == "global" ] && \
+	    fatal "building in a global zone is not supported. See definition in $conf_arg0_dir"
+
 	if [[ "$(uname -v)" =~ "server-os_" ]]; then
-		[[ "$(zonename)" == "global" ]] && fatal \
-		    "building in a GZ on Sever OS is not supported"
+		echo "Building on $(uname -n), based on ServerOS "$(uname -v)" in zone $zonename"
 	else
-		fatal "building on ServerOS is required"
+		if [[ "$(uname -v)" =~ "joyent" ]]; then
+			echo "Building $(uname -n), based on SmartOS "$(uname -v)" in zone $zonename"
+		else
+			fatal "build must run on ServerOS or SmartOS"
+		fi
 	fi
+
+	echo "Prefloght checks completed successfully."
 }
 
 #
@@ -482,9 +498,7 @@ EOF
 [[ -n "$PLATFORM_PASSWORD" ]] && \
 	echo "PLATFORM_PASSWORD=$PLATFORM_PASSWORD" >> build.env
 
-echo "Doing pre-flight checks... \c "
-check_loc
-echo "done."
+run_preflight_checks
 echo "Creating and updating projects directory ..."
 create_projects
 echo "done."
