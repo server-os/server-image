@@ -71,7 +71,7 @@ function run_preflight_checks
 	[[ "$(uname -s)" != "SunOS" ]] && \
 	    fatal "Build must run on SunOS. See definition in $conf_arg0_dir"
 
-	[[ "$(zonename)" == "global" ] && \
+	[[ "$(zonename)" == "global" ]] && \
 	    fatal "building in a global zone is not supported. See definition in $conf_arg0_dir"
 
 	if [[ "$(uname -v)" =~ "server-os_" ]]; then
