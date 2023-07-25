@@ -174,16 +174,19 @@ function initialize_projects
 	echo "Initializing projects:"
 	echo "$projects_configuration"
 
-	local local_projexts_dir="projects/local"
-	[[ -d "$local_projexts_dir" ]] || mkdir -p "$local_projexts_dir" || fatal \
-		"failed to create local projects dir  $local_projexts_dir"
+	local local_projects_dir="projects/local"
+	[[ -d "$local_projects_dir" ]] || mkdir -p "$local_projects_dir" || fatal \
+		"failed to create local projects dir  $local_projects_dir"
 
 	local default_git_location="git@github.com:server-os"
 
 	echo "$projects_configuration" | grep -v '^#' | while read -r line; do
-		local repo_folder=$(echo $line | cut -d: -f 1 | sed -e 's/ //g')
-		local project_name=$(basename $project_dir)
+	
+		local project_folder=$(echo $line | cut -d: -f 1 | sed -e 's/ //g')
+
+		local project_name=$(basename $project_folder)
 		local repo_name="${project_name}.git"
+
 		local repo_branch=$(echo $line | cut -d: -f 2 | sed -e 's/ //g')
 		local repo_url=$(echo $line | cut -d: -f 3- | sed -e 's/ //g')
 
@@ -194,7 +197,7 @@ function initialize_projects
 			;;
 		esac
 
-		initialize_project "projects/$repo_folder" "$repo_branch" "$repo_url"
+		initialize_project "projects/$project_folder" "$repo_branch" "$repo_url"
 			
 	done || fatal "Error occured while creating projects"
 
