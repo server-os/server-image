@@ -273,7 +273,11 @@ update-base:
 .PHONY: %.update
 %.update:
 	cd $(ROOT)/projects/local/$* && \
-		gmake update; \
+	    if [[ -f Makefile.joyent ]]; then \
+			gmake -f Makefile.joyent update; \
+	    else \
+			gmake update; \
+	    fi
 	-rm -f 0-subdir-$*-stamp
 
 0-local-stamp: $(LOCAL_SUBDIRS:%=0-subdir-%-stamp)
@@ -282,7 +286,13 @@ update-base:
 0-subdir-%-stamp: 0-illumos-stamp
 	@echo "========== building $* =========="
 	cd "$(ROOT)/projects/local/$*" && \
-		gmake $(SUBDIR_DEFS) DESTDIR=$(PROTO) world install; \
+
+	    if [[ -f Makefile.joyent ]]; then \
+			gmake -f Makefile.joyent $(SUBDIR_DEFS) DESTDIR=$(PROTO) \
+		    world install; \
+	    else \
+			gmake $(SUBDIR_DEFS) DESTDIR=$(PROTO) world install; \
+	    fi
 	touch $@
 
 0-devpro-stamp:
