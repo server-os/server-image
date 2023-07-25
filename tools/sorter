@@ -22,20 +22,25 @@ nErrors = 0
 files = {}
 
 for line in sys.stdin.readlines():
+    
+    # ignore whitespace, empty lines and comments.
     line = line.strip()
     if len(line) == 0 or line[0] == '#':
         continue
+
     fields = line.split()
     if len(fields) < 2:
         sys.stderr.write(
             "ERROR: unexpected manifest line: '%s' (removing)\n" % line)
         nErrors +=1
         continue
+
     if fields[1] in files and not (
             # Don't warn about same directory with identical properties.
             fields[0] == 'd' and files[fields[1]] == line):
         sys.stderr.write(
             "WARNING: duplicate manifest entry for '%s'\n" % fields[1])
+
     files[fields[1]] = line
 
 for key in sorted(files):

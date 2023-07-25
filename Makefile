@@ -65,7 +65,7 @@ endif
 LOCAL_SUBDIRS :=	$(shell ls projects/local)
 PKGSRC =	$(ROOT)/pkgsrc
 MANIFEST_FILE =	manifest
-BOOT_MANIFEST =	boot.manifest
+BOOT_MANIFEST_FILE = boot.manifest
 JSSTYLE =	$(ROOT)/tools/jsstyle/jsstyle
 JSLINT =	$(ROOT)/tools/javascriptlint/build/install/jsl
 CSTYLE =	$(ROOT)/tools/cstyle
@@ -119,7 +119,7 @@ TEST_IPS_MANIFEST_ROOT = projects/illumos/usr/src/pkg/manifests
 include projects/illumos/usr/src/Makefile.testarchive
 
 TEST_IPS_MANIFESTS = $(TEST_IPS_MANIFEST_FILES:%=$(TEST_IPS_MANIFEST_ROOT)/%)
-TESTS_MANIFEST = $(ROOT)/tests.manifest
+TESTS_MANIFEST_FILE = $(ROOT)/tests.manifest
 
 BOOT_VERSION :=	boot-$(shell [[ -f $(ROOT)/configure-buildver ]] && \
     echo $$(head -n1 $(ROOT)/configure-buildver)-)$(shell head -n1 $(STAMPFILE))
@@ -164,7 +164,7 @@ $(BOOT_TARBALL): world manifest
 	pfexec rm -rf $(BOOT_PROTO)
 	mkdir -p $(BOOT_PROTO)/etc/version/
 	mkdir -p $(ROOT)/output
-	pfexec ./tools/builder/builder $(ROOT)/$(BOOT_MANIFEST) \
+	pfexec ./tools/builder/builder $(ROOT)/$(BOOT_MANIFEST_FILE) \
 	    $(BOOT_PROTO) $(ROOT)/proto
 	cp $(STAMPFILE) $(BOOT_PROTO)/etc/version/boot
 	(cd $(BOOT_PROTO) && pfexec gtar czf $(ROOT)/$@ .)
@@ -187,7 +187,7 @@ $(BOOT_TARBALL): world manifest
 #
 # Look ma, no for loops in these shell fragments!
 #
-manifest: $(MANIFEST_FILE) $(BOOT_MANIFEST)
+manifest: $(MANIFEST_FILE) $(BOOT_MANIFEST_FILE)
 
 mancheck.conf: $(MANCHECK_CONFS)
 	cat $(MANCHECK_CONFS) >$@ 2>/dev/null
@@ -228,11 +228,11 @@ $(MANIFEST_FILE): $(BASE_MANIFESTS) $(LOCAL_MANIFESTS)
 	-rm -f $@
 	./tools/build_manifest $(MANIFEST_DIR) | ./tools/sorter > $@
 
-$(BOOT_MANIFEST): $(BOOT_MANIFESTS)
+$(BOOT_MANIFEST_FILE): $(BOOT_MANIFESTS)
 	-rm -f $@
 	./tools/build_manifest $(BOOT_MANIFEST_DIR) | ./tools/sorter > $@
 
-$(TESTS_MANIFEST): world
+$(TESTS_MANIFEST_FILE): world
 	-rm -f $@
 	echo "f tests.manifest 0444 root sys" >> $@
 	echo "f tests.buildstamp 0444 root sys" >> $@
@@ -246,12 +246,12 @@ $(TESTS_MANIFEST): world
 # overwrite the same file in the platform.tgz if they were
 # ever extracted to the same area for investigation. Juggle a bit.
 #
-$(TESTS_TARBALL): $(TESTS_MANIFEST)
+$(TESTS_TARBALL): $(TESTS_MANIFEST_FILE)
 	pfexec rm -f $@
 	pfexec rm -rf $(TESTS_PROTO)
 	mkdir -p $(TESTS_PROTO)
 	cp $(STAMPFILE) $(ROOT)/tests.buildstamp
-	pfexec ./tools/builder/builder $(TESTS_MANIFEST) $(TESTS_PROTO) \
+	pfexec ./tools/builder/builder $(TESTS_MANIFEST_FILE) $(TESTS_PROTO) \
 	    $(PROTO) $(ROOT)
 	pfexec gtar -C $(TESTS_PROTO) -I pigz -cf $@ .
 	rm $(ROOT)/tests.buildstamp
@@ -358,9 +358,9 @@ $(CTFTOOLS_TARBALL): 0-strap-stamp $(STAMPFILE)
 tools/cryptpass: src/cryptpass.c
 	$(NATIVE_CC) -Wall -W -O2 -o $@ $<
 
-$(MANCF_FILE): $(MANCF) $(MANIFEST)
+$(MANCF_FILE): $(MANCF) $(MANIFEST_FILE)
 	@rm -f $@
-	$(MANCF) -t -f $(MANIFEST) > $@
+	$(MANCF) -t -f $(MANIFEST_FILE) > $@
 
 .PHONY: $(MANCF)
 $(MANCF): 0-illumos-stamp
@@ -388,7 +388,7 @@ check: $(JSLINT)
 
 clean:
 	./tools/clobber_illumos
-	rm -f $(MANIFEST) $(BOOT_MANIFEST) $(TESTS_MANIFEST)
+	rm -f $(MANIFEST_FILE) $(BOOT_MANIFEST_FILE) $(TESTS_MANIFEST_FILE)
 	rm -rf $(MANIFEST_DIR)/* $(BOOT_MANIFEST_DIR)/*
 	(cd $(ROOT)/src && gmake clean)
 	[ ! -d $(ROOT)/projects/illumos-extra ] || \
