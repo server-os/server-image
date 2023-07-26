@@ -286,7 +286,6 @@ update-base:
 0-subdir-%-stamp: 0-illumos-stamp
 	@echo "========== building $* =========="
 	cd "$(ROOT)/projects/local/$*" && \
-
 	    if [[ -f Makefile.joyent ]]; then \
 			gmake -f Makefile.joyent $(SUBDIR_DEFS) DESTDIR=$(PROTO) \
 		    world install; \
